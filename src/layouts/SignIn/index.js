@@ -16,7 +16,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { PureComponent } from 'react';
-import './style.css';
+import './style.scss';
 
 export class SignIn extends PureComponent {
     constructor(props) {
@@ -25,6 +25,12 @@ export class SignIn extends PureComponent {
     }
 
     render() {
-        return <div className="form sign-in"></div>
+        return <div className="display">
+            <label htmlFor="email">E-mail:</label>
+            <input type="text" id="email" />
+
+            <label htmlFor="password">Password:</label>
+            <input type="password" id="password" />
+        </div>
     }
 }

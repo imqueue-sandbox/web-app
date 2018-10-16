@@ -18,7 +18,7 @@
 import React, { Component } from 'react';
 import { UserStorage } from './common';
 import { SignIn, AppView } from './layouts';
-import './App.css';
+import './App.scss';
 
 class App extends Component {
   constructor(props) {

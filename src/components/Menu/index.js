@@ -16,7 +16,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { PureComponent } from 'react';
-import './style.css';
+import './style.scss';
 
 export class Menu extends PureComponent {
     constructor(props) {

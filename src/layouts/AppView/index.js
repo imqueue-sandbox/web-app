@@ -16,8 +16,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { PureComponent } from 'react';
-import './style.css';
 import { Header, Menu, TimeTable } from '../../components';
+import './style.scss';
 
 export class AppView extends PureComponent {
     constructor(props) {
