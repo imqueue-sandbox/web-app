@@ -16,6 +16,4 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 export * from './App';
-export * from './Header';
-export * from './Menu';
 export * from './TimeTable';

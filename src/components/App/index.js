@@ -33,11 +33,11 @@ export class App extends Component {
 
   render() {
     if (this.state.user) {
-        return <AppView></AppView>;
+        return <AppView/>;
     }
 
     else {
-        return <Login></Login>;
+        return <Login/>;
     }
   }
 }
