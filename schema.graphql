@@ -34,6 +34,27 @@ input loginInput {
 }
 
 type loginPayload {
+  """The ID of an object"""
+  id: ID!
+
+  """User's first (given) name"""
+  firstName: String
+
+  """User's last (family) name"""
+  lastName: String
+
+  """User's contact email (unique)"""
+  email: String
+
+  """User's active state flag"""
+  isActive: Boolean
+
+  """User's admin role flag"""
+  isAdmin: Boolean
+
+  """User cars list"""
+  cars: [Car]
+
   """User's JWT authentication token"""
   token: String
   clientMutationId: String
