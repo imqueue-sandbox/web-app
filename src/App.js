@@ -17,10 +17,19 @@
  */
 import React, { Component } from 'react';
 import { graphql, QueryRenderer } from 'react-relay';
+import { UserStorage } from './common';
 import environment from './relay/Environment';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+      super(props)
+
+      this.state = {
+          user: UserStorage.fetch()
+      }
+  }
+
   render() {
     return (
         <QueryRenderer
