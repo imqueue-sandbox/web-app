@@ -17,7 +17,56 @@
  */
 import { Storage } from './Storage';
 
+const events = {};
+
+function emit(event, ...args) {
+    if (events[event]) {
+        for (let i = 0, s = events[event].length; i < s; i++) {
+            events[event] && events[event][i](...args);
+        }
+    }
+}
+
 export class UserStorage {
+
+    /**
+     * Attaches given handler to an event
+     *
+     * @param {string} event
+     * @param {() => *} handler
+     */
+    static on(event, handler) {
+        if (!(events[event] instanceof Array)) {
+            events[event] = [];
+        }
+
+        events[event].push(handler);
+    }
+
+    /**
+     * Removes given handler from an event. If handler is not provided
+     * will remove all handler for given event.
+     *
+     * @param {string} event
+     * @param (() => *) [handler]
+     */
+    static off(event, handler) {
+        if (!events[event]) {
+            return ;
+        }
+
+        if (handler) {
+            let pos;
+
+            while (~(pos = events[event].indexOf(handler))) {
+                events[event].splice(pos, 1);
+            }
+        }
+
+        else {
+            events[event] = [];
+        }
+    }
 
     /**
      * returns key used to store user data
@@ -33,7 +82,12 @@ export class UserStorage {
      * @return {*}
      */
     static save(userData) {
-        return Storage.set(UserStorage.key(), userData);
+        const oldData = UserStorage.fetch();
+        const res = Storage.set(UserStorage.key(), userData);
+
+        emit('change', userData, oldData);
+
+        return res;
     }
 
     /**
@@ -49,7 +103,12 @@ export class UserStorage {
      * @return {*}
      */
     static clear() {
-        return Storage.del(UserStorage.key());
+        const oldData = UserStorage.fetch();
+        const res = Storage.del(UserStorage.key());
+
+        emit('change', null, oldData);
+
+        return res;
     }
 
     /**

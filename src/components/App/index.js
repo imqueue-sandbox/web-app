@@ -17,25 +17,27 @@
  */
 import React, { Component } from 'react';
 import { UserStorage } from '../../common/index';
-import { SignIn, AppView } from '../../layouts/index';
+import { Login, AppView } from '../../layouts/index';
 import './style.scss';
 
 export class App extends Component {
   constructor(props) {
-      super(props)
+      super(props);
 
       this.state = {
           user: UserStorage.fetch()
-      }
+      };
+
+      UserStorage.on('change', user => this.setState({ user }));
   }
 
   render() {
     if (this.state.user) {
-        return <AppView></AppView>
+        return <AppView></AppView>;
     }
 
     else {
-        return <SignIn></SignIn>
+        return <Login></Login>;
     }
   }
 }
