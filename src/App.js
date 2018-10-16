@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { graphql, QueryRenderer } from 'react-relay';
-import environment from './Environment';
+import environment from './relay/Environment';
 import './App.css';
 
 class App extends Component {
@@ -18,11 +18,13 @@ class App extends Component {
                 if (error) {
                     return <div>Error!</div>;
                 }
+
                 if (!props) {
                     return <div>Loading...</div>;
                 }
-
-                return <div>Known brands: {props.brands.join(', ')}</div>;
+                return <ul>
+                    {props.brands.map(brand => <li>{brand}</li>)}
+                </ul>
             }}
         />
     );

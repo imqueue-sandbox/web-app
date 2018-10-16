@@ -1,4 +1,8 @@
 {
+  "passPerPreset": true,
+  "presets": [
+    "react-app"
+  ],
   "plugins": [
     "relay"
   ]
