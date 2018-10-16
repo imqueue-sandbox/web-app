@@ -1,0 +1,193 @@
+"""Car entity"""
+type Car implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """The ID of an object"""
+  carId: ID!
+
+  """Car's manufacturer"""
+  make: String
+
+  """Car's model name"""
+  model: String
+
+  """Car type (vehicle class)"""
+  type: String
+
+  """Car manufacturing years"""
+  years: [Int]
+
+  """
+  Registration number. This field used only when car is associated with the User entity
+  """
+  regNumber: String
+}
+
+input loginInput {
+  """User's contact email (unique)"""
+  email: String!
+
+  """User's password"""
+  password: String!
+  clientMutationId: String
+}
+
+type loginPayload {
+  """User's JWT authentication token"""
+  token: String
+  clientMutationId: String
+}
+
+input logoutInput {
+  """Valid auth jwt token which should be invalidated"""
+  token: String!
+  clientMutationId: String
+}
+
+type logoutPayload {
+  """Logout operation success result"""
+  success: Boolean
+  clientMutationId: String
+}
+
+type Mutation {
+  """Updates given user data fields with a given values"""
+  updateUser(input: updateUserInput!): updateUserPayload
+
+  """Logs user in and returns valid auth jwt token"""
+  login(input: loginInput!): loginPayload
+
+  """Logs user out and invalidates token"""
+  logout(input: logoutInput!): logoutPayload
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+type Query {
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+
+  """Fetches list of users"""
+  users: [User]
+
+  """Fetches user data by user id or email"""
+  user(
+    """User identifier. Optional. Either this identifier or email required"""
+    id: String
+
+    """
+    User email address. Optional. Either this email or identifier required
+    """
+    email: String
+  ): User
+
+  """Fetches list of cars for a given brand"""
+  cars(
+    """Car's manufacturer (brand) name"""
+    brand: String!
+  ): [Car]
+
+  """Fetches car data by its identifier"""
+  car(
+    """User identifier. Optional. Either this identifier or email required"""
+    id: String!
+  ): Car
+
+  """Fetches list of car brands"""
+  brands: [String]
+}
+
+input updateUserInput {
+  """The ID of an object"""
+  id: ID!
+
+  """User's first (given) name"""
+  firstName: String
+
+  """User's last (family) name"""
+  lastName: String
+
+  """User's contact email (unique)"""
+  email: String
+
+  """User's password"""
+  password: String
+
+  """User's active state flag"""
+  isActive: Boolean
+
+  """User's admin role flag"""
+  isAdmin: Boolean
+
+  """List of cars associated with the user"""
+  cars: [UserCar]
+  clientMutationId: String
+}
+
+type updateUserPayload {
+  """The ID of an object"""
+  id: ID!
+
+  """User's first (given) name"""
+  firstName: String
+
+  """User's last (family) name"""
+  lastName: String
+
+  """User's contact email (unique)"""
+  email: String
+
+  """User's active state flag"""
+  isActive: Boolean
+
+  """User's admin role flag"""
+  isAdmin: Boolean
+
+  """User cars list"""
+  cars: [Car]
+  clientMutationId: String
+}
+
+"""User entity"""
+type User implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """User's first (given) name"""
+  firstName: String
+
+  """User's last (family) name"""
+  lastName: String
+
+  """User's contact email (unique)"""
+  email: String
+
+  """User's password"""
+  password: String
+
+  """User's active state flag"""
+  isActive: Boolean
+
+  """User's admin role flag"""
+  isAdmin: Boolean
+
+  """User cars list"""
+  cars: [Car]
+}
+
+"""User car association object"""
+input UserCar {
+  """Identifier of car object from cars database"""
+  carId: String!
+
+  """Car registration number"""
+  regNumber: String!
+}
