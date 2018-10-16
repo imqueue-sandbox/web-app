@@ -16,11 +16,11 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { Component } from 'react';
-import { UserStorage } from './common';
-import { SignIn, AppView } from './layouts';
-import './App.scss';
+import { UserStorage } from '../../common/index';
+import { SignIn, AppView } from '../../layouts/index';
+import './style.scss';
 
-class App extends Component {
+export class App extends Component {
   constructor(props) {
       super(props)
 
@@ -39,5 +39,3 @@ class App extends Component {
     }
   }
 }
-
-export default App;
