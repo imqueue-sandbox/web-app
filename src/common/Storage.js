@@ -24,7 +24,7 @@ export class Storage {
      * @return {*}
      */
     static set(key, jsonData) {
-        return localStorage.set(key, JSON.stringify(jsonData));
+        return localStorage.setItem(key, JSON.stringify(jsonData));
     }
 
     /**
@@ -34,7 +34,7 @@ export class Storage {
      * @return {*}
      */
     static get(key) {
-        let data = localStorage.get(key);
+        let data = localStorage.getItem(key);
 
         if (!data) {
             return null;
@@ -56,6 +56,6 @@ export class Storage {
      * @return {*}
      */
     static del(key) {
-        return localStorage.del(key);
+        return localStorage.removeItem(key);
     }
 }

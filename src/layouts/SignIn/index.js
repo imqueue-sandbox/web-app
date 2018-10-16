@@ -17,12 +17,13 @@
  */
 import React, { PureComponent } from 'react';
 
-export default class SignIn extends PureComponent {
+export class SignIn extends PureComponent {
     constructor(props) {
-        super(props)
+        super(props);
+        this.state = {};
     }
 
     render() {
-        return <div class="form sign-in"></div>
+        return <div className="form sign-in"></div>
     }
 }

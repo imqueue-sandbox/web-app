@@ -15,29 +15,15 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import React, { Component } from 'react';
-import { UserStorage } from './common';
-import './App.css';
-import { SignIn, AppView } from './layouts';
+import React, { PureComponent } from 'react';
 
-class App extends Component {
-  constructor(props) {
-      super(props)
-
-      this.state = {
-          user: UserStorage.fetch()
-      }
-  }
-
-  render() {
-    if (this.state.user) {
-        return <AppView></AppView>
+export class AppView extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {};
     }
 
-    else {
-        return <SignIn></SignIn>
+    render() {
+        return <div className="app"></div>
     }
-  }
 }
-
-export default App;
