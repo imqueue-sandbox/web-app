@@ -15,5 +15,5 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export * from './SignIn/index';
-export * from './AppView/index';
+export * from './SignIn';
+export * from './AppView';

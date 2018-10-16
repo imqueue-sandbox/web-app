@@ -18,13 +18,13 @@
 import React, { PureComponent } from 'react';
 import './style.css';
 
-export class SignIn extends PureComponent {
+export class Header extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {};
     }
 
     render() {
-        return <div className="form sign-in"></div>
+        return <section className="header"></section>
     }
 }

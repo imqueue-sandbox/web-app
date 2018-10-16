@@ -16,6 +16,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { PureComponent } from 'react';
+import './style.css';
+import { Header, Menu, TimeTable } from '../../components';
 
 export class AppView extends PureComponent {
     constructor(props) {
@@ -24,6 +26,10 @@ export class AppView extends PureComponent {
     }
 
     render() {
-        return <div className="app"></div>
+        return <div className="app">
+            <Header/>
+            <Menu/>
+            <TimeTable/>
+        </div>
     }
 }
