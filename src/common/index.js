@@ -18,3 +18,4 @@
 export * from './clone';
 export * from './Storage';
 export * from './UserStorage';
+export * from './uuid';

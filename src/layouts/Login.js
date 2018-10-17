@@ -27,7 +27,7 @@ import LockOpen from '@material-ui/icons/LockOpen';
 import NotInterested from '@material-ui/icons/NotInterested';
 import { login } from '../relay/mutations/index';
 import { AppMessage } from '../components';
-import { clone } from '../common';
+import { clone, uuid } from '../common';
 
 const styles = () => ({});
 
@@ -47,7 +47,7 @@ class Login extends PureComponent {
         this.state = {
             email: '',
             password: '',
-            error: '',
+            errors: [],
         };
 
         this.initialState = clone(this.state);
@@ -69,13 +69,13 @@ class Login extends PureComponent {
     /**
      * Resets the login form to initial state
      */
-    reset = () => this.clearError() ||
+    reset = () => this.clearErrors() ||
         this.setState(clone(this.initialState));
 
     /**
-     * Clears error off
+     * Clears errors off
      */
-    clearError = () => this.setState({ error: '' });
+    clearErrors = () => this.setState({ errors: [] });
 
     /**
      * Handles changes on a form fields and updates local state
@@ -97,12 +97,13 @@ class Login extends PureComponent {
                 {"Customer Login"}
             </DialogTitle>
             <DialogContent>
-                {this.state.error &&
+                {this.state.errors.map(error =>
                     <AppMessage
                         variant="error"
-                        message={this.state.error}
-                        onClose={this.clearError}
-                    />
+                        message={error.message}
+                        onClose={this.clearErrors}
+                        key={(error.extensions || {}).code || uuid()}
+                    />)
                 }
                 <TextField
                     id="email"
@@ -134,6 +135,11 @@ class Login extends PureComponent {
                     onClick={this.reset}
                     color="default"
                     size={"large"}
+                    disabled={!(
+                        this.state.email ||
+                        this.state.password ||
+                        this.state.errors
+                    )}
                 >
                     Reset
                     <NotInterested />
@@ -144,6 +150,7 @@ class Login extends PureComponent {
                     color="primary"
                     autoFocus
                     size={"large"}
+                    disabled={!(this.state.email && this.state.password)}
                 >
                     Login
                     <LockOpen />

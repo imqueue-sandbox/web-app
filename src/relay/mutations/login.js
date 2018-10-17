@@ -56,7 +56,7 @@ export function login(component) {
         onError: logger.error.bind(logger, 'LoginMutation:request', email),
         onCompleted: (response, errors) => {
             if (errors && errors.length) {
-                return component.setState({ error: errors[0].message });
+                return component.setState({ errors: errors });
             }
 
             UserStorage.save(response.login);
