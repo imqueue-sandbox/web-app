@@ -26,7 +26,16 @@ import Icon from '@material-ui/core/Icon';
 import LoginMutation from './LoginMutation';
 import './style.scss';
 
+/**
+ * Login page layout component - displays login form
+ */
 export class Login extends PureComponent {
+    /**
+     * Initializes component
+     *
+     * @constructor
+     * @param {*} props
+     */
     constructor(props) {
         super(props);
 
@@ -34,29 +43,35 @@ export class Login extends PureComponent {
             email: '',
             password: ''
         };
-
-        this.login = this.login.bind(this);
-        this.reset = this.reset.bind(this);
     }
 
-    handleClose() {
-        return false;
-    }
+    /**
+     * Handles close login dialog box. Actually it exists specially to prevent
+     * close behavior
+     *
+     * @return {boolean}
+     */
+    handleClose = () => false;
 
-    login() {
-        LoginMutation.commit(this.state);
-    }
+    /**
+     * Performs login action
+     */
+    login = () => LoginMutation.commit(this.state);
 
-    reset() {
-        this.setState({
-            email: '',
-            password: ''
-        });
-    }
+    /**
+     * Resets the login form to initial state
+     */
+    reset = () =>
+        this.setState({ email: '', password: '' });
 
-    handleChange(name, event) {
+    /**
+     * Handles changes on a form fields and updates local state
+     *
+     * @param {string} name - field name
+     * @param {CustomEvent} event - react event
+     */
+    handleChange = (name, event) =>
         this.setState({ [name]: event.target.value });
-    }
 
     render() {
         return <Dialog

@@ -19,8 +19,8 @@ import { commitMutation, graphql } from 'react-relay';
 import environment from '../../relay/Environment';
 import { UserStorage } from '../../common';
 
-let $id = 0;
-const logoutMutation = graphql`
+let callId = 0;
+const mutation = graphql`
     mutation LogoutMutation($input: logoutInput!) {
         logout(input: $input) {
             success
@@ -31,11 +31,11 @@ const logoutMutation = graphql`
 
 export default class LogoutMutation {
     static commit(token) {
-        $id++;
+        callId++;
         commitMutation(environment, {
-            mutation: logoutMutation,
+            mutation,
             variables: {
-                input: { token, clientMutationId: String($id) }
+                input: { token, clientMutationId: String(callId) }
             },
             onError: err => console.error('LogoutMutation:request', err),
             onCompleted: (response, errors) => {
