@@ -17,9 +17,9 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
 import { App } from './components';
 import * as serviceWorker from './serviceWorker';
+import './style.scss';
 
 ReactDOM.render(<App />, document.getElementById('app'));
 
@@ -27,3 +27,5 @@ ReactDOM.render(<App />, document.getElementById('app'));
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;

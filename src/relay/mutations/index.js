@@ -15,16 +15,5 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import React, { PureComponent } from 'react';
-import './style.scss';
-
-export class TimeTable extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
-    render() {
-        return <section className="time-table"></section>
-    }
-}
+export * from './login';
+export * from './logout';

@@ -16,20 +16,25 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { PureComponent } from 'react';
+import { withStyles } from "@material-ui/core";
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import Icon from '@material-ui/core/Icon';
-import LoginMutation from './LoginMutation';
-import './style.scss';
+import LockOpen from '@material-ui/icons/LockOpen';
+import NotInterested from '@material-ui/icons/NotInterested';
+import { login } from '../relay/mutations/index';
+import { AppMessage } from '../components';
+import { clone } from '../common';
+
+const styles = () => ({});
 
 /**
  * Login page layout component - displays login form
  */
-export class Login extends PureComponent {
+class Login extends PureComponent {
     /**
      * Initializes component
      *
@@ -41,8 +46,11 @@ export class Login extends PureComponent {
 
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            error: '',
         };
+
+        this.initialState = clone(this.state);
     }
 
     /**
@@ -56,13 +64,18 @@ export class Login extends PureComponent {
     /**
      * Performs login action
      */
-    login = () => LoginMutation.commit(this.state);
+    login = () => login(this);
 
     /**
      * Resets the login form to initial state
      */
-    reset = () =>
-        this.setState({ email: '', password: '' });
+    reset = () => this.clearError() ||
+        this.setState(clone(this.initialState));
+
+    /**
+     * Clears error off
+     */
+    clearError = () => this.setState({ error: '' });
 
     /**
      * Handles changes on a form fields and updates local state
@@ -84,6 +97,13 @@ export class Login extends PureComponent {
                 {"Customer Login"}
             </DialogTitle>
             <DialogContent>
+                {this.state.error &&
+                    <AppMessage
+                        variant="error"
+                        message={this.state.error}
+                        onClose={this.clearError}
+                    />
+                }
                 <TextField
                     id="email"
                     label="E-mail"
@@ -114,10 +134,9 @@ export class Login extends PureComponent {
                     onClick={this.reset}
                     color="default"
                     size={"large"}
-                    className="button-reset"
                 >
                     Reset
-                    <Icon style={{marginLeft: "5px"}}>not_interested</Icon>
+                    <NotInterested />
                 </Button>
                 <Button
                     variant="contained"
@@ -125,12 +144,16 @@ export class Login extends PureComponent {
                     color="primary"
                     autoFocus
                     size={"large"}
-                    className="button-login"
                 >
                     Login
-                    <Icon style={{marginLeft: "5px"}}>lock_open</Icon>
+                    <LockOpen />
                 </Button>
             </DialogActions>
         </Dialog>
     }
 }
+
+
+Login = withStyles(styles)(Login);
+
+export { Login };

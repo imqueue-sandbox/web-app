@@ -15,12 +15,28 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { App } from '.';
+import React, { Component } from 'react';
+import { UserStorage } from '../common/index';
+import { Login, AppView } from '../layouts/index';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
-});
+export class App extends Component {
+  constructor(props) {
+      super(props);
+
+      this.state = {
+          user: UserStorage.fetch()
+      };
+
+      UserStorage.on('change', user => this.setState({ user }));
+  }
+
+  render() {
+    if (this.state.user) {
+        return <AppView/>;
+    }
+
+    else {
+        return <Login/>;
+    }
+  }
+}

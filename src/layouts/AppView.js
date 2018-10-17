@@ -29,10 +29,9 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Waves from '@material-ui/icons/Waves';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import LogoutMutation from './LogoutMutation';
-import { TimeTable } from '../../components';
-import './style.scss';
-import {UserStorage} from "../../common";
+import { logout } from '../relay/mutations/index';
+import { TimeTable } from '../components/index';
+import { UserStorage } from "../common";
 
 const drawerWidth = 240;
 
@@ -87,9 +86,7 @@ class AppView extends PureComponent {
     logout = () => {
         const token = (UserStorage.fetch() || {}).token;
         this.handleClose();
-        if (token) {
-            LogoutMutation.commit(token);
-        }
+        token && logout(token);
     }
 
     render() {
