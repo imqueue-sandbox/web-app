@@ -138,7 +138,7 @@ class Login extends PureComponent {
                     disabled={!(
                         this.state.email ||
                         this.state.password ||
-                        this.state.errors
+                        this.state.errors.length
                     )}
                 >
                     Reset
