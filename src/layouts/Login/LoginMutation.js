@@ -23,13 +23,23 @@ let $id = 0;
 const loginMutation = graphql`
     mutation LoginMutation($input: loginInput!) {
         login(input: $input) {
-            id
-            email
-            firstName
-            lastName
-            isActive
-            isAdmin
             token
+            user {
+                id
+                email
+                firstName
+                lastName
+                isAdmin
+                isActive
+                cars {
+                    id
+                    carId
+                    make
+                    model
+                    type
+                    regNumber
+                }
+            }
             clientMutationId
         }
     }
