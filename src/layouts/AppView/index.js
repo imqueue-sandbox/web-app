@@ -26,9 +26,10 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import Waves from '@material-ui/icons/Waves';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import LogoutMutatin from './LogoutMutation';
+import LogoutMutation from './LogoutMutation';
 import { TimeTable } from '../../components';
 import './style.scss';
 import {UserStorage} from "../../common";
@@ -43,6 +44,9 @@ const styles = theme => ({
         overflow: 'hidden',
         position: 'relative',
         display: 'flex',
+    },
+    logo: {
+      marginRight: '15px',
     },
     grow: {
         flexGrow: 1,
@@ -84,7 +88,7 @@ class AppView extends PureComponent {
         const token = (UserStorage.fetch() || {}).token;
         this.handleClose();
         if (token) {
-            LogoutMutatin.commit(token);
+            LogoutMutation.commit(token);
         }
     }
 
@@ -96,13 +100,14 @@ class AppView extends PureComponent {
             <div className={classes.root}>
                 <AppBar position="absolute" className={classes.appBar}>
                     <Toolbar>
+                        <Waves className={classes.logo} />
                         <Typography
                             variant="h6"
                             color="inherit"
                             className={classes.grow}
                             noWrap
                         >
-                            CarWash Time Reservations
+                            CarWash Reservations
                         </Typography>
                         <div>
                             <IconButton
