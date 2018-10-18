@@ -25,8 +25,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 import LockOpen from '@material-ui/icons/LockOpen';
 import NotInterested from '@material-ui/icons/NotInterested';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Visibility from '@material-ui/icons/Visibility';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import { login } from '../relay/mutations/index';
 import { AppMessage } from '../components';
@@ -54,6 +58,7 @@ class Login extends PureComponent {
             canSubmit: false,
             canReset: false,
             shrink: false,
+            showPassword: false,
         };
 
         this.initialState = clone(this.state);
@@ -126,6 +131,13 @@ class Login extends PureComponent {
         this.setState(newState);
     }
 
+    /**
+     * Handles show password button click
+     */
+    handleClickShowPassword = () => {
+        this.setState({ showPassword: !this.state.showPassword });
+    }
+
     render() {
         const { fullScreen } = this.props;
 
@@ -158,7 +170,7 @@ class Login extends PureComponent {
                     variant="outlined"
                     value={this.state.email}
                     InputLabelProps={{
-                        shrink: this.state.shrink || this.state.email
+                        shrink: this.state.shrink || !!this.state.email
                     }}
                     onChange={this.handleChange.bind(this, 'email')}
                 />
@@ -166,13 +178,28 @@ class Login extends PureComponent {
                     id="password"
                     label="Password"
                     fullWidth
-                    type="password"
+                    type={this.state.showPassword ? "text" : "password"}
                     autoComplete="current-password"
                     margin="normal"
                     variant="outlined"
                     value={this.state.password}
                     InputLabelProps={{
                         shrink: this.state.shrink || !!this.state.password
+                    }}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="Toggle password visibility"
+                                    onClick={this.handleClickShowPassword}
+                                >
+                                    {this.state.showPassword
+                                        ? <VisibilityOff />
+                                        : <Visibility />
+                                    }
+                                </IconButton>
+                            </InputAdornment>
+                        ),
                     }}
                     onChange={this.handleChange.bind(this, 'password')}
                 />
