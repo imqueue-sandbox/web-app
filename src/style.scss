@@ -38,6 +38,11 @@ input, textarea, select {
     transition: background-color 50000s ease-in-out !important;
   }
 }
+input, textarea, select {
+  :not(:-webkit-autofill) {
+    animation-name: onAutoFillCancel;
+  }
+}
 .adornment-end {
   div {
     &:nth-of-type(1) {
@@ -45,9 +50,7 @@ input, textarea, select {
     }
   }
 }
-input:not(:-webkit-autofill) {
-  animation-name: onAutoFillCancel;
-}
+
 .link-button {
   background-color: transparent;
   border: none;
@@ -57,17 +60,17 @@ input:not(:-webkit-autofill) {
   margin: 0;
   padding: 0;
   color: #00f;
-}
-.link-button:hover,
-.link-button:focus {
-  text-decoration: none;
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
 }
 .left-right {
   justify-content: flex-end !important;
-}
-.left {
-  justify-self: flex-start !important;
-  margin-right: auto !important;
+  .left {
+    justify-self: flex-start !important;
+    margin-right: auto !important;
+  }
 }
 .login-actions {
   button {
@@ -80,6 +83,13 @@ input:not(:-webkit-autofill) {
     }
     svg {
       margin-left: 5px;
+    }
+  }
+}
+ul[role=menu] {
+  li {
+    svg {
+      margin-right: 10px;
     }
   }
 }

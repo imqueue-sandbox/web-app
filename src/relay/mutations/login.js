@@ -20,9 +20,7 @@ import environment from '../Environment';
 import { UserStorage } from '../../common/index';
 import { logger } from '../../config';
 
-export function login(component) {
-    const { email, password } = component.state;
-
+export function login({ email, password }, success, failure) {
     if (!login.id) {
         login.id = 0;
     }
@@ -53,13 +51,17 @@ export function login(component) {
         variables: {
             input: { email, password, clientMutationId: String(++login.id) }
         },
-        onError: logger.error.bind(logger, 'LoginMutation:request', email),
+        onError: (err) => {
+            logger.error('LoginMutation:request', email, err);
+            failure && failure([err]);
+        },
         onCompleted: (response, errors) => {
             if (errors && errors.length) {
-                return component.setState({ errors: errors });
+                return failure && failure(errors);
             }
 
             UserStorage.save(response.login);
+            success && success(response.login);
         }
     })
 }

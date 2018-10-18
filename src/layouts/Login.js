@@ -59,6 +59,8 @@ class Login extends PureComponent {
             canReset: false,
             shrink: false,
             showPassword: false,
+            wrongPassword: '',
+            wrongEmail: ''
         };
 
         this.initialState = clone(this.state);
@@ -105,7 +107,19 @@ class Login extends PureComponent {
     /**
      * Performs login action
      */
-    login = () => login(this);
+    login = () => {
+        login(this.state, null, (errors) => {
+            this.setState({
+                errors: errors,
+                wrongEmail: (errors.find(err =>
+                    (err.extensions || {}).code === 'USER_EMAIL_EMPTY'
+                ) || {}).message,
+                wrongPassword: (errors.find(err =>
+                    (err.extensions || {}).code === 'USER_PASSWORD_EMPTY'
+                ) || {}).message,
+            });
+        });
+    }
 
     /**
      * Resets the login form to initial state
@@ -153,6 +167,7 @@ class Login extends PureComponent {
             <DialogContent className="login-content">
                 {this.state.errors.map(error =>
                     <AppMessage
+                        className="app-message"
                         variant="error"
                         message={error.message}
                         onClose={this.clearErrors}
@@ -161,6 +176,8 @@ class Login extends PureComponent {
                 }
                 <TextField
                     id="email"
+                    error={!!this.state.wrongEmail}
+                    required
                     label="E-mail"
                     fullWidth
                     type="email"
@@ -176,6 +193,8 @@ class Login extends PureComponent {
                 />
                 <TextField
                     id="password"
+                    required
+                    error={!!this.state.wrongPassword}
                     label="Password"
                     fullWidth
                     type={this.state.showPassword ? "text" : "password"}
