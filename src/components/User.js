@@ -23,7 +23,7 @@ export class User extends PureComponent {
     render() {
         const { user } = UserStorage.fetch();
         return <div>
-            <Gravatar user={user} size={150} />
+            <Gravatar user={user} size={150} editable={true} />
         </div>;
     }
 }

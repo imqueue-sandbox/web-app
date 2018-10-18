@@ -30,6 +30,17 @@ const styles = {
     },
     avatar: {
         margin: 10,
+        cursor: 'pointer',
+        border: '5px solid transparent',
+    },
+    editable: {
+        transition: 'border-color 0.5s ease-in-out, ' +
+            'box-shadow: 0.5s ease-in-out',
+        opacity: 1,
+        '&:hover': {
+            borderColor: '#fff',
+            boxShadow: '0 0 8px #333'
+        },
     },
     bigAvatar: {
         width: bigSize,
@@ -38,17 +49,26 @@ const styles = {
 };
 
 class Gravatar extends PureComponent {
+
+    edit = () => {
+        window.open('https://gravatar.com/gravatars/new', '_blank');
+    }
+
     render() {
-        const { user, classes, large, size } = this.props;
+        const { user, classes, large, size, editable } = this.props;
 
         return <Avatar
-            alt={`${user.firstName} ${user.lastName}`}
+            onClick={this.props.editable ? this.edit : () => {}}
+            title={`${user.firstName} ${user.lastName}${
+                this.props.editable ? '. Click to change...' : ''
+            }`}
             src={`https://s.gravatar.com/avatar/${
                 md5(user.email.trim().toLowerCase())
             }` + ((size || large) && `?s=${size ? size : bigSize}`)}
             className={classNames(
                 classes.avatar,
                 large && classes.bigAvatar,
+                editable && classes.editable,
             )}
             style={size && {
                 width: size,
@@ -60,9 +80,10 @@ class Gravatar extends PureComponent {
 
 Gravatar.propTypes = {
     classes: PropTypes.object.isRequired,
-    user: PropTypes.object,
+    user: PropTypes.object.isRequired,
     large: PropTypes.bool,
     size: PropTypes.number,
+    editable: PropTypes.bool,
 };
 Gravatar = withStyles(styles)(Gravatar);
 
