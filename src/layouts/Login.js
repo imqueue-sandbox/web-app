@@ -31,8 +31,9 @@ import LockOpen from '@material-ui/icons/LockOpen';
 import NotInterested from '@material-ui/icons/NotInterested';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Visibility from '@material-ui/icons/Visibility';
+import PersonAdd from '@material-ui/icons/PersonAdd';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
-import { login } from '../relay/mutations/index';
+import { login, register } from '../relay/mutations/index';
 import { AppMessage } from '../components';
 import { clone, uuid } from '../common';
 
@@ -54,18 +55,26 @@ class Login extends PureComponent {
         this.state = {
             email: '',
             password: '',
+            firstName: '',
+            lastName: '',
             errors: [],
             canSubmit: false,
             canReset: false,
             shrink: false,
             showPassword: false,
             wrongPassword: '',
-            wrongEmail: ''
+            wrongEmail: '',
+            wrongFirstName: '',
+            wrongLastName: '',
+            isRegForm: false,
         };
 
         this.initialState = clone(this.state);
     }
 
+    /**
+     * handling component insertion into DOM
+     */
     componentDidMount() {
         window.requestAnimationFrame(() => {
             const node = ReactDOM.findDOMNode(this);
@@ -73,9 +82,8 @@ class Login extends PureComponent {
             if (node) {
                 const onAutoFillStart = () => {
                     this.setState({
-                        canSubmit: true,
-                        canReset: true,
-                        shrink: true
+                        shrink: true,
+                        ...this.checkActions(this.state)
                     });
                 }
                 const onAnimationStart = ({ target, animationName }) => {
@@ -93,7 +101,6 @@ class Login extends PureComponent {
                 );
             }
         });
-
     }
 
     /**
@@ -105,31 +112,96 @@ class Login extends PureComponent {
     handleClose = () => false;
 
     /**
+     * Returns error messages mapped to state fields
+     *
+     * @param {Error[]} errors
+     * @return {*}
+     */
+    mapErrors(errors) {
+        return errors.reduce((prev, next) => {
+            const key = ((next.extensions || {}).code || '')
+                .replace(/^user_|_error$/i)
+                .split('_')
+                .map((part, i) => i
+                    ? part.substr(0, 1) + part.substr(1).toLowerCase()
+                    : part.toLowerCase()
+                );
+
+            return Object.assign(prev, { [key]: next.message });
+        }, {});
+    }
+
+    /**
      * Performs login action
      */
     login = () => {
-        login(this.state, null, (errors) => {
+        login(this.state, null, (errors) =>
             this.setState({
+                ...this.mapErrors(errors),
                 errors: errors,
-                wrongEmail: (errors.find(err =>
-                    (err.extensions || {}).code === 'USER_EMAIL_EMPTY'
-                ) || {}).message,
-                wrongPassword: (errors.find(err =>
-                    (err.extensions || {}).code === 'USER_PASSWORD_EMPTY'
-                ) || {}).message,
-            });
-        });
+            }),
+        );
     }
+
+    /**
+     * Performs new user registration action
+     */
+    register = () => {
+        const { firstName, lastName, email, password } = this.state;
+
+        console.log()
+
+        register(
+            { firstName, lastName, email, password, isActive: true },
+            (data) => {
+                console.log('data:', data);
+                let state = { // come back to login form
+                    ...this.initialState,
+                    email: data.user.email,
+                    shrink: true,
+                };
+                state = { ...state, ...this.checkActions(state) };
+                console.log('state', state);
+                this.setState(state);
+            },
+            (errors) => this.setState({ // display errors
+                ...this.mapErrors(errors),
+                errors: errors,
+            }),
+        );
+    }
+
 
     /**
      * Resets the login form to initial state
      */
-    reset = () => this.setState(clone(this.initialState));
+    reset = () => {
+        const newState = clone(this.initialState);
+        newState.isRegForm = this.state.isRegForm;
+        this.setState(newState);
+    }
 
     /**
      * Clears errors off
      */
     clearErrors = () => this.setState({ errors: [] });
+
+    /**
+     * Returns flags for button state actions build from a given state
+     *
+     * @param {*} state
+     * @return {{canReset: boolean, canSubmit: boolean}}
+     */
+    checkActions = (state) => {
+        const canReset = !!(state.email || state.password ||
+            state.errors.length || state.firstName || state.lastName);
+        const canSubmit = !!(state.isRegForm
+            ? state.email && state.password && state.firstName &&
+            state.lastName
+            : state.email && state.password);
+
+        return { canReset, canSubmit };
+    }
 
     /**
      * Handles changes on a form fields and updates local state
@@ -138,10 +210,8 @@ class Login extends PureComponent {
      * @param {CustomEvent} event - react event
      */
     handleChange = (name, event) => {
-        const newState = { ...this.state, [name]: event.target.value };
-        newState.canReset = newState.email || newState.password ||
-            newState.errors.length;
-        newState.canSubmit = newState.email && newState.password;
+        let newState = {...this.state, [name]: event.target.value };
+        newState = { ...newState, ...this.checkActions(newState) };
         this.setState(newState);
     }
 
@@ -150,6 +220,26 @@ class Login extends PureComponent {
      */
     handleClickShowPassword = () => {
         this.setState({ showPassword: !this.state.showPassword });
+    }
+
+    /**
+     * Handles switch to login form link click
+     */
+    handleLoginFormClick = () => {
+        this.setState({
+            isRegForm: false,
+            ...this.checkActions(this.state)
+        });
+    }
+
+    /**
+     * Handles registration link click
+     */
+    handleRegistrationClick = () => {
+        this.setState({
+            isRegForm: true,
+            ...this.checkActions(this.state)
+        });
     }
 
     render() {
@@ -161,9 +251,11 @@ class Login extends PureComponent {
             onClose={this.handleClose}
             aria-labelledby="responsive-dialog-title"
         >
-            <DialogTitle id="responsive-dialog-title">
-                {"Customer Login"}
-            </DialogTitle>
+            <DialogTitle id="responsive-dialog-title">{
+                this.state.isRegForm
+                    ? "Customer Registration"
+                    : "Customer Login"
+            }</DialogTitle>
             <DialogContent className="login-content">
                 {this.state.errors.map(error =>
                     <AppMessage
@@ -223,10 +315,54 @@ class Login extends PureComponent {
                     }}
                     onChange={this.handleChange.bind(this, 'password')}
                 />
+                {this.state.isRegForm && (<>
+                    <TextField
+                        id="firstName"
+                        error={!!this.state.wrongFirstName}
+                        required
+                        label="First Name"
+                        fullWidth
+                        type="text"
+                        name="firstName"
+                        autoComplete="firstName"
+                        margin="normal"
+                        variant="outlined"
+                        value={this.state.firstName}
+                        InputLabelProps={{
+                            shrink: this.state.shrink || !!this.state.firstName
+                        }}
+                        onChange={this.handleChange.bind(this, 'firstName')}
+                    />
+                    <TextField
+                        id="lastName"
+                        error={!!this.state.wrongFirstName}
+                        required
+                        label="Last Name"
+                        fullWidth
+                        type="text"
+                        name="lastName"
+                        autoComplete="lastName"
+                        margin="normal"
+                        variant="outlined"
+                        value={this.state.lastName}
+                        InputLabelProps={{
+                            shrink: this.state.shrink || !!this.state.lastName
+                        }}
+                        onChange={this.handleChange.bind(this, 'lastName')}
+                    />
+                </>)}
             </DialogContent>
             <DialogActions className="left-right login-actions">
-                <button className="link-button left" onClick={this.regForm}>
-                    Need an account?
+                <button
+                    className="link-button left"
+                    onClick={this.state.isRegForm
+                        ? this.handleLoginFormClick
+                        : this.handleRegistrationClick}
+                >
+                    {this.state.isRegForm
+                        ? "I have an account"
+                        : "Need an account?"
+                    }
                 </button>
                 <Button
                     variant={fullScreen ? "text" : "contained"}
@@ -240,14 +376,18 @@ class Login extends PureComponent {
                 </Button>
                 <Button
                     variant={fullScreen ? "text" : "contained"}
-                    onClick={this.login}
+                    onClick={this.state.isRegForm
+                        ? this.register
+                        : this.login}
                     color="primary"
                     autoFocus
                     size={"large"}
                     disabled={!this.state.canSubmit}
                 >
-                    Login
-                    <LockOpen />
+                    {this.state.isRegForm
+                        ? <>Register <PersonAdd /></>
+                        : <>Login <LockOpen /></>
+                    }
                 </Button>
             </DialogActions>
         </Dialog>

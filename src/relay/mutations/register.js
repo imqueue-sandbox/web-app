@@ -17,18 +17,16 @@
  */
 import { commitMutation, graphql } from 'react-relay';
 import environment from '../Environment';
-import { UserStorage } from '../../common/index';
 import { logger } from '../../config';
 
-export function login({ email, password }, success, failure) {
-    if (!login.id) {
-        login.id = 0;
+export function register(userData, success, failure) {
+    if (!register.id) {
+        register.id = 0;
     }
 
     const config = {
-        mutation: graphql`mutation loginMutation($input: loginInput!) {
-            login(input: $input) {
-                token
+        mutation: graphql`mutation registerMutation($input: updateUserInput!) {
+            updateUser(input: $input) {
                 user {
                     id
                     email
@@ -49,10 +47,10 @@ export function login({ email, password }, success, failure) {
             }
         }`,
         variables: {
-            input: { email, password, clientMutationId: String(++login.id) }
+            input: { ...userData, clientMutationId: String(++register.id) }
         },
         onError: (err) => {
-            logger.error('loginMutation:request', email, err);
+            logger.error('registerMutation:request', err);
             failure && failure([err]);
         },
         onCompleted: (response, errors) => {
@@ -60,8 +58,7 @@ export function login({ email, password }, success, failure) {
                 return failure && failure(errors);
             }
 
-            UserStorage.save(response.login);
-            success && success(response.login);
+            success && success(response.updateUser);
         }
     };
 

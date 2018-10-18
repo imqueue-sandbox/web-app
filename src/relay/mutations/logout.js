@@ -25,16 +25,14 @@ export function logout(token) {
         logout.id = 0;
     }
 
-    commitMutation(environment, {
+    const config = {
         mutation: graphql`mutation logoutMutation($input: logoutInput!) {
             logout(input: $input) {
                 success
                 clientMutationId
             }
         }`,
-        variables: {
-            input: { token, clientMutationId: String(logout.id++) }
-        },
+        variables: { input: { token, clientMutationId: String(logout.id++) } },
         onError: logger.error.bind(logger, 'LogoutMutation:request'),
         onCompleted: (response, errors) => {
             if (errors && errors.length) {
@@ -47,5 +45,7 @@ export function logout(token) {
                 UserStorage.clear();
             }
         }
-    })
+    };
+
+    commitMutation(environment, config);
 }
