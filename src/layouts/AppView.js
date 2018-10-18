@@ -26,6 +26,7 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import Lock from '@material-ui/icons/Lock';
 import Waves from '@material-ui/icons/Waves';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -130,6 +131,7 @@ class AppView extends PureComponent {
                                 onClose={this.handleClose}
                             >
                                 <MenuItem onClick={this.logout}>
+                                    <Lock/>
                                     Logout
                                 </MenuItem>
                             </Menu>
