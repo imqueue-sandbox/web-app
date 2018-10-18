@@ -55,6 +55,10 @@ const styles = theme => ({
     },
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
+        '& *': {
+            color: '#fff !important',
+            textDecoration: 'none',
+        },
     },
     drawerPaper: {
         position: 'relative',
@@ -100,8 +104,10 @@ class AppView extends PureComponent {
             <div className={classes.root}>
                 <AppBar position="absolute" className={classes.appBar}>
                     <Toolbar>
-                        <Waves className={classes.logo} />
-                        <Typography
+                        <Link to="/">
+                            <Waves className={classes.logo} />
+                        </Link>
+                        <Typography component={Link} to="/"
                             variant="h6"
                             color="inherit"
                             className={classes.grow}

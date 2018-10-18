@@ -96,3 +96,23 @@ ul[role=menu] {
 .invisible {
   visibility: hidden !important;
 }
+.user-box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction:row;
+  .divider {
+    align-self: stretch;
+    width:0;
+    border-right: 0.1em solid #ccc;
+    margin: 0 20px;
+  }
+  > * {
+    margin:5px;
+  }
+  .user-info {
+    p {
+      font-size: 1em !important;
+    }
+  }
+}

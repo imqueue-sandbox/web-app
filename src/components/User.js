@@ -16,14 +16,33 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { PureComponent } from 'react';
+import Typography from '@material-ui/core/Typography';
 import { UserStorage } from '../common';
 import { Gravatar } from './Gravatar';
 
 export class User extends PureComponent {
     render() {
         const { user } = UserStorage.fetch();
-        return <div>
-            <Gravatar user={user} size={150} editable={true} />
+        return <div class="user-box">
+            <Gravatar user={user} size={100} editable={true} />
+            <div class="divider" />
+            <div className="user-info">
+                <Typography>
+                    <b>Name:</b> {user.firstName} {user.lastName}
+                </Typography>
+                <Typography>
+                    <b>Email:</b> {user.email}
+                </Typography>
+                <Typography>
+                    <b>Cars in garage:</b> {user.cars.length}
+                </Typography>
+                <Typography>
+                    <b>Reservations requested:</b> {0}
+                </Typography>
+                <Typography>
+                    <b>Cars washed:</b> {0}
+                </Typography>
+            </div>
         </div>;
     }
 }
