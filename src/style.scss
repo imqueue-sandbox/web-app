@@ -29,3 +29,48 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+@keyframes onAutoFillStart {  from {/**/}  to {/**/}}
+@keyframes onAutoFillCancel {  from {/**/}  to {/**/}}
+input:-webkit-autofill {
+  animation-name: onAutoFillStart;
+  transition: background-color 50000s ease-in-out 0s;
+}
+input:not(:-webkit-autofill) {
+  animation-name: onAutoFillCancel;
+}
+.link-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  display: inline;
+  margin: 0;
+  padding: 0;
+  color: #00f;
+}
+.link-button:hover,
+.link-button:focus {
+  text-decoration: none;
+}
+.left-right {
+  justify-content: flex-end !important;
+}
+.left {
+  justify-self: flex-start !important;
+  margin-right: auto !important;
+}
+.login-actions {
+  button {
+    margin-bottom: 5px;
+    &:last-child {
+      margin-right: 20px;
+    }
+    &:first-child {
+      margin-left: 20px;
+    }
+    svg {
+      margin-left: 5px;
+    }
+  }
+}

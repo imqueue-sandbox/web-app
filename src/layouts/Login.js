@@ -16,6 +16,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { PureComponent } from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import { withStyles } from "@material-ui/core";
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -25,6 +27,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import LockOpen from '@material-ui/icons/LockOpen';
 import NotInterested from '@material-ui/icons/NotInterested';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 import { login } from '../relay/mutations/index';
 import { AppMessage } from '../components';
 import { clone, uuid } from '../common';
@@ -48,9 +51,42 @@ class Login extends PureComponent {
             email: '',
             password: '',
             errors: [],
+            canSubmit: false,
+            canReset: false,
+            shrink: false,
         };
 
         this.initialState = clone(this.state);
+    }
+
+    componentDidMount() {
+        window.requestAnimationFrame(() => {
+            const node = ReactDOM.findDOMNode(this);
+
+            if (node) {
+                const onAutoFillStart = () => {
+                    this.setState({
+                        canSubmit: true,
+                        canReset: true,
+                        shrink: true
+                    });
+                }
+                const onAnimationStart = ({ target, animationName }) => {
+                    if (animationName === 'onAutoFillStart') {
+                        return onAutoFillStart(target);
+                    }
+                };
+
+                document.querySelectorAll('input').forEach(el =>
+                    el.addEventListener(
+                        'animationstart',
+                        onAnimationStart,
+                        false
+                    )
+                );
+            }
+        });
+
     }
 
     /**
@@ -69,8 +105,7 @@ class Login extends PureComponent {
     /**
      * Resets the login form to initial state
      */
-    reset = () => this.clearErrors() ||
-        this.setState(clone(this.initialState));
+    reset = () => this.setState(clone(this.initialState));
 
     /**
      * Clears errors off
@@ -83,12 +118,19 @@ class Login extends PureComponent {
      * @param {string} name - field name
      * @param {CustomEvent} event - react event
      */
-    handleChange = (name, event) =>
-        this.setState({ [name]: event.target.value });
+    handleChange = (name, event) => {
+        const newState = { ...this.state, [name]: event.target.value };
+        newState.canReset = newState.email || newState.password ||
+            newState.errors.length;
+        newState.canSubmit = newState.email && newState.password;
+        this.setState(newState);
+    }
 
     render() {
+        const { fullScreen } = this.props;
+
         return <Dialog
-            fullScreen={false}
+            fullScreen={fullScreen}
             open={true}
             onClose={this.handleClose}
             aria-labelledby="responsive-dialog-title"
@@ -115,6 +157,9 @@ class Login extends PureComponent {
                     margin="normal"
                     variant="outlined"
                     value={this.state.email}
+                    InputLabelProps={{
+                        shrink: this.state.shrink || this.state.email
+                    }}
                     onChange={this.handleChange.bind(this, 'email')}
                 />
                 <TextField
@@ -126,31 +171,33 @@ class Login extends PureComponent {
                     margin="normal"
                     variant="outlined"
                     value={this.state.password}
+                    InputLabelProps={{
+                        shrink: this.state.shrink || !!this.state.password
+                    }}
                     onChange={this.handleChange.bind(this, 'password')}
                 />
             </DialogContent>
-            <DialogActions>
+            <DialogActions className="left-right login-actions">
+                <button className="link-button left" onClick={this.regForm}>
+                    Need an account?
+                </button>
                 <Button
-                    variant="contained"
+                    variant={fullScreen ? "text" : "contained"}
                     onClick={this.reset}
                     color="default"
                     size={"large"}
-                    disabled={!(
-                        this.state.email ||
-                        this.state.password ||
-                        this.state.errors.length
-                    )}
+                    disabled={!this.state.canReset}
                 >
                     Reset
                     <NotInterested />
                 </Button>
                 <Button
-                    variant="contained"
+                    variant={fullScreen ? "text" : "contained"}
                     onClick={this.login}
                     color="primary"
                     autoFocus
                     size={"large"}
-                    disabled={!(this.state.email && this.state.password)}
+                    disabled={!this.state.canSubmit}
                 >
                     Login
                     <LockOpen />
@@ -160,7 +207,10 @@ class Login extends PureComponent {
     }
 }
 
+Login.propTypes = {
+    fullScreen: PropTypes.bool.isRequired,
+};
 
-Login = withStyles(styles)(Login);
+Login = withMobileDialog()(withStyles(styles)(Login));
 
 export { Login };
