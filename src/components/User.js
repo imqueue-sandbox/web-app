@@ -23,9 +23,9 @@ import { Gravatar } from './Gravatar';
 export class User extends PureComponent {
     render() {
         const { user } = UserStorage.fetch();
-        return <div class="user-box">
+        return <div className="user-box">
             <Gravatar user={user} size={100} editable={true} />
-            <div class="divider" />
+            <div className="divider" />
             <div className="user-info">
                 <Typography>
                     <b>Name:</b> {user.firstName} {user.lastName}

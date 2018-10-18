@@ -16,13 +16,102 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import ExpansionPanelSummary
+    from "@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary";
+import Typography from "@material-ui/core/Typography/Typography";
+import ExpansionPanelDetails
+    from "@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails";
+import ExpansionPanelActions
+    from "@material-ui/core/ExpansionPanelActions/ExpansionPanelActions";
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Edit from '@material-ui/icons/Edit';
+import Button from "@material-ui/core/Button/Button";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel/ExpansionPanel";
 import { User } from './User';
+import {withStyles} from "@material-ui/core";
 
-export class Profile extends PureComponent {
+const styles = theme => (console.log(theme) || {
+    root: {
+        width: '100%',
+    },
+    right: {
+        justifyContent: 'flex-start',
+    },
+    grey: {
+        background: '#f5f5f5',
+    },
+    summary: {
+        background: theme.palette.secondary.main,
+        '& *': {
+            color: theme.palette.primary.contrastText + ' !important',
+        },
+    },
+    heading: {
+        fontSize: theme.typography.pxToRem(18),
+    },
+    icon: {
+        verticalAlign: 'bottom',
+        height: 20,
+        width: 20,
+    },
+    details: {
+        alignItems: 'center',
+        marginTop: 40 + 'px',
+    },
+    column: {
+        flexBasis: '33.33%',
+    },
+    helper: {
+        borderLeft: `2px solid ${theme.palette.divider}`,
+        padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+    },
+    link: {
+        color: theme.palette.primary.main,
+        textDecoration: 'none',
+        '&:hover': {
+            textDecoration: 'underline',
+        },
+    },
+});
+
+class Profile extends PureComponent {
     render() {
+        const { classes } = this.props;
+
         return <div>
-            <h2>Customer Profile</h2>
-            <User />
+            <ExpansionPanel defaultExpanded>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMore />}
+                    className={classes.summary}
+                >
+                    <div className={classes.column}>
+                        <Typography className={classes.heading}>
+                            Customer Details
+                        </Typography>
+                    </div>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails className={classes.details}>
+                    <User />
+                </ExpansionPanelDetails>
+                <ExpansionPanelActions className={[
+                    classes.right,
+                    // classes.grey,
+                ].join(" ")}>
+                    <Button size="small">
+                        <Edit />
+                        Edit
+                    </Button>
+                </ExpansionPanelActions>
+            </ExpansionPanel>
         </div>;
     }
 }
+
+Profile.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+Profile = withStyles(styles)(Profile);
+
+export { Profile };
