@@ -16,6 +16,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { PureComponent } from 'react';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -28,10 +29,11 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Lock from '@material-ui/icons/Lock';
 import Waves from '@material-ui/icons/Waves';
+import Person from '@material-ui/icons/Person';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { logout } from '../relay/mutations/index';
-import { TimeTable } from '../components/index';
+import { logout } from '../relay/mutations';
+import { TimeTable, Profile } from '../components';
 import { UserStorage } from "../common";
 
 const drawerWidth = 240;
@@ -94,7 +96,7 @@ class AppView extends PureComponent {
         const { classes } = this.props;
         const open = Boolean(this.state.anchorEl);
 
-        return (
+        return (<Router>
             <div className={classes.root}>
                 <AppBar position="absolute" className={classes.appBar}>
                     <Toolbar>
@@ -116,25 +118,34 @@ class AppView extends PureComponent {
                             >
                                 <AccountCircle />
                             </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={this.state.anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={open}
-                                onClose={this.handleClose}
-                            >
-                                <MenuItem onClick={this.logout}>
-                                    <Lock/>
-                                    Logout
-                                </MenuItem>
-                            </Menu>
+                                <Menu
+                                    id="menu-appbar"
+                                    anchorEl={this.state.anchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={open}
+                                    onClose={this.handleClose}
+                                >
+                                    <MenuItem
+                                        component={Link}
+                                        to="/profile"
+                                        onClick={this.handleClose}
+                                    >
+                                        <Person/>
+                                        Profile
+                                    </MenuItem>
+                                    <Divider/>
+                                    <MenuItem onClick={this.logout}>
+                                        <Lock/>
+                                        Logout
+                                    </MenuItem>
+                                </Menu>
                         </div>
                     </Toolbar>
                 </AppBar>
@@ -151,10 +162,11 @@ class AppView extends PureComponent {
                 </Drawer>
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
-                    <TimeTable/>
+                    <Route exact path="/" component={TimeTable} />
+                    <Route path="/profile" component={Profile} />
                 </main>
             </div>
-        );
+        </Router>);
     }
 }
 

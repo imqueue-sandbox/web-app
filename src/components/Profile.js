@@ -15,8 +15,14 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export * from './clone';
-export * from './Storage';
-export * from './UserStorage';
-export * from './uuid';
-export * from './md5';
+import React, { PureComponent } from 'react';
+import { User } from './User';
+
+export class Profile extends PureComponent {
+    render() {
+        return <div>
+            <h2>Customer Profile</h2>
+            <User />
+        </div>;
+    }
+}

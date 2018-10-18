@@ -15,8 +15,15 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export * from './clone';
-export * from './Storage';
-export * from './UserStorage';
-export * from './uuid';
-export * from './md5';
+import React, { PureComponent } from 'react';
+import { UserStorage } from '../common';
+import { Gravatar } from './Gravatar';
+
+export class User extends PureComponent {
+    render() {
+        const { user } = UserStorage.fetch();
+        return <div>
+            <Gravatar user={user} size={150} />
+        </div>;
+    }
+}

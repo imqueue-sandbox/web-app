@@ -18,3 +18,4 @@
 export * from './AppMessage';
 export * from './App';
 export * from './TimeTable';
+export * from './Profile';
