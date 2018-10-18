@@ -32,12 +32,24 @@ import NotInterested from '@material-ui/icons/NotInterested';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Visibility from '@material-ui/icons/Visibility';
 import PersonAdd from '@material-ui/icons/PersonAdd';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import green from '@material-ui/core/colors/green';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import { login, register } from '../relay/mutations/index';
 import { AppMessage } from '../components';
 import { clone, uuid } from '../common';
 
-const styles = () => ({});
+const styles = () => ({
+    buttonProgress: {
+        color: green[500],
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+    },
+});
 
 /**
  * Login page layout component - displays login form
@@ -67,6 +79,7 @@ class Login extends PureComponent {
             wrongFirstName: '',
             wrongLastName: '',
             isRegForm: false,
+            inProgress: false,
         };
 
         this.initialState = clone(this.state);
@@ -135,10 +148,13 @@ class Login extends PureComponent {
      * Performs login action
      */
     login = () => {
-        login(this.state, null, (errors) =>
-            this.setState({
+        this.setState({ inProgress: true })
+        login(this.state,
+            () => this.setState({ inProgress: false }),
+            (errors) => this.setState({
                 ...this.mapErrors(errors),
                 errors: errors,
+                inProgress: false
             }),
         );
     }
@@ -149,24 +165,24 @@ class Login extends PureComponent {
     register = () => {
         const { firstName, lastName, email, password } = this.state;
 
-        console.log()
+        this.setState({ inProgress: true });
 
         register(
             { firstName, lastName, email, password, isActive: true },
             (data) => {
-                console.log('data:', data);
                 let state = { // come back to login form
                     ...this.initialState,
                     email: data.user.email,
                     shrink: true,
+                    inProgress: false,
                 };
                 state = { ...state, ...this.checkActions(state) };
-                console.log('state', state);
                 this.setState(state);
             },
             (errors) => this.setState({ // display errors
                 ...this.mapErrors(errors),
                 errors: errors,
+                inProgress: false,
             }),
         );
     }
@@ -256,6 +272,9 @@ class Login extends PureComponent {
                     ? "Customer Registration"
                     : "Customer Login"
             }</DialogTitle>
+            <LinearProgress color="secondary" className={
+                this.state.inProgress ? "" : "invisible"
+            } />
             <DialogContent className="login-content">
                 {this.state.errors.map(error =>
                     <AppMessage
@@ -382,11 +401,17 @@ class Login extends PureComponent {
                     color="primary"
                     autoFocus
                     size={"large"}
-                    disabled={!this.state.canSubmit}
+                    disabled={!this.state.canSubmit || this.state.inProgress}
                 >
                     {this.state.isRegForm
                         ? <>Register <PersonAdd /></>
                         : <>Login <LockOpen /></>
+                    }
+                    {this.state.inProgress &&
+                        <CircularProgress
+                            size={24}
+                            className={this.props.classes.buttonProgress}
+                        />
                     }
                 </Button>
             </DialogActions>
