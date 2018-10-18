@@ -32,9 +32,18 @@ code {
 
 @keyframes onAutoFillStart {  from {/**/}  to {/**/}}
 @keyframes onAutoFillCancel {  from {/**/}  to {/**/}}
-input:-webkit-autofill {
-  animation-name: onAutoFillStart;
-  transition: background-color 50000s ease-in-out 0s;
+input, textarea, select {
+  &:-webkit-autofill {
+    animation-name: onAutoFillStart !important;
+    transition: background-color 50000s ease-in-out !important;
+  }
+}
+.adornment-end {
+  div {
+    &:nth-of-type(1) {
+      padding-right: 0 !important;
+    }
+  }
 }
 input:not(:-webkit-autofill) {
   animation-name: onAutoFillCancel;

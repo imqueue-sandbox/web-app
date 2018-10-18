@@ -150,7 +150,7 @@ class Login extends PureComponent {
             <DialogTitle id="responsive-dialog-title">
                 {"Customer Login"}
             </DialogTitle>
-            <DialogContent>
+            <DialogContent className="login-content">
                 {this.state.errors.map(error =>
                     <AppMessage
                         variant="error"
@@ -182,6 +182,7 @@ class Login extends PureComponent {
                     autoComplete="current-password"
                     margin="normal"
                     variant="outlined"
+                    className="adornment-end"
                     value={this.state.password}
                     InputLabelProps={{
                         shrink: this.state.shrink || !!this.state.password
