@@ -187,7 +187,6 @@ class Login extends PureComponent {
         );
     }
 
-
     /**
      * Resets the login form to initial state
      */

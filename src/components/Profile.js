@@ -31,7 +31,7 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel/ExpansionPanel";
 import { User } from './User';
 import {withStyles} from "@material-ui/core";
 
-const styles = theme => (console.log(theme) || {
+const styles = theme => ({
     root: {
         width: '100%',
     },

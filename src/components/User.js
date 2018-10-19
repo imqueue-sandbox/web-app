@@ -16,33 +16,81 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { PureComponent } from 'react';
+import { QueryRenderer, graphql } from 'react-relay';
 import Typography from '@material-ui/core/Typography';
-import { UserStorage } from '../common';
+import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
+import environment from '../relay/Environment';
 import { Gravatar } from './Gravatar';
 
 export class User extends PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            inProgress: true,
+        };
+    }
+
     render() {
-        const { user } = UserStorage.fetch();
-        return <div className="user-box">
-            <Gravatar user={user} size={100} editable={true} />
-            <div className="divider" />
-            <div className="user-info">
-                <Typography>
-                    <b>Name:</b> {user.firstName} {user.lastName}
-                </Typography>
-                <Typography>
-                    <b>Email:</b> {user.email}
-                </Typography>
-                <Typography>
-                    <b>Cars in garage:</b> {user.cars.length}
-                </Typography>
-                <Typography>
-                    <b>Reservations requested:</b> {0}
-                </Typography>
-                <Typography>
-                    <b>Cars washed:</b> {0}
-                </Typography>
-            </div>
-        </div>;
+        return <QueryRenderer
+            environment={environment}
+            query={graphql`query UserQuery {
+                user {
+                    id
+                    firstName
+                    lastName
+                    email
+                    isActive
+                    isAdmin
+                    cars {
+                        id
+                        carId
+                        make
+                        model
+                        type
+                        regNumber
+                    }
+                }
+            }`}
+        render={({error, props}) => {
+            if (!error && !props) {
+                return null;
+            }
+
+            const { user } = props;
+
+            if (error) {
+                return <div>{error.message}</div>;
+            }
+
+            else if (props) {
+                return <div className="user-box">
+                    <Gravatar user={user} size={100} editable={true} />
+                    <div className="divider" />
+                    <div className="user-info">
+                        <Typography>
+                            <b>Name:</b> {user.firstName} {user.lastName}
+                        </Typography>
+                        <Typography>
+                            <b>Email:</b> {user.email}
+                        </Typography>
+                        <Typography>
+                            <b>Cars in garage:</b> {user.cars.length}
+                        </Typography>
+                        <Typography>
+                            <b>Reservations requested:</b> {0}
+                        </Typography>
+                        <Typography>
+                            <b>Cars washed:</b> {0}
+                        </Typography>
+                    </div>
+                </div>;
+            }
+
+            return <LinearProgress color="secondary" className={
+                this.state.inProgress ? "" : "invisible"
+            } />;
+        }}
+    />
     }
 }

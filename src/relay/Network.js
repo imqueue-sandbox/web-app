@@ -16,6 +16,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  */
+/* eslint-disable */
 import { Network } from 'relay-runtime';
 import { UserStorage } from '../common';
 
@@ -24,10 +25,12 @@ const network = Network.create((
     variables,
 ) => fetch('http://localhost:8888/', {
         method: 'POST',
-        headers: {
+        headers: new Headers({
             'Content-Type': 'application/json',
-            'X-Auth-User': UserStorage.token()
-        },
+            get ['X-Auth-User']() {
+                return UserStorage.token();
+            },
+        }),
         body: JSON.stringify({
             query: operation.text,
             variables,
