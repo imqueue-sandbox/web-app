@@ -20,6 +20,7 @@ import Typography from '@material-ui/core/Typography';
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import { Gravatar } from './Gravatar';
 
+//TODO: this component can be re-writed just as Presentation component
 export class User extends PureComponent {
     constructor(props) {
         super(props);

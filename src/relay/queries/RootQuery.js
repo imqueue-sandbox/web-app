@@ -17,8 +17,10 @@
  */
 import { graphql } from 'react-relay';
 
-export const RootQuery = graphql`
-    query RootQuery($withoutUser: Boolean!) {
-        ...UserQueryFragment @skip(if: $withoutUser)
-    }
-`;
+// export const RootQuery = graphql`
+//     query RootQuery($withoutUser: Boolean!) {
+//         ...UserQueryFragment on  @skip(if: $withoutUser)
+//     }
+// `;
+
+export const ANDREW = 'BALANYUK';

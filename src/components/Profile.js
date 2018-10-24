@@ -31,6 +31,8 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel/ExpansionPanel";
 import { User } from './User';
 import {withStyles} from "@material-ui/core";
 
+import {createFragmentContainer, graphql} from 'react-relay';
+
 const styles = theme => ({
     root: {
         width: '100%',
@@ -76,7 +78,10 @@ const styles = theme => ({
 });
 
 class Profile extends PureComponent {
+  //TODO: here can be FragmentContainer which is describes user entity
     render() {
+        console.log('Profile:user prop', this.props.user);
+
         const { classes } = this.props;
 
         return <div>
@@ -113,5 +118,23 @@ Profile.propTypes = {
 };
 
 Profile = withStyles(styles)(Profile);
+Profile = createFragmentContainer(Profile,
+  graphql`
+    fragment Profile_user on User @argumentDefinitions(
+      id: {type: "String"},
+      email: {type: "String"}
+    ) {
+      id
+      firstName
+      lastName
+      email
+      cars {
+        id
+        make
+        model
+      }
+    }
+`
+);
 
 export { Profile };
