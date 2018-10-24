@@ -108,8 +108,8 @@ class AppView extends PureComponent {
           <QueryRenderer
               environment={environment}
               query={graphql`
-                query AppViewQuery($userID: String, $userEmail: String, $brand: String!) {
-                  ...User_user @arguments(id: $userID, email: $userEmail)
+                query AppViewQuery($brand: String!) {
+                  ...User_user
                   cars(brand: $brand) {
                     ...Cars_cars
                   }
@@ -117,8 +117,6 @@ class AppView extends PureComponent {
                 }
               `}
               variables={{
-                userID: "VXNlcjo1YmQwNjAyYTM2NjRiYTI4NTJiMWFjNDQ=",
-                userEmail: "abalanuk@lohika.com",
                 brand: "Renault"
               }}
               render={({error, props}) => {
