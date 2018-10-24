@@ -79,7 +79,7 @@ const styles = theme => ({
 class Profile extends PureComponent {
   //TODO: here can be FragmentContainer which is describes user entity
     render() {
-        const { classes } = this.props;
+        const { classes, data } = this.props;
 
         return <div>
             <ExpansionPanel defaultExpanded>
@@ -94,7 +94,7 @@ class Profile extends PureComponent {
                     </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.details}>
-                    <User />
+                    <User user={data} />
                     <Cars />
                 </ExpansionPanelDetails>
                 <ExpansionPanelActions className={[

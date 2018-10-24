@@ -15,10 +15,10 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
-import { Gravatar } from './Gravatar';
+import {Gravatar} from './Gravatar';
 
 import {createFragmentContainer, graphql} from 'react-relay';
 
@@ -33,9 +33,8 @@ class User extends PureComponent {
     }
 
     render() {
-        const { user, error } = this.props;
-
-        console.log("User::", this.props)
+        let { error, user } = this.props;
+        user = user.user;
 
         if (error) {
             return <div>{error.message}</div>;
@@ -43,8 +42,8 @@ class User extends PureComponent {
 
         else if (user) {
             return <div className="user-box">
-                <Gravatar user={user} size={100} editable={true} />
-                <div className="divider" />
+                <Gravatar user={user} size={100} editable={true}/>
+                <div className="divider"/>
                 <div className="user-info">
                     <Typography>
                         <b>Name:</b> {user.firstName} {user.lastName}
@@ -67,17 +66,26 @@ class User extends PureComponent {
 
         return <LinearProgress color="secondary" className={
             this.state.inProgress ? "" : "invisible"
-        } />;
+        }/>;
     }
 }
 
 User = createFragmentContainer(User,
-  graphql`
-    fragment User on User {
-        id
-        firstName
-        lastName
-        email
+    graphql`
+    fragment User_user on Query {
+        user {
+            id
+            firstName
+            lastName
+            email
+            isActive
+            isAdmin
+            cars {
+                id
+                make
+                model
+            }
+        }
     }`
 );
 
