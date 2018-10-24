@@ -71,6 +71,21 @@ interface Node {
   id: ID!
 }
 
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
 type Query {
   """Fetches an object given its ID"""
   node(
@@ -78,16 +93,33 @@ type Query {
     id: ID!
   ): Node
 
-  """Fetches list of users"""
-  users: [User]
+  """
+  Fetches list of users applying given filters and selecting given number of
+  records before or after a specified record in the selection list. If the data
+  is requested not by admin user the max number of records to fetch is limited
+  to 100 (as first or last arguments define). Without a first or last args
+  defined it will return first 10 users matching given filters
+  """
+  users(
+    """
+    Optional argument, allowing to define filtering criteria for user list selection
+    """
+    filter: UserFilter
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): UserConnection
 
   """Fetches user data by user id or email"""
   user(
-    """User identifier. Optional. Either this identifier or email required"""
+    """
+    User identifier. Optional. Either this identifier argument or email required
+    """
     id: String
 
     """
-    User email address. Optional. Either this email or identifier required
+    User email address. Optional. Either this email argument or identifier required
     """
     email: String
   ): User
@@ -109,9 +141,6 @@ type Query {
 }
 
 input updateUserInput {
-  """The ID of an object"""
-  id: ID!
-
   """User's first (given) name"""
   firstName: String
 
@@ -129,6 +158,11 @@ input updateUserInput {
 
   """User's admin role flag"""
   isAdmin: Boolean
+
+  """
+  User identifier. If provided will perform update, if not provided - will attempt to create new user
+  """
+  id: ID
 
   """List of cars associated with the user"""
   cars: [UserCar]
@@ -175,4 +209,42 @@ input UserCar {
 
   """Car registration number"""
   regNumber: String!
+}
+
+"""A connection to a list of items."""
+type UserConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [UserEdge]
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge"""
+  node: User
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""
+This type describes an arguments bypassed to a users collection selection filters
+"""
+input UserFilter {
+  """Filters users list by isActive boolean flag"""
+  isActive: Boolean
+
+  """Filters users list by isAdmin boolean flag"""
+  isAdmin: Boolean
+
+  """Filters users whom firstName matches given string pattern"""
+  firstName: String
+
+  """Filters users whom lastName matches given string pattern"""
+  lastName: String
+
+  """Filters users whom email address matches given string pattern"""
+  email: String
 }
