@@ -20,8 +20,10 @@ import Typography from '@material-ui/core/Typography';
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import { Gravatar } from './Gravatar';
 
+import {createFragmentContainer, graphql} from 'react-relay';
+
 //TODO: this component can be re-writed just as Presentation component
-export class User extends PureComponent {
+class User extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -32,6 +34,8 @@ export class User extends PureComponent {
 
     render() {
         const { user, error } = this.props;
+
+        console.log("User::", this.props)
 
         if (error) {
             return <div>{error.message}</div>;
@@ -66,3 +70,21 @@ export class User extends PureComponent {
         } />;
     }
 }
+
+User = createFragmentContainer(User,
+  graphql`
+    fragment User_user on User {
+        id
+        firstName
+        lastName
+        email
+        cars {
+          id
+          make
+          model
+        }
+      }
+`
+);
+
+export default User;

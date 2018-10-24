@@ -28,11 +28,9 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Edit from '@material-ui/icons/Edit';
 import Button from "@material-ui/core/Button/Button";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel/ExpansionPanel";
-import { User } from './User';
+import User from './User';
 import Cars from './Cars';
 import {withStyles} from "@material-ui/core";
-
-import {createFragmentContainer, graphql} from 'react-relay';
 
 const styles = theme => ({
     root: {
@@ -81,8 +79,6 @@ const styles = theme => ({
 class Profile extends PureComponent {
   //TODO: here can be FragmentContainer which is describes user entity
     render() {
-        console.log('Profile:user prop', this.props.user);
-
         const { classes } = this.props;
 
         return <div>
@@ -116,27 +112,9 @@ class Profile extends PureComponent {
 }
 
 Profile.propTypes = {
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired
 };
 
 Profile = withStyles(styles)(Profile);
-Profile = createFragmentContainer(Profile,
-  graphql`
-    fragment Profile_user on User @argumentDefinitions(
-      id: {type: "String"},
-      email: {type: "String"}
-    ) {
-      id
-      firstName
-      lastName
-      email
-      cars {
-        id
-        make
-        model
-      }
-    }
-`
-);
 
 export { Profile };

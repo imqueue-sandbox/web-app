@@ -108,23 +108,27 @@ class AppView extends PureComponent {
           <QueryRenderer
               environment={environment}
               query={graphql`
-                query AppViewQuery($userID: String, $userEmail: String) {
-                  user {
-                    ...Profile_user @arguments(id: $userID, email: $userEmail)
+                query AppViewQuery($userID: String, $userEmail: String, $brand: String!) {
+                  user(id: $userID, email: $userEmail) {
+                    ...User_user
+                  }
+                  cars(brand: $brand) {
+                    ...Cars_cars
                   }
                   brands
                 }
               `}
               variables={{
-                userID: 'userID',
-                userEmail: 'userEmail'
+                userID: "userID",
+                userEmail: "userEmail",
+                brand: "Renault"
               }}
               render={({error, props}) => {
                 if (error) {
                   return <div>{error.message}</div>;
                 } else if (props) {
 
-                  //console.log(props.user, props.brands);
+                  console.log(props);
 
                   return (
                     <Router>
