@@ -33,8 +33,8 @@ class User extends PureComponent {
     }
 
     render() {
-        let { error, user } = this.props;
-        user = user.user;
+        const { error, data } = this.props;
+        const user = data.user;
 
         if (error) {
             return <div>{error.message}</div>;
@@ -72,7 +72,7 @@ class User extends PureComponent {
 
 User = createFragmentContainer(User,
     graphql`
-    fragment User_user on Query {
+    fragment User on Query {
         user {
             id
             firstName

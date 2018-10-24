@@ -94,7 +94,7 @@ class Profile extends PureComponent {
                     </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.details}>
-                    <User user={data} />
+                    <User data={data} />
                     <Cars />
                 </ExpansionPanelDetails>
                 <ExpansionPanelActions className={[

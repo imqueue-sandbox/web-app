@@ -109,7 +109,7 @@ class AppView extends PureComponent {
                 environment={environment}
                 query={graphql`
                 query AppViewQuery {
-                    ...User_user
+                    ...User
                 }
               `}
                 variables={{
@@ -120,10 +120,7 @@ class AppView extends PureComponent {
                         return <div>{error.message}</div>;
                     } else if (props) {
 
-                        console.log('AppView::', props);
-
                         return (
-                            //<Profile/>
                             <Router>
                                 <div className={classes.root}>
                                     <AppBar position="absolute"
