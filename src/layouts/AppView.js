@@ -123,7 +123,9 @@ class AppView extends PureComponent {
                 if (error) {
                   return <div>{error.message}</div>;
                 } else if (props) {
+
                   //console.log(props.user, props.brands);
+
                   return (
                     <Router>
                         <div className={classes.root}>
@@ -196,14 +198,11 @@ class AppView extends PureComponent {
                                 <Route
                                   exact
                                   path="/"
-                                  component={prop => {
-                                    console.log('TimeTable props::', prop, props.brands);
-                                    return <TimeTable {...prop} brands={props.brands}/>
-                                  }}
+                                  component={ (prop) => <TimeTable {...prop}/> }
                                 />
                                 <Route
                                   path="/profile"
-                                  component={props => <Profile {...props}/>}
+                                  component={ (props) => <Profile {...props}/> }
                                 />
                             </main>
                         </div>

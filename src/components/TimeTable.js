@@ -27,7 +27,6 @@ export class TimeTable extends PureComponent {
       //TODO: here can be FragmentContainer which is describes all required entities such as cars, brands. etc...
         return (
           <section className="time-table">
-            {JSON.stringify(this.props.brands)}
           </section>
         )
     }

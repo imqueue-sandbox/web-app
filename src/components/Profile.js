@@ -29,6 +29,7 @@ import Edit from '@material-ui/icons/Edit';
 import Button from "@material-ui/core/Button/Button";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel/ExpansionPanel";
 import { User } from './User';
+import Cars from './Cars';
 import {withStyles} from "@material-ui/core";
 
 import {createFragmentContainer, graphql} from 'react-relay';
@@ -98,6 +99,7 @@ class Profile extends PureComponent {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.details}>
                     <User />
+                    <Cars />
                 </ExpansionPanelDetails>
                 <ExpansionPanelActions className={[
                     classes.right,
