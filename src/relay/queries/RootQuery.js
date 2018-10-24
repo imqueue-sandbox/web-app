@@ -22,5 +22,3 @@ import { graphql } from 'react-relay';
 //         ...UserQueryFragment on  @skip(if: $withoutUser)
 //     }
 // `;
-
-export const ANDREW = 'BALANYUK';
