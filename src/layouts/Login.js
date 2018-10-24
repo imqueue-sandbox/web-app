@@ -36,7 +36,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
-import { login, register } from '../relay/mutations/index';
+import { login, register } from '../relay/mutations';
 import { AppMessage } from '../components';
 import { clone, uuid } from '../common';
 
