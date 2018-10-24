@@ -73,15 +73,20 @@ class User extends PureComponent {
 
 User = createFragmentContainer(User,
   graphql`
-    fragment User_user on User {
-        id
-        firstName
-        lastName
-        email
-        cars {
+    fragment User_user on Query @argumentDefinitions(
+      id: {type: "String"},
+      email: {type: "String"}
+    ) {
+        user(id: $id, email: $email){
           id
-          make
-          model
+          firstName
+          lastName
+          email
+          cars {
+            id
+            make
+            model
+          }
         }
       }
 `

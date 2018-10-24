@@ -109,9 +109,7 @@ class AppView extends PureComponent {
               environment={environment}
               query={graphql`
                 query AppViewQuery($userID: String, $userEmail: String, $brand: String!) {
-                  user(id: $userID, email: $userEmail) {
-                    ...User_user
-                  }
+                  ...User_user @arguments(id: $userID, email: $userEmail)
                   cars(brand: $brand) {
                     ...Cars_cars
                   }
@@ -119,8 +117,8 @@ class AppView extends PureComponent {
                 }
               `}
               variables={{
-                userID: "userID",
-                userEmail: "userEmail",
+                userID: "VXNlcjo1YmQwNjAyYTM2NjRiYTI4NTJiMWFjNDQ=",
+                userEmail: "abalanuk@lohika.com",
                 brand: "Renault"
               }}
               render={({error, props}) => {
@@ -128,7 +126,7 @@ class AppView extends PureComponent {
                   return <div>{error.message}</div>;
                 } else if (props) {
 
-                  console.log(props);
+                  console.log('AppView::', props);
 
                   return (
                     <Router>
