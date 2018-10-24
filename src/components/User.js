@@ -73,20 +73,12 @@ class User extends PureComponent {
 
 User = createFragmentContainer(User,
   graphql`
-    fragment User_user on Query {
-        user {
-          id
-          firstName
-          lastName
-          email
-          cars {
-            id
-            make
-            model
-          }
-        }
-      }
-`
+    fragment User on User {
+        id
+        firstName
+        lastName
+        email
+    }`
 );
 
 export default User;

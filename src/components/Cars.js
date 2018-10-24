@@ -8,7 +8,8 @@ import {createFragmentContainer, graphql} from 'react-relay';
  */
 class Cars extends Component { // eslint-disable-line react/prefer-stateless-function
   render() {
-    console.log('Cars::', this.props)
+    //console.log('Cars::', this.props)
+
     return (
       <div><Car/></div>
     );
@@ -17,7 +18,7 @@ class Cars extends Component { // eslint-disable-line react/prefer-stateless-fun
 
 Cars = createFragmentContainer(Cars,
   graphql`
-    fragment Cars_cars on Car {
+    fragment Cars on Car {
       id
       make
       model
