@@ -15,10 +15,4 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import { graphql } from 'react-relay';
-
-// export const RootQuery = graphql`
-//     query RootQuery($withoutUser: Boolean!) {
-//         ...UserQueryFragment on  @skip(if: $withoutUser)
-//     }
-// `;
+export * from './RootQuery';
