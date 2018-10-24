@@ -108,10 +108,10 @@ class AppView extends PureComponent {
             <QueryRenderer
                 environment={environment}
                 query={graphql`
-                query AppViewQuery {
-                    ...User
-                }
-              `}
+                    query AppViewQuery {
+                        ...User
+                    }
+                `}
                 variables={{
                     brand: "Renault"
                 }}
