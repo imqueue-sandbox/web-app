@@ -109,9 +109,11 @@ class AppView extends PureComponent {
               environment={environment}
               query={graphql`
                 query AppViewQuery($brand: String!) {
-                  ...User_user
+                  user {
+                    ...User
+                  }
                   cars(brand: $brand) {
-                    ...Cars_cars
+                    ...Cars
                   }
                   brands
                 }
@@ -127,6 +129,7 @@ class AppView extends PureComponent {
                   console.log('AppView::', props);
 
                   return (
+                    //<Profile/>
                     <Router>
                         <div className={classes.root}>
                             <AppBar position="absolute" className={classes.appBar}>
@@ -202,7 +205,7 @@ class AppView extends PureComponent {
                                 />
                                 <Route
                                   path="/profile"
-                                  component={ (props) => <Profile {...props}/> }
+                                  component={ (prop) => <Profile {...prop}/> }
                                 />
                             </main>
                         </div>
