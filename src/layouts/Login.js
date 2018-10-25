@@ -55,65 +55,69 @@ const styles = () => ({
  * Login page layout component - displays login form
  */
 class Login extends PureComponent {
-    /**
-     * Initializes component
-     *
-     * @constructor
-     * @param {*} props
-     */
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            email: '',
-            password: '',
-            firstName: '',
-            lastName: '',
-            errors: [],
-            canSubmit: false,
-            canReset: false,
-            shrink: false,
-            showPassword: false,
-            wrongPassword: '',
-            wrongEmail: '',
-            wrongFirstName: '',
-            wrongLastName: '',
-            isRegForm: false,
-            inProgress: false,
-        };
+    state = {
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        errors: [],
+        canSubmit: false,
+        canReset: false,
+        shrink: false,
+        showPassword: false,
+        wrongPassword: '',
+        wrongEmail: '',
+        wrongFirstName: '',
+        wrongLastName: '',
+        isRegForm: false,
+        inProgress: false,
+    }
 
-        this.initialState = clone(this.state);
+    _initialState = clone(this.state)
+    _isMounted = false
+
+    _onAutoFillStart = () => {
+        this.setState({
+            shrink: true,
+            ...this.checkActions(this.state)
+        });
+    }
+
+    _onAnimationStart = ({ target, animationName }) => {
+        if (animationName === 'onAutoFillStart') {
+            return this._onAutoFillStart(target);
+        }
     }
 
     /**
      * handling component insertion into DOM
      */
     componentDidMount() {
+        this._isMounted = true;
         window.requestAnimationFrame(() => {
             const node = ReactDOM.findDOMNode(this);
 
             if (node) {
-                const onAutoFillStart = () => {
-                    this.setState({
-                        shrink: true,
-                        ...this.checkActions(this.state)
-                    });
-                }
-                const onAnimationStart = ({ target, animationName }) => {
-                    if (animationName === 'onAutoFillStart') {
-                        return onAutoFillStart(target);
-                    }
-                };
-
                 document.querySelectorAll('input').forEach(el =>
                     el.addEventListener(
                         'animationstart',
-                        onAnimationStart,
+                        this._onAnimationStart,
                         false
                     )
                 );
             }
         });
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+        document.querySelectorAll('input').forEach(el =>
+            el.removeEventListener(
+                'animationstart',
+                this._onAnimationStart,
+            )
+        );
     }
 
     /**
@@ -150,7 +154,7 @@ class Login extends PureComponent {
     login = () => {
         this.setState({ inProgress: true })
         login(this.state,
-            () => this.setState({ inProgress: false }),
+            () => this._isMounted && this.setState({ inProgress: false }),
             (errors) => this.setState({
                 ...this.mapErrors(errors),
                 errors: errors,
@@ -171,7 +175,7 @@ class Login extends PureComponent {
             { firstName, lastName, email, password, isActive: true },
             (data) => {
                 let state = { // come back to login form
-                    ...this.initialState,
+                    ...this._initialState,
                     email: data.user.email,
                     shrink: true,
                     inProgress: false,
@@ -191,7 +195,7 @@ class Login extends PureComponent {
      * Resets the login form to initial state
      */
     reset = () => {
-        const newState = clone(this.initialState);
+        const newState = clone(this._initialState);
         newState.isRegForm = this.state.isRegForm;
         this.setState(newState);
     }
