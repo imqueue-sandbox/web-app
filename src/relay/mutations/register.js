@@ -32,16 +32,6 @@ export function register(userData, success, failure) {
                     email
                     firstName
                     lastName
-                    isAdmin
-                    isActive
-                    cars {
-                        id
-                        carId
-                        make
-                        model
-                        type
-                        regNumber
-                    }
                 }
                 clientMutationId
             }

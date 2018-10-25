@@ -18,6 +18,7 @@
 import React, { Component } from 'react';
 import { UserStorage } from '../common';
 import { Login, AppView } from '../layouts';
+import { AppMessage } from './AppMessage';
 
 export class App extends Component {
 
@@ -40,7 +41,10 @@ export class App extends Component {
             return <AppView
                 vars={{}}
                 onError={error =>
-                    <div className="error">{error.message}</div>}
+                    <AppMessage
+                        message={error.message}
+                        variant="error"
+                    />}
                 onLoading={() =>
                     <div>Loading...</div>}
             />;
