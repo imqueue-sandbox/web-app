@@ -24,7 +24,7 @@ const query = graphql`query AppRootQuery {
     ...User
 }`;
 
-export function withAppRootQuery(WrappedComponent) {
+export function withAppRootQuery(Child) {
     class AppRootQuery extends Component {
         render() {
             const { vars, onError, onLoading } = this.props;
@@ -39,7 +39,7 @@ export function withAppRootQuery(WrappedComponent) {
                     }
 
                     else if (props) {
-                        return <WrappedComponent data={props} />;
+                        return <Child data={props} />;
                     }
 
                     return onLoading && (onLoading() || null);
