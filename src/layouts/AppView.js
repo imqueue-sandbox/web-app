@@ -101,7 +101,6 @@ class AppView extends PureComponent {
     }
 
     render() {
-        // TODO: here can be QueryRenderer which is fetching: users, cars, brands
         const {classes} = this.props;
         const open = Boolean(this.state.anchorEl);
         return (

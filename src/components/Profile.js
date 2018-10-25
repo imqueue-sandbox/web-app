@@ -77,7 +77,6 @@ const styles = theme => ({
 });
 
 class Profile extends PureComponent {
-  //TODO: here can be FragmentContainer which is describes user entity
     render() {
         const { classes, data } = this.props;
 
