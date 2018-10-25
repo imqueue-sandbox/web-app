@@ -26,7 +26,7 @@ import { UserCarsFragment } from '../relay/queries';
 class UserCars extends Component {
     render() {
         const { data } = this.props;
-        const cars = data.cars || [];
+        const cars = data ? data.cars || [] : [];
 
         if (cars) {
             return <div className="cars">
