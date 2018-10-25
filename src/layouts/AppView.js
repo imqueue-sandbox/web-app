@@ -99,6 +99,7 @@ class AppView extends PureComponent {
     render() {
         const { classes } = this.props;
         const open = Boolean(this.state.anchorEl);
+        console.log(this.props.data);
 
         return <div className={classes.root}>
             <AppBar position="absolute"
