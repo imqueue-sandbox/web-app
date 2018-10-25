@@ -1,21 +1,21 @@
-"""UserCar entity"""
-type UserCar implements Node {
+"""Car entity"""
+type Car implements Node {
   """The ID of an object"""
   id: ID!
 
   """The ID of an object"""
   carId: ID!
 
-  """UserCar's manufacturer"""
+  """Car's manufacturer"""
   make: String
 
-  """UserCar's model name"""
+  """Car's model name"""
   model: String
 
-  """UserCar type (vehicle class)"""
+  """Car type (vehicle class)"""
   type: String
 
-  """UserCar manufacturing years"""
+  """Car manufacturing years"""
   years: [Int]
 
   """
@@ -126,15 +126,15 @@ type Query {
 
   """Fetches list of cars for a given brand"""
   cars(
-    """UserCar's manufacturer (brand) name"""
+    """Car's manufacturer (brand) name"""
     brand: String!
-  ): [UserCar]
+  ): [Car]
 
   """Fetches car data by its identifier"""
   car(
     """User identifier. Optional. Either this identifier or email required"""
     id: String!
-  ): UserCar
+  ): Car
 
   """Fetches list of car brands"""
   brands: [String]
@@ -199,7 +199,7 @@ type User implements Node {
   isAdmin: Boolean
 
   """User cars list"""
-  cars: [UserCar]
+  cars: [Car]
 }
 
 """User car association object"""
@@ -207,7 +207,7 @@ input UserCar {
   """Identifier of car object from cars database"""
   carId: String!
 
-  """UserCar registration number"""
+  """Car registration number"""
   regNumber: String!
 }
 
