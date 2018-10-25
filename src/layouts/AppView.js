@@ -34,7 +34,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { logout } from '../relay/mutations';
 import { TimeTable, Profile } from '../components';
-import { UserStorage } from "../common";
+import { UserStorage } from '../common';
 import { withAppRootQuery } from '../relay/queries';
 
 const drawerWidth = 240;
@@ -76,12 +76,9 @@ const styles = theme => ({
 });
 
 class AppView extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            auth: true,
-            anchorEl: null
-        };
+    state = {
+        auth: true,
+        anchorEl: null
     }
 
     handleMenu = event => {
@@ -96,6 +93,7 @@ class AppView extends PureComponent {
         const token = (UserStorage.fetch() || {}).token;
         this.handleClose();
         token && logout(token);
+        UserStorage.clear();
     }
 
     render() {

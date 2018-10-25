@@ -15,26 +15,26 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
-import {Gravatar} from './Gravatar';
+import { Gravatar } from './Gravatar';
 
-import {createFragmentContainer, graphql} from 'react-relay';
+import { createFragmentContainer, graphql } from 'react-relay';
+import { UserStorage } from "../common";
 
-//TODO: this component can be re-writed just as Presentation component
 class User extends PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            inProgress: true,
-        };
+    state = {
+        inProgress: true,
     }
 
     render() {
         const { error, data } = this.props;
         const user = data.user;
+
+        if (!user) {
+            UserStorage.clear();
+        }
 
         if (error) {
             return <div>{error.message}</div>;

@@ -22,17 +22,21 @@ import { Login, AppView } from '../layouts';
 export class App extends Component {
 
     state = {
-        user: UserStorage.fetch(),
+        auth: UserStorage.fetch(),
     };
 
-    constructor(props) {
-        super(props);
+    _onUserChange = auth => this.setState({ auth })
 
-        UserStorage.on('change', user => this.setState({ user }));
+    componentWillUnmount() {
+        UserStorage.off('change', this._onUserChange);
+    }
+
+    componentDidMount() {
+        UserStorage.on('change', this._onUserChange);
     }
 
     render() {
-        if (this.state.user) {
+        if (this.state.auth) {
             return <AppView
                 vars={{}}
                 onError={error =>
