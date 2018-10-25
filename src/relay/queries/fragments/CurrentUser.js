@@ -18,16 +18,11 @@
 import { graphql } from 'react-relay';
 
 export const CurrentUserFragment = graphql`
-fragment CurrentUser on Query {
-    user {
+fragment CurrentUser on User {
         id
         firstName
         lastName
         email
         isActive
         isAdmin
-        cars {
-            id
-        }
-    }
 }`;

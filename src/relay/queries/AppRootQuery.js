@@ -25,8 +25,10 @@ query AppRootQuery(
     $withUser: Boolean!
     $withUserCars: Boolean!
 ) {
-    ...CurrentUser @include(if: $withUser)
-    ...UserCars @include(if: $withUserCars)
+    user {
+        ...CurrentUser @include(if: $withUser)
+        ...UserCars @include(if: $withUserCars)
+    }
 }`;
 
 export function withAppRootQuery(Child) {

@@ -89,7 +89,7 @@ class Profile extends PureComponent {
                     </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.details}>
-                    <User data={data} />
+                    <User data={data.user} />
                 </ExpansionPanelDetails>
             </ExpansionPanel>
 
@@ -105,7 +105,7 @@ class Profile extends PureComponent {
                     </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.details}>
-                    <UserCars data={data}  />
+                    <UserCars data={data.user}  />
                 </ExpansionPanelDetails>
             </ExpansionPanel>
         </div>;

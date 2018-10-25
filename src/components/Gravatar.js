@@ -63,7 +63,7 @@ class Gravatar extends PureComponent {
                 this.props.editable ? '. Click to change...' : ''
             }`}
             src={`https://s.gravatar.com/avatar/${
-                md5(user.email.trim().toLowerCase())
+                md5((user.email || '').trim().toLowerCase())
             }` + ((size || large) && `?s=${size ? size : bigSize}`)}
             className={classNames(
                 classes.avatar,

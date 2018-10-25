@@ -30,7 +30,7 @@ class User extends PureComponent {
 
     render() {
         const { error, data } = this.props;
-        const user = data.user;
+        const user = data;
 
         if (!user) {
             UserStorage.clear();

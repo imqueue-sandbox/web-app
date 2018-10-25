@@ -18,15 +18,12 @@
 import { graphql } from 'react-relay';
 
 export const UserCarsFragment = graphql`
-fragment UserCars on Query {
-    user {
+fragment UserCars on User {
+    cars {
         id
-        cars {
-            id
-            carId
-            make
-            model
-            regNumber
-        }
+        carId
+        make
+        model
+        regNumber
     }
 }`;
