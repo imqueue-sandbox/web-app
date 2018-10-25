@@ -17,7 +17,7 @@
  */
 import React, { PureComponent } from 'react';
 import Typography from '@material-ui/core/Typography';
-import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
+import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
 import { Gravatar } from './Gravatar';
 
 import { createFragmentContainer, graphql } from 'react-relay';
