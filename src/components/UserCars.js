@@ -27,6 +27,7 @@ class UserCars extends Component {
     render() {
         const { data } = this.props;
         const cars = data.user ? data.user.cars : [];
+
         if (cars) {
             return <div className="cars">
                 {cars.map(car => <UserCar key={car.id} car={car}/>)}
