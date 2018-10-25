@@ -159,6 +159,9 @@ input updateUserInput {
   """User's admin role flag"""
   isAdmin: Boolean
 
+  """User registered cars count"""
+  carsCount: Int
+
   """
   User identifier. If provided will perform update, if not provided - will attempt to create new user
   """
@@ -200,6 +203,9 @@ type User implements Node {
 
   """User cars list"""
   cars: [Car]
+
+  """User registered cars count"""
+  carsCount: Int
 }
 
 """User car association object"""

@@ -25,4 +25,5 @@ fragment CurrentUser on User {
         email
         isActive
         isAdmin
+        carsCount
 }`;
