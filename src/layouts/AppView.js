@@ -15,10 +15,10 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import React, {PureComponent} from 'react';
-import {BrowserRouter as Router, Route, Link} from "react-router-dom";
+import React, { PureComponent } from 'react';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -32,12 +32,10 @@ import Waves from '@material-ui/icons/Waves';
 import Person from '@material-ui/icons/Person';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import {logout} from '../relay/mutations';
-import {TimeTable, Profile} from '../components';
-import {UserStorage} from "../common";
-
-import environment from '../relay/Environment';
-import {QueryRenderer, graphql} from 'react-relay';
+import { logout } from '../relay/mutations';
+import { TimeTable, Profile } from '../components';
+import { UserStorage } from "../common";
+import { withAppRootQuery } from '../relay/queries';
 
 const drawerWidth = 240;
 
@@ -101,115 +99,92 @@ class AppView extends PureComponent {
     }
 
     render() {
-        const {classes} = this.props;
+        const { classes } = this.props;
         const open = Boolean(this.state.anchorEl);
-        return (
-            <QueryRenderer
-                environment={environment}
-                query={graphql`
-                    query AppViewQuery {
-                        ...User
-                    }
-                `}
-                variables={{
-                    brand: "Renault"
-                }}
-                render={({error, props}) => {
-                    if (error) {
-                        return <div>{error.message}</div>;
-                    } else if (props) {
 
-                        return (
-                            <Router>
-                                <div className={classes.root}>
-                                    <AppBar position="absolute"
-                                            className={classes.appBar}>
-                                        <Toolbar>
-                                            <Link to="/">
-                                                <Waves
-                                                    className={classes.logo}/>
-                                            </Link>
-                                            <Typography component={Link} to="/"
-                                                        variant="h6"
-                                                        color="inherit"
-                                                        className={classes.grow}
-                                                        noWrap
-                                            >
-                                                CarWash Reservations
-                                            </Typography>
-                                            <div>
-                                                <IconButton
-                                                    aria-owns={open ? 'menu-appbar' : null}
-                                                    aria-haspopup="true"
-                                                    onClick={this.handleMenu}
-                                                    color="inherit"
-                                                >
-                                                    <AccountCircle/>
-                                                </IconButton>
-                                                <Menu
-                                                    id="menu-appbar"
-                                                    anchorEl={this.state.anchorEl}
-                                                    anchorOrigin={{
-                                                        vertical: 'top',
-                                                        horizontal: 'right',
-                                                    }}
-                                                    transformOrigin={{
-                                                        vertical: 'top',
-                                                        horizontal: 'right',
-                                                    }}
-                                                    open={open}
-                                                    onClose={this.handleClose}
-                                                >
-                                                    <MenuItem
-                                                        component={Link}
-                                                        to="/profile"
-                                                        onClick={this.handleClose}
-                                                    >
-                                                        <Person/>
-                                                        Profile
-                                                    </MenuItem>
-                                                    <Divider/>
-                                                    <MenuItem
-                                                        onClick={this.logout}>
-                                                        <Lock/>
-                                                        Logout
-                                                    </MenuItem>
-                                                </Menu>
-                                            </div>
-                                        </Toolbar>
-                                    </AppBar>
-                                    <Drawer
-                                        variant="permanent"
-                                        classes={{
-                                            paper: classes.drawerPaper,
-                                        }}
-                                    >
-                                        <div className={classes.toolbar}/>
-                                        <List></List>
-                                        <Divider/>
-                                        <List></List>
-                                    </Drawer>
-                                    <main className={classes.content}>
-                                        <div className={classes.toolbar}/>
-                                        <Route
-                                            exact
-                                            path="/"
-                                            component={() =>
-                                                <TimeTable {...props}/>}
-                                        />
-                                        <Route
-                                        path="/profile"
-                                        component={ () => <Profile data={props}/> }
-                                        />
-                                    </main>
-                                </div>
-                            </Router>
-                        )
-                    }
-                    return <div>Loading...</div>;
-                }}
-            />
-        )
+        return <Router>
+            <div className={classes.root}>
+                <AppBar position="absolute"
+                        className={classes.appBar}>
+                    <Toolbar>
+                        <Link to="/">
+                            <Waves
+                                className={classes.logo}/>
+                        </Link>
+                        <Typography component={Link} to="/"
+                                    variant="h6"
+                                    color="inherit"
+                                    className={classes.grow}
+                                    noWrap
+                        >
+                            CarWash Reservations
+                        </Typography>
+                        <div>
+                            <IconButton
+                                aria-owns={open ? 'menu-appbar' : null}
+                                aria-haspopup="true"
+                                onClick={this.handleMenu}
+                                color="inherit"
+                            >
+                                <AccountCircle/>
+                            </IconButton>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={this.state.anchorEl}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={open}
+                                onClose={this.handleClose}
+                            >
+                                <MenuItem
+                                    component={Link}
+                                    to="/profile"
+                                    onClick={this.handleClose}
+                                >
+                                    <Person/>
+                                    Profile
+                                </MenuItem>
+                                <Divider/>
+                                <MenuItem
+                                    onClick={this.logout}>
+                                    <Lock/>
+                                    Logout
+                                </MenuItem>
+                            </Menu>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    variant="permanent"
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                >
+                    <div className={classes.toolbar}/>
+                    <List></List>
+                    <Divider/>
+                    <List></List>
+                </Drawer>
+                <main className={classes.content}>
+                    <div className={classes.toolbar}/>
+                    <Route
+                        exact
+                        path="/"
+                        component={() => <TimeTable data={this.props.data}/>}
+                    />
+                    <Route
+                        path="/profile"
+                        component={() => <Profile data={this.props.data}/>}
+                    />
+                </main>
+            </div>
+        </Router>;
     }
 }
 
@@ -217,6 +192,6 @@ AppView.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-AppView = withStyles(styles)(AppView);
+AppView = withAppRootQuery(withStyles(styles)(AppView));
 
-export {AppView};
+export { AppView };
