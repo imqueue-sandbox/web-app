@@ -21,7 +21,7 @@ import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import { Gravatar } from './Gravatar';
 
 import { createFragmentContainer, graphql } from 'react-relay';
-import { UserStorage } from "../common";
+import { UserStorage } from '../common';
 
 class User extends PureComponent {
     state = {
