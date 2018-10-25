@@ -36,10 +36,17 @@ export class App extends Component {
         UserStorage.on('change', this._onUserChange);
     }
 
+    _is(routePath) {
+        return this.props.location.pathname === `/${routePath}`;
+    }
+
     render() {
         if (this.state.auth) {
             return <AppView
-                vars={{}}
+                vars={{
+                    withUser: true,
+                    withUserCars: this._is('profile'),
+                }}
                 onError={error =>
                     <AppMessage
                         message={error.message}

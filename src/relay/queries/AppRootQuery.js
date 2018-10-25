@@ -20,9 +20,13 @@ import PropTypes from 'prop-types';
 import { graphql, QueryRenderer } from 'react-relay';
 import environment from '../Environment';
 
-const query = graphql`query AppRootQuery {
-    ...CurrentUser
-    ...UserCars
+const query = graphql`
+query AppRootQuery(
+    $withUser: Boolean!
+    $withUserCars: Boolean!
+) {
+    ...CurrentUser @include(if: $withUser)
+    ...UserCars @include(if: $withUserCars)
 }`;
 
 export function withAppRootQuery(Child) {
