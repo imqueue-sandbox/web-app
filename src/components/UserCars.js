@@ -29,7 +29,7 @@ class UserCars extends Component {
         const cars = data.user ? data.user.cars : [];
         if (cars) {
             return <div className="cars">
-                {cars.map(car => <UserCar car={car}/>)}
+                {cars.map(car => <UserCar key={car.id} car={car}/>)}
             </div>;
         }
 
