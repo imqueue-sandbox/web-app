@@ -18,20 +18,19 @@
 import React, { PureComponent } from 'react';
 import { Route, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Lock from '@material-ui/icons/Lock';
+import Avatar from '@material-ui/core/Avatar';
 import Waves from '@material-ui/icons/Waves';
-import Person from '@material-ui/icons/Person';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+
 import { logout } from '../relay/mutations';
 import { TimeTable, Profile } from '../components';
 import { UserStorage } from '../common';
@@ -75,112 +74,98 @@ const styles = theme => ({
     toolbar: theme.mixins.toolbar,
 });
 
+function ListItemLink(props) {
+    return <ListItem button component="a" {...props} />;
+}
+
 class AppView extends PureComponent {
     state = {
-        auth: true,
-        anchorEl: null
-    }
-
-    handleMenu = event => {
-        this.setState({anchorEl: event.currentTarget});
-    }
-
-    handleClose = () => {
-        this.setState({anchorEl: null});
+        auth: true
     }
 
     logout = () => {
         const token = (UserStorage.fetch() || {}).token;
-        this.handleClose();
         token && logout(token);
         UserStorage.clear();
     }
 
     render() {
         const { classes } = this.props;
-        const open = Boolean(this.state.anchorEl);
+        const {user} = UserStorage.fetch();
+        const letters = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
+        const fullName = `${user.firstName} ${user.lastName}`
 
-        return <div className={classes.root}>
-            <AppBar position="absolute"
-                    className={classes.appBar}>
-                <Toolbar>
-                    <Link to="/">
-                        <Waves
-                            className={classes.logo}/>
-                    </Link>
-                    <Typography component={Link} to="/"
-                                variant="h6"
-                                color="inherit"
-                                className={classes.grow}
-                                noWrap
-                    >
-                        CarWash Reservations
-                    </Typography>
-                    <div>
-                        <IconButton
-                            aria-owns={open ? 'menu-appbar' : null}
-                            aria-haspopup="true"
-                            onClick={this.handleMenu}
+        return (
+            <div className={classes.root}>
+                <AppBar
+                    position="absolute"
+                    className={classes.appBar}
+                >
+                    <Toolbar>
+                        <Link to="/">
+                            <Waves className={classes.logo}/>
+                        </Link>
+                        <Typography
+                            component={Link} to="/"
+                            variant="h6"
                             color="inherit"
+                            className={classes.grow}
+                            noWrap
                         >
-                            <AccountCircle/>
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={this.state.anchorEl}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={open}
-                            onClose={this.handleClose}
-                        >
-                            <MenuItem
-                                component={Link}
-                                to="/profile"
-                                onClick={this.handleClose}
+                            CarWash Reservations
+                        </Typography>
+                        <div>
+                            <span>{`Hello ${user['firstName']}`}</span>
+                            <IconButton
+                                disableRipple={true}
                             >
-                                <Person/>
-                                Profile
-                            </MenuItem>
-                            <Divider/>
-                            <MenuItem
-                                onClick={this.logout}>
-                                <Lock/>
-                                Logout
-                            </MenuItem>
-                        </Menu>
-                    </div>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                variant="permanent"
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-            >
-                <div className={classes.toolbar}/>
-                <List></List>
-                <Divider/>
-                <List></List>
-            </Drawer>
-            <main className={classes.content}>
-                <div className={classes.toolbar}/>
-                <Route
-                    exact
-                    path="/"
-                    component={() => <TimeTable data={this.props.data}/>}
-                />
-                <Route
-                    path="/profile"
-                    component={() => <Profile data={this.props.data}/>}
-                />
-            </main>
-        </div>;
+                                { user.avatarUrl ?
+                                    <Avatar
+                                        alt={fullName}
+                                        src={user.avatarUrl}
+                                    /> : <Avatar>{letters}</Avatar>
+                                }
+                            </IconButton>
+                            <IconButton
+                                onClick={this.logout}
+                            >
+                                <svg style={{'width': 24, 'height':24}} viewBox="0 0 24 24">
+                                    <path fill="white" d="M17,17.25V14H10V10H17V6.75L22.25,12L17,17.25M13,2A2,2 0 0,1 15,4V8H13V4H4V20H13V16H15V20A2,2 0 0,1 13,22H4A2,2 0 0,1 2,20V4A2,2 0 0,1 4,2H13Z" />
+                                </svg>
+                            </IconButton>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    variant="permanent"
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                >
+                    <div className={classes.toolbar}/>
+                    <List>
+                        <ListItemLink href="/">
+                            <ListItemText primary="TimeTable" />
+                        </ListItemLink>
+                        <ListItemLink href="/profile">
+                            <ListItemText primary="Profile" />
+                        </ListItemLink>
+                    </List>
+                </Drawer>
+                <main className={classes.content}>
+                    <div className={classes.toolbar}/>
+                    <Route
+                        exact
+                        path="/"
+                        component={() => <TimeTable data={this.props.data}/>}
+                    />
+                    <Route
+                        path="/profile"
+                        component={() => <Profile data={this.props.data}/>}
+                    />
+                </main>
+            </div>
+        )
     }
 }
 

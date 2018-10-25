@@ -270,14 +270,19 @@ class Login extends PureComponent {
             onClose={this.handleClose}
             aria-labelledby="responsive-dialog-title"
         >
-            <DialogTitle id="responsive-dialog-title">{
+            <DialogTitle id="responsive-dialog-title">
+              {
                 this.state.isRegForm
                     ? "Customer Registration"
                     : "Customer Login"
-            }</DialogTitle>
-            <LinearProgress color="secondary" className={
+              }
+            </DialogTitle>
+            <LinearProgress
+              color="secondary"
+              className={
                 this.state.inProgress ? "" : "invisible"
-            } />
+              }
+            />
             <DialogContent className="login-content">
                 {this.state.errors.map(error =>
                     <AppMessage
@@ -288,55 +293,57 @@ class Login extends PureComponent {
                         key={(error.extensions || {}).code || uuid()}
                     />)
                 }
-                <TextField
-                    id="email"
-                    error={!!this.state.wrongEmail}
-                    required
-                    label="E-mail"
-                    fullWidth
-                    type="email"
-                    name="email"
-                    autoComplete="email"
-                    margin="normal"
-                    variant="outlined"
-                    value={this.state.email}
-                    InputLabelProps={{
-                        shrink: this.state.shrink || !!this.state.email
-                    }}
-                    onChange={this.handleChange.bind(this, 'email')}
-                />
-                <TextField
-                    id="password"
-                    required
-                    error={!!this.state.wrongPassword}
-                    label="Password"
-                    fullWidth
-                    type={this.state.showPassword ? "text" : "password"}
-                    autoComplete="current-password"
-                    margin="normal"
-                    variant="outlined"
-                    className="adornment-end"
-                    value={this.state.password}
-                    InputLabelProps={{
-                        shrink: this.state.shrink || !!this.state.password
-                    }}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="Toggle password visibility"
-                                    onClick={this.handleClickShowPassword}
-                                >
-                                    {this.state.showPassword
-                                        ? <VisibilityOff />
-                                        : <Visibility />
-                                    }
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                    onChange={this.handleChange.bind(this, 'password')}
-                />
+                <form>
+                    <TextField
+                        id="email"
+                        error={!!this.state.wrongEmail}
+                        required
+                        label="E-mail"
+                        fullWidth
+                        type="email"
+                        name="email"
+                        autoComplete="email"
+                        margin="normal"
+                        variant="outlined"
+                        value={this.state.email}
+                        InputLabelProps={{
+                            shrink: this.state.shrink || !!this.state.email
+                        }}
+                        onChange={this.handleChange.bind(this, 'email')}
+                    />
+                    <TextField
+                        id="password"
+                        required
+                        error={!!this.state.wrongPassword}
+                        label="Password"
+                        fullWidth
+                        type={this.state.showPassword ? "text" : "password"}
+                        autoComplete="current-password"
+                        margin="normal"
+                        variant="outlined"
+                        className="adornment-end"
+                        value={this.state.password}
+                        InputLabelProps={{
+                            shrink: this.state.shrink || !!this.state.password
+                        }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="Toggle password visibility"
+                                        onClick={this.handleClickShowPassword}
+                                    >
+                                        {this.state.showPassword
+                                            ? <VisibilityOff />
+                                            : <Visibility />
+                                        }
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                        onChange={this.handleChange.bind(this, 'password')}
+                    />
+                </form>
                 {this.state.isRegForm && (<>
                     <TextField
                         id="firstName"
