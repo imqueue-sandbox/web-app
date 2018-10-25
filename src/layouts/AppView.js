@@ -16,7 +16,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { PureComponent } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Route, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -100,89 +100,87 @@ class AppView extends PureComponent {
         const { classes } = this.props;
         const open = Boolean(this.state.anchorEl);
 
-        return <Router>
-            <div className={classes.root}>
-                <AppBar position="absolute"
-                        className={classes.appBar}>
-                    <Toolbar>
-                        <Link to="/">
-                            <Waves
-                                className={classes.logo}/>
-                        </Link>
-                        <Typography component={Link} to="/"
-                                    variant="h6"
-                                    color="inherit"
-                                    className={classes.grow}
-                                    noWrap
-                        >
-                            CarWash Reservations
-                        </Typography>
-                        <div>
-                            <IconButton
-                                aria-owns={open ? 'menu-appbar' : null}
-                                aria-haspopup="true"
-                                onClick={this.handleMenu}
+        return <div className={classes.root}>
+            <AppBar position="absolute"
+                    className={classes.appBar}>
+                <Toolbar>
+                    <Link to="/">
+                        <Waves
+                            className={classes.logo}/>
+                    </Link>
+                    <Typography component={Link} to="/"
+                                variant="h6"
                                 color="inherit"
+                                className={classes.grow}
+                                noWrap
+                    >
+                        CarWash Reservations
+                    </Typography>
+                    <div>
+                        <IconButton
+                            aria-owns={open ? 'menu-appbar' : null}
+                            aria-haspopup="true"
+                            onClick={this.handleMenu}
+                            color="inherit"
+                        >
+                            <AccountCircle/>
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={this.state.anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={open}
+                            onClose={this.handleClose}
+                        >
+                            <MenuItem
+                                component={Link}
+                                to="/profile"
+                                onClick={this.handleClose}
                             >
-                                <AccountCircle/>
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={this.state.anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={open}
-                                onClose={this.handleClose}
-                            >
-                                <MenuItem
-                                    component={Link}
-                                    to="/profile"
-                                    onClick={this.handleClose}
-                                >
-                                    <Person/>
-                                    Profile
-                                </MenuItem>
-                                <Divider/>
-                                <MenuItem
-                                    onClick={this.logout}>
-                                    <Lock/>
-                                    Logout
-                                </MenuItem>
-                            </Menu>
-                        </div>
-                    </Toolbar>
-                </AppBar>
-                <Drawer
-                    variant="permanent"
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
-                >
-                    <div className={classes.toolbar}/>
-                    <List></List>
-                    <Divider/>
-                    <List></List>
-                </Drawer>
-                <main className={classes.content}>
-                    <div className={classes.toolbar}/>
-                    <Route
-                        exact
-                        path="/"
-                        component={() => <TimeTable data={this.props.data}/>}
-                    />
-                    <Route
-                        path="/profile"
-                        component={() => <Profile data={this.props.data}/>}
-                    />
-                </main>
-            </div>
-        </Router>;
+                                <Person/>
+                                Profile
+                            </MenuItem>
+                            <Divider/>
+                            <MenuItem
+                                onClick={this.logout}>
+                                <Lock/>
+                                Logout
+                            </MenuItem>
+                        </Menu>
+                    </div>
+                </Toolbar>
+            </AppBar>
+            <Drawer
+                variant="permanent"
+                classes={{
+                    paper: classes.drawerPaper,
+                }}
+            >
+                <div className={classes.toolbar}/>
+                <List></List>
+                <Divider/>
+                <List></List>
+            </Drawer>
+            <main className={classes.content}>
+                <div className={classes.toolbar}/>
+                <Route
+                    exact
+                    path="/"
+                    component={() => <TimeTable data={this.props.data}/>}
+                />
+                <Route
+                    path="/profile"
+                    component={() => <Profile data={this.props.data}/>}
+                />
+            </main>
+        </div>;
     }
 }
 
