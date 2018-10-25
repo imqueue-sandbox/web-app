@@ -18,9 +18,8 @@
 import React, { PureComponent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
-import { Gravatar } from './Gravatar';
-
 import { createFragmentContainer } from 'react-relay';
+import { Gravatar } from './Gravatar';
 import { UserStorage } from '../common';
 import { CurrentUserFragment } from '../relay/queries';
 
