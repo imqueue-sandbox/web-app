@@ -15,5 +15,21 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export * from './CurrentUser';
-export * from './UserCars';
+import React, { Component } from 'react';
+import LocalCarWash from '@material-ui/icons/LocalCarWash';
+
+/**
+ * Car
+ */
+export default class UserCar extends Component { // eslint-disable-line react/prefer-stateless-function
+    render() {
+        const { car } = this.props;
+
+        return <div className="car">
+            <LocalCarWash/>
+            <div>{car.make}</div>
+            <div>{car.model}</div>
+            <div>{car.regNumber}</div>
+        </div>;
+    }
+}

@@ -18,19 +18,15 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ExpansionPanelSummary
-    from "@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary";
-import Typography from "@material-ui/core/Typography/Typography";
+    from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
+import Typography from '@material-ui/core/Typography/Typography';
 import ExpansionPanelDetails
-    from "@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails";
-import ExpansionPanelActions
-    from "@material-ui/core/ExpansionPanelActions/ExpansionPanelActions";
+    from '@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import Edit from '@material-ui/icons/Edit';
-import Button from "@material-ui/core/Button/Button";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel/ExpansionPanel";
+import ExpansionPanel from '@material-ui/core/ExpansionPanel/ExpansionPanel';
 import User from './User';
-import Cars from './Cars';
-import {withStyles} from "@material-ui/core";
+import UserCars from './UserCars';
+import { withStyles } from "@material-ui/core";
 
 const styles = theme => ({
     root: {
@@ -94,17 +90,23 @@ class Profile extends PureComponent {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.details}>
                     <User data={data} />
-                    <Cars />
                 </ExpansionPanelDetails>
-                <ExpansionPanelActions className={[
-                    classes.right,
-                    // classes.grey,
-                ].join(" ")}>
-                    <Button size="small">
-                        <Edit />
-                        Edit
-                    </Button>
-                </ExpansionPanelActions>
+            </ExpansionPanel>
+
+            <ExpansionPanel defaultExpanded>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMore />}
+                    className={classes.summary}
+                >
+                    <div className={classes.column}>
+                        <Typography className={classes.heading}>
+                            Garage
+                        </Typography>
+                    </div>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails className={classes.details}>
+                    <UserCars data={data}  />
+                </ExpansionPanelDetails>
             </ExpansionPanel>
         </div>;
     }

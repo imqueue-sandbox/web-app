@@ -15,5 +15,30 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export * from './CurrentUser';
-export * from './UserCars';
+import React, { Component } from 'react';
+import UserCar from './UserCar';
+import { createFragmentContainer } from 'react-relay';
+import { UserCarsFragment } from '../relay/queries';
+
+/**
+ * Cars
+ */
+class UserCars extends Component {
+    render() {
+        const { data } = this.props;
+        const cars = data.user ? data.user.cars : [];
+        if (cars) {
+            return <div className="cars">
+                {cars.map(car => <UserCar car={car}/>)}
+            </div>;
+        }
+
+        else {
+            return <div>No cars in garage</div>
+        }
+    }
+}
+
+UserCars = createFragmentContainer(UserCars, UserCarsFragment);
+
+export default UserCars;

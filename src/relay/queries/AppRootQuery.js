@@ -22,6 +22,7 @@ import environment from '../Environment';
 
 const query = graphql`query AppRootQuery {
     ...CurrentUser
+    ...UserCars
 }`;
 
 export function withAppRootQuery(Child) {

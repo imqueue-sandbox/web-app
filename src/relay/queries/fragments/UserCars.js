@@ -15,5 +15,18 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export * from './CurrentUser';
-export * from './UserCars';
+import { graphql } from 'react-relay';
+
+export const UserCarsFragment = graphql`
+fragment UserCars on Query {
+    user {
+        id
+        cars {
+            id
+            carId
+            make
+            model
+            regNumber
+        }
+    }
+}`;
