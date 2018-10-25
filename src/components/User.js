@@ -52,7 +52,7 @@ class User extends PureComponent {
                         <b>Email:</b> {user.email}
                     </Typography>
                     <Typography>
-                        <b>Cars in garage:</b> {user.cars.length}
+                        <b>Cars in garage:</b> {(user.cars || []).length}
                     </Typography>
                     <Typography>
                         <b>Reservations requested:</b> {0}

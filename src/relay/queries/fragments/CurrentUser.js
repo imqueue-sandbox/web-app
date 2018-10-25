@@ -28,8 +28,6 @@ fragment CurrentUser on Query {
         isAdmin
         cars {
             id
-            make
-            model
         }
     }
 }`;
