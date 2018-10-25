@@ -20,8 +20,9 @@ import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
 import { Gravatar } from './Gravatar';
 
-import { createFragmentContainer, graphql } from 'react-relay';
+import { createFragmentContainer } from 'react-relay';
 import { UserStorage } from '../common';
+import { CurrentUserFragment } from '../relay/queries';
 
 class User extends PureComponent {
     state = {
@@ -70,23 +71,6 @@ class User extends PureComponent {
     }
 }
 
-User = createFragmentContainer(User,
-    graphql`
-    fragment User on Query {
-        user {
-            id
-            firstName
-            lastName
-            email
-            isActive
-            isAdmin
-            cars {
-                id
-                make
-                model
-            }
-        }
-    }`
-);
+User = createFragmentContainer(User, CurrentUserFragment);
 
 export default User;

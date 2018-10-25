@@ -21,7 +21,7 @@ import { graphql, QueryRenderer } from 'react-relay';
 import environment from '../Environment';
 
 const query = graphql`query AppRootQuery {
-    ...User
+    ...CurrentUser
 }`;
 
 export function withAppRootQuery(Child) {

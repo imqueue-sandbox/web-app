@@ -15,5 +15,4 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export * from './AppRootQuery';
-export * from './fragments';
+export * from './CurrentUser';
