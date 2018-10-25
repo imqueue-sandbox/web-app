@@ -15,7 +15,7 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { UserStorage } from '../common';
 import { Login, AppView } from '../layouts';
 
