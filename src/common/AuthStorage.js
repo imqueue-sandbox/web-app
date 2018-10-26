@@ -27,7 +27,7 @@ function emit(event, ...args) {
     }
 }
 
-export class UserStorage {
+export class AuthStorage {
 
     /**
      * Attaches given handler to an event
@@ -82,8 +82,8 @@ export class UserStorage {
      * @return {*}
      */
     static save(userData) {
-        const oldData = UserStorage.fetch();
-        const res = Storage.set(UserStorage.key(), userData);
+        const oldData = AuthStorage.fetch();
+        const res = Storage.set(AuthStorage.key(), userData);
 
         emit('change', userData, oldData);
 
@@ -95,7 +95,7 @@ export class UserStorage {
      * @return {*}
      */
     static fetch() {
-        return Storage.get(UserStorage.key());
+        return Storage.get(AuthStorage.key());
     }
 
     /**
@@ -103,8 +103,8 @@ export class UserStorage {
      * @return {*}
      */
     static clear() {
-        const oldData = UserStorage.fetch();
-        const res = Storage.del(UserStorage.key());
+        const oldData = AuthStorage.fetch();
+        const res = Storage.del(AuthStorage.key());
 
         emit('change', null, oldData);
 
@@ -115,8 +115,22 @@ export class UserStorage {
      * Returns stored user token if any
      * @return {string|null}
      */
+    static user() {
+        const data = AuthStorage.fetch();
+
+        if (!data) {
+            return null;
+        }
+
+        return data.user || null;
+    }
+
+    /**
+     * Returns stored user token if any
+     * @return {string|null}
+     */
     static token() {
-        const data = UserStorage.fetch();
+        const data = AuthStorage.fetch();
 
         if (!data) {
             return null;

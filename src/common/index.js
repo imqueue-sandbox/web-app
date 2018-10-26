@@ -17,6 +17,6 @@
  */
 export * from './clone';
 export * from './Storage';
-export * from './UserStorage';
+export * from './AuthStorage';
 export * from './uuid';
 export * from './md5';

@@ -17,7 +17,7 @@
  */
 import { commitMutation, graphql } from 'react-relay';
 import environment from '../Environment';
-import { UserStorage } from '../../common/index';
+import { AuthStorage } from '../../common/index';
 import { logger } from '../../config';
 
 export function logout(token) {
@@ -42,7 +42,7 @@ export function logout(token) {
             }
 
             if (response) {
-                UserStorage.clear();
+                AuthStorage.clear();
             }
         }
     };

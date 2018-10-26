@@ -20,7 +20,7 @@ import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
 import { createFragmentContainer } from 'react-relay';
 import { Gravatar } from './Gravatar';
-import { UserStorage } from '../common';
+import { AuthStorage } from '../common';
 import { CurrentUserFragment } from '../relay/queries';
 
 class User extends PureComponent {
@@ -33,40 +33,40 @@ class User extends PureComponent {
         const user = data;
 
         if (!user) {
-            UserStorage.clear();
+            AuthStorage.clear();
         }
 
         if (error) {
             return <div>{error.message}</div>;
         }
 
-        else if (user) {
-            return <div className="user-box">
-                <Gravatar user={user} size={100} editable={true}/>
-                <div className="divider"/>
-                <div className="user-info">
-                    <Typography>
-                        <b>Name:</b> {user.firstName} {user.lastName}
-                    </Typography>
-                    <Typography>
-                        <b>Email:</b> {user.email}
-                    </Typography>
-                    <Typography>
-                        <b>Cars in garage:</b> {user.carsCount}
-                    </Typography>
-                    <Typography>
-                        <b>Reservations requested:</b> {0}
-                    </Typography>
-                    <Typography>
-                        <b>Cars washed:</b> {0}
-                    </Typography>
-                </div>
-            </div>;
+        if (!user) {
+            return <LinearProgress color="secondary" className={
+                this.state.inProgress ? "" : "invisible"
+            }/>;
         }
 
-        return <LinearProgress color="secondary" className={
-            this.state.inProgress ? "" : "invisible"
-        }/>;
+        return <div className="user-box">
+            <Gravatar user={user} size={100} editable={true}/>
+            <div className="divider"/>
+            <div className="user-info">
+                <Typography>
+                    <b>Name:</b> {user.firstName} {user.lastName}
+                </Typography>
+                <Typography>
+                    <b>Email:</b> {user.email}
+                </Typography>
+                <Typography>
+                    <b>Cars in garage:</b> {user.carsCount}
+                </Typography>
+                <Typography>
+                    <b>Reservations requested:</b> {0}
+                </Typography>
+                <Typography>
+                    <b>Cars washed:</b> {0}
+                </Typography>
+            </div>
+        </div>;
     }
 }
 

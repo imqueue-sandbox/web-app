@@ -17,7 +17,7 @@
  */
 import { commitMutation, graphql } from 'react-relay';
 import environment from '../Environment';
-import { UserStorage } from '../../common/index';
+import { AuthStorage } from '../../common/index';
 import { logger } from '../../config';
 
 export function login({ email, password }, success, failure) {
@@ -60,7 +60,7 @@ export function login({ email, password }, success, failure) {
                 return failure && failure(errors);
             }
 
-            UserStorage.save(response.login);
+            AuthStorage.save(response.login);
             success && success(response.login);
         }
     };

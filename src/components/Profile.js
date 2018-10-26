@@ -72,42 +72,36 @@ const styles = theme => ({
     },
 });
 
+
 class Profile extends PureComponent {
+    panels = {
+        'Customer Details': User,
+        'Garage': UserCars,
+    }
+
     render() {
         const { classes, data } = this.props;
 
         return <div>
-            <ExpansionPanel defaultExpanded>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMore />}
-                    className={classes.summary}
-                >
-                    <div className={classes.column}>
-                        <Typography className={classes.heading}>
-                            Customer Details
-                        </Typography>
-                    </div>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails className={classes.details}>
-                    <User data={data.user} />
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
+            {Object.keys(this.panels).map((name, key) => {
+                const Child = this.panels[name];
 
-            <ExpansionPanel defaultExpanded>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMore />}
-                    className={classes.summary}
-                >
-                    <div className={classes.column}>
-                        <Typography className={classes.heading}>
-                            Garage
-                        </Typography>
-                    </div>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails className={classes.details}>
-                    <UserCars data={data.user}  />
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
+                return <ExpansionPanel key={key} defaultExpanded>
+                        <ExpansionPanelSummary
+                            expandIcon={<ExpandMore/>}
+                            className={classes.summary}
+                        >
+                            <div className={classes.column}>
+                                <Typography className={classes.heading}>
+                                    {name}
+                                </Typography>
+                            </div>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails className={classes.details}>
+                            <Child data={data.user} />
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            })}
         </div>;
     }
 }

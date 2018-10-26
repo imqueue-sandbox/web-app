@@ -74,19 +74,19 @@ class Login extends PureComponent {
         inProgress: false,
     }
 
-    _initialState = clone(this.state)
-    _isMounted = false
+    initialState = clone(this.state)
+    isMounted = false
 
-    _onAutoFillStart = () => {
+    onAutoFillStart = () => {
         this.setState({
             shrink: true,
             ...this.checkActions(this.state)
         });
     }
 
-    _onAnimationStart = ({ target, animationName }) => {
+    onAnimationStart = ({ target, animationName }) => {
         if (animationName === 'onAutoFillStart') {
-            return this._onAutoFillStart(target);
+            return this.onAutoFillStart(target);
         }
     }
 
@@ -94,7 +94,7 @@ class Login extends PureComponent {
      * handling component insertion into DOM
      */
     componentDidMount() {
-        this._isMounted = true;
+        this.isMounted = true;
         window.requestAnimationFrame(() => {
             const node = ReactDOM.findDOMNode(this);
 
@@ -102,8 +102,8 @@ class Login extends PureComponent {
                 document.querySelectorAll('input').forEach(el =>
                     el.addEventListener(
                         'animationstart',
-                        this._onAnimationStart,
-                        false
+                        this.onAnimationStart,
+                        false,
                     )
                 );
             }
@@ -111,11 +111,11 @@ class Login extends PureComponent {
     }
 
     componentWillUnmount() {
-        this._isMounted = false;
+        this.isMounted = false;
         document.querySelectorAll('input').forEach(el =>
             el.removeEventListener(
                 'animationstart',
-                this._onAnimationStart,
+                this.onAnimationStart,
             )
         );
     }
@@ -152,9 +152,9 @@ class Login extends PureComponent {
      * Performs login action
      */
     login = () => {
-        this.setState({ inProgress: true })
+        this.setState({ inProgress: true });
         login(this.state,
-            () => this._isMounted && this.setState({ inProgress: false }),
+            () => this.isMounted && this.setState({ inProgress: false }),
             (errors) => this.setState({
                 ...this.mapErrors(errors),
                 errors: errors,
@@ -175,7 +175,7 @@ class Login extends PureComponent {
             { firstName, lastName, email, password, isActive: true },
             (data) => {
                 let state = { // come back to login form
-                    ...this._initialState,
+                    ...this.initialState,
                     email: data.user.email,
                     shrink: true,
                     inProgress: false,
@@ -195,7 +195,7 @@ class Login extends PureComponent {
      * Resets the login form to initial state
      */
     reset = () => {
-        const newState = clone(this._initialState);
+        const newState = clone(this.initialState);
         newState.isRegForm = this.state.isRegForm;
         this.setState(newState);
     }

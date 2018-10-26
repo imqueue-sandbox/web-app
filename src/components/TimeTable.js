@@ -24,7 +24,6 @@ export class TimeTable extends PureComponent {
     }
 
     render() {
-      //TODO: here can be FragmentContainer which is describes all required entities such as cars, brands. etc...
         return (
           <section className="time-table">
           </section>

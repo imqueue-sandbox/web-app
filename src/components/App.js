@@ -16,49 +16,47 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { Component } from 'react';
-import { UserStorage } from '../common';
+import { AuthStorage } from '../common';
 import { Login, AppView } from '../layouts';
 import { AppMessage } from './AppMessage';
 
 export class App extends Component {
 
     state = {
-        auth: UserStorage.fetch(),
+        user: AuthStorage.user(),
     };
 
-    _onUserChange = auth => this.setState({ auth })
+    onUserChange = auth => this.setState({ user: auth && auth.user })
 
     componentWillUnmount() {
-        UserStorage.off('change', this._onUserChange);
+        AuthStorage.off('change', this.onUserChange);
     }
 
     componentDidMount() {
-        UserStorage.on('change', this._onUserChange);
+        AuthStorage.on('change', this.onUserChange);
     }
 
-    _is(routePath) {
+    is(routePath) {
         return this.props.location.pathname === `/${routePath}`;
     }
 
     render() {
-        if (this.state.auth) {
-            return <AppView
-                vars={{
-                    withUser: true,
-                    withUserCars: this._is('profile'),
-                }}
-                onError={error =>
-                    <AppMessage
-                        message={error.message}
-                        variant="error"
-                    />}
-                onLoading={() =>
-                    <div>Loading...</div>}
-            />;
-        }
-
-        else {
+        if (!this.state.user) {
             return <Login/>;
         }
+
+        return <AppView
+            vars={{
+                withUser: true,
+                withUserCars: this.is('profile'),
+            }}
+            onError={error =>
+                <AppMessage
+                    message={error.message}
+                    variant="error"
+                />}
+            onLoading={() =>
+                <div>Loading...</div>}
+        />;
     }
 }

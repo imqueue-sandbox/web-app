@@ -18,7 +18,7 @@
  */
 /* eslint-disable */
 import { Network } from 'relay-runtime';
-import { UserStorage } from '../common';
+import { AuthStorage } from '../common';
 
 const network = Network.create((
     operation,
@@ -28,7 +28,7 @@ const network = Network.create((
         headers: new Headers({
             'Content-Type': 'application/json',
             get ['X-Auth-User']() {
-                return UserStorage.token();
+                return AuthStorage.token();
             },
         }),
         body: JSON.stringify({

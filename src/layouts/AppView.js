@@ -15,7 +15,7 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -33,7 +33,7 @@ import Waves from '@material-ui/icons/Waves';
 
 import { logout } from '../relay/mutations';
 import { TimeTable, Profile } from '../components';
-import { UserStorage } from '../common';
+import { AuthStorage } from '../common';
 import { withAppRootQuery } from '../relay/queries';
 
 const drawerWidth = 240;
@@ -78,20 +78,16 @@ function ListItemLink(props) {
     return <ListItem button component="a" {...props} />;
 }
 
-class AppView extends PureComponent {
-    state = {
-        auth: true
-    }
-
+class AppView extends Component {
     logout = () => {
-        const token = (UserStorage.fetch() || {}).token;
+        const token = AuthStorage.token();
         token && logout(token);
-        UserStorage.clear();
+        AuthStorage.clear();
     }
 
     render() {
         const { classes } = this.props;
-        const {user} = UserStorage.fetch();
+        const user = AuthStorage.user();
         const letters = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
         const fullName = `${user.firstName} ${user.lastName}`
 
