@@ -75,7 +75,7 @@ class Login extends PureComponent {
     }
 
     initialState = clone(this.state)
-    isMounted = false
+    mounted = false
 
     onAutoFillStart = () => {
         this.setState({
@@ -94,7 +94,7 @@ class Login extends PureComponent {
      * handling component insertion into DOM
      */
     componentDidMount() {
-        this.isMounted = true;
+        this.mounted = true;
         window.requestAnimationFrame(() => {
             const node = ReactDOM.findDOMNode(this);
 
@@ -111,7 +111,7 @@ class Login extends PureComponent {
     }
 
     componentWillUnmount() {
-        this.isMounted = false;
+        this.mounted = false;
         document.querySelectorAll('input').forEach(el =>
             el.removeEventListener(
                 'animationstart',
@@ -154,7 +154,7 @@ class Login extends PureComponent {
     login = () => {
         this.setState({ inProgress: true });
         login(this.state,
-            () => this.isMounted && this.setState({ inProgress: false }),
+            () => this.mounted && this.setState({ inProgress: false }),
             (errors) => this.setState({
                 ...this.mapErrors(errors),
                 errors: errors,
