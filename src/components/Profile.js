@@ -17,16 +17,17 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import ExpansionPanelSummary
-    from '@material-ui/core/ExpansionPanelSummary/ExpansionPanelSummary';
-import Typography from '@material-ui/core/Typography/Typography';
-import ExpansionPanelDetails
-    from '@material-ui/core/ExpansionPanelDetails/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Typography from '@material-ui/core/Typography';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel/ExpansionPanel';
+import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
+import Divider from '@material-ui/core/Divider';
 import User from './User';
 import UserCars from './UserCars';
 import { withStyles } from '@material-ui/core';
+import { AddCar } from './Dialog';
 
 const styles = theme => ({
     root: {
@@ -43,6 +44,9 @@ const styles = theme => ({
         '& *': {
             color: theme.palette.primary.contrastText + ' !important',
         },
+    },
+    carActions: {
+        justifyContent: 'flex-start',
     },
     heading: {
         fontSize: theme.typography.pxToRem(18),
@@ -79,8 +83,17 @@ class Profile extends PureComponent {
         'Garage': UserCars,
     }
 
+    state = {
+        addCarOpen: false,
+    }
+
+    addCar = () => {
+        this.setState({ addCarOpen: true });
+    }
+
     render() {
         const { classes, data } = this.props;
+        const userId = (data.user || {}).__id;
 
         return <div>
             {Object.keys(this.panels).map((name, key) => {
@@ -100,6 +113,13 @@ class Profile extends PureComponent {
                         <ExpansionPanelDetails className={classes.details}>
                             <Child data={data.user} />
                     </ExpansionPanelDetails>
+                    {Child === UserCars &&
+                    (<div>
+                        <Divider />
+                        <ExpansionPanelActions className={classes.carActions}>
+                            <AddCar userId={userId} />
+                        </ExpansionPanelActions>
+                    </div>)}
                 </ExpansionPanel>
             })}
         </div>;

@@ -229,7 +229,7 @@ class Login extends PureComponent {
      * @param {CustomEvent} event - react event
      */
     handleChange = (name, event) => {
-        let newState = {...this.state, [name]: event.target.value };
+        let newState = { ...this.state, [name]: event.target.value };
         newState = { ...newState, ...this.checkActions(newState) };
         this.setState(newState);
     }
