@@ -16,6 +16,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { PureComponent } from 'react';
+import { PropTypes } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
 import { createFragmentContainer } from 'react-relay';
@@ -69,6 +70,20 @@ class User extends PureComponent {
         </div>;
     }
 }
+
+User.propTypes = {
+    error: {
+        message: PropTypes.string,
+    },
+    data: {
+        user: {
+            firstName: PropTypes.string,
+            lastName: PropTypes.string,
+            email: PropTypes.string,
+            carsCount: PropTypes.number,
+        },
+    },
+};
 
 User = createFragmentContainer(User, CurrentUserFragment);
 
