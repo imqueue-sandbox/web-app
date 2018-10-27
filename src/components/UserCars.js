@@ -52,8 +52,11 @@ class UserCars extends Component {
     }
 }
 
-UserCar.propTypes = {
+UserCars.propTypes = {
     classes: PropTypes.object.isRequired,
+    data: PropTypes.shape({
+        cars: PropTypes.arrayOf(Object),
+    }),
 };
 
 UserCars = createFragmentContainer(

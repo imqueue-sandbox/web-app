@@ -72,17 +72,17 @@ class User extends PureComponent {
 }
 
 User.propTypes = {
-    error: {
+    error: PropTypes.shape({
         message: PropTypes.string,
-    },
-    data: {
-        user: {
+    }),
+    data: PropTypes.shape({
+        user: PropTypes.shape({
             firstName: PropTypes.string,
             lastName: PropTypes.string,
             email: PropTypes.string,
             carsCount: PropTypes.number,
-        },
-    },
+        }),
+    }),
 };
 
 User = createFragmentContainer(User, CurrentUserFragment);

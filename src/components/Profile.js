@@ -26,7 +26,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel/ExpansionPanel';
 import User from './User';
 import UserCars from './UserCars';
-import { withStyles } from "@material-ui/core";
+import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
     root: {
@@ -107,7 +107,7 @@ class Profile extends PureComponent {
 }
 
 Profile.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
 };
 
 Profile = withStyles(styles)(Profile);

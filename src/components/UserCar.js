@@ -64,7 +64,7 @@ const styles = theme => ({
         color: theme.palette.secondary.light,
     },
     carNumber: {
-        '& div': {
+        '& span': {
             display: 'inline-block',
             border: '.2rem solid #666',
             borderRadius: 5,
@@ -83,7 +83,7 @@ class UserCar extends Component {
     }
 
     render() {
-        const { car, classes } = this.props;
+        const { classes, car } = this.props;
 
         return <Card className={classes.card}>
             <LocalCarWash className={classes.carIcon}/>
@@ -93,7 +93,7 @@ class UserCar extends Component {
                         <b>{car.make}</b> <i>{car.model}</i>
                     </Typography>
                     <Typography className={classes.carNumber}>
-                        <div>{car.regNumber}</div>
+                        <span>{car.regNumber}</span>
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.controls}>
@@ -111,14 +111,14 @@ class UserCar extends Component {
 
 UserCar.propTypes = {
     classes: PropTypes.object.isRequired,
-    car: {
+    car: PropTypes.shape({
         id: PropTypes.string.isRequired,
         make: PropTypes.string.isRequired,
         model: PropTypes.string.isRequired,
         regNumber: PropTypes.string.isRequired,
-    },
+    }),
 };
 
-UserCar = withStyles(styles)(UserCar)
+UserCar = withStyles(styles)(UserCar);
 
 export default UserCar;
