@@ -25,7 +25,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import Slide from '@material-ui/core/Slide';
 import Add from '@material-ui/icons/Add';
-// import { CarModelSelect, CarBrandsSelect } from '../Form';
+import { CarModelSelect, CarBrandsSelect } from '../Form';
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
@@ -37,19 +37,24 @@ class AddCar extends Component {
         open: false,
     }
 
-    handleClose = () => {
+    close = () => {
         this.setState({ open: false });
     }
 
-    handleOpen = () => {
+    open = () => {
         this.setState({ open: true });
-    };
+    }
+
+    addCar = () => {
+
+        this.close();
+    }
 
     render() {
         const { fullScreen } = this.props;
 
         return (<>
-            <Button size="small" onClick={this.handleOpen}>
+            <Button onClick={this.open}>
                 <Add/>
                 Add car
             </Button>
@@ -57,18 +62,22 @@ class AddCar extends Component {
                 fullScreen={fullScreen}
                 TransitionComponent={Transition}
                 open={this.state.open}
-                onClose={this.handleClose}
+                onClose={this.close}
                 aria-labelledby="responsive-dialog-title"
             >
                 <DialogTitle id="responsive-dialog-title">
                     Choose your car
                 </DialogTitle>
                 <DialogContent>
-
+                    <CarBrandsSelect/>
+                    <CarModelSelect/>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.handleClose} color="primary">
+                    <Button onClick={this.close} color="primary">
                         Cancel
+                    </Button>
+                    <Button onClick={this.addCar} autoFocus color="primary">
+                        Add
                     </Button>
                 </DialogActions>
             </Dialog>

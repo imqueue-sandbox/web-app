@@ -15,8 +15,69 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-// import Select from '@material-ui/core/Select';
+import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import { withStyles } from '@material-ui/core';
 
-export class CarModelSelect {
+const styles = theme => ({
+    root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    formControl: {
+        margin: theme.spacing.unit,
+        minWidth: 120,
+    },
+    selectEmpty: {
+        marginTop: theme.spacing.unit * 2,
+    },
+});
 
+class CarModelSelect extends Component {
+    state = {
+        model: '',
+        disabled: true,
+    }
+
+    select = (event) => {
+        this.setState({ model: event.target.value })
+    }
+
+    render() {
+        const { classes } = this.props;
+
+        return <>
+            <FormControl className={classes.formControl}>
+                <InputLabel htmlFor="car-model-select">Model</InputLabel>
+                <Select
+                    value={this.state.model}
+                    onChange={this.select}
+                    inputProps={{
+                        name: 'car-model',
+                        id: 'car-model-select',
+                    }}
+                    disabled={this.state.disabled}
+                >
+                    <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+            </FormControl>
+        </>
+    }
 }
+
+CarModelSelect.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+CarModelSelect = withStyles(styles)(CarModelSelect);
+
+export { CarModelSelect };
