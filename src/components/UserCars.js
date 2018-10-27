@@ -28,6 +28,7 @@ const styles = theme => ({
         flexDirection: 'row',
         alignItems: 'center',
         alignContent: 'flex-start',
+        flexWrap: 'wrap',
     },
 });
 

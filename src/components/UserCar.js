@@ -20,33 +20,59 @@ import { PropTypes } from 'prop-types';
 import LocalCarWash from '@material-ui/icons/LocalCarWash';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import CardActions from '@material-ui/core/CardActions';
+import IconButton from '@material-ui/core/IconButton';
+import Delete from '@material-ui/icons/Delete';
 import { withStyles } from '@material-ui/core';
 import { removeCar } from '../relay/mutations';
 
 const styles = theme => ({
     card: {
         display: 'flex',
-        marginLeft: '20px',
+        marginRight: theme.spacing.unit,
+        marginBottom: theme.spacing.unit,
+        minWidth: '30em',
     },
     details: {
         display: 'flex',
         flexDirection: 'column',
+        width: '100%',
+        textAlign: 'center',
     },
     content: {
         flex: '1 0 auto',
-    },
-    cover: {
-        width: 151,
+        '& h5': {
+            marginTop: '.5em',
+        },
+        paddingBottom: 0,
     },
     controls: {
+        margin: 0,
         display: 'flex',
         alignItems: 'center',
         paddingLeft: theme.spacing.unit,
         paddingBottom: theme.spacing.unit,
+        justifyContent: 'flex-start',
     },
-    playIcon: {
-        height: 38,
-        width: 38,
+    carIcon: {
+        height: 'initial !important',
+        width: '3em',
+        background: '#eee',
+        alignSelf: 'stretch',
+        padding: '0 2em 0 2em',
+        color: theme.palette.secondary.light,
+    },
+    carNumber: {
+        '& div': {
+            display: 'inline-block',
+            border: '.2rem solid #666',
+            borderRadius: 5,
+            padding: 5,
+            fontSize: '1.3em',
+            fontWeight: 'bold',
+            marginTop: '1em',
+        },
     },
 });
 
@@ -64,13 +90,25 @@ class UserCar extends Component {
         const { car, classes } = this.props;
 
         return <Card className={classes.card}>
-            <CardContent>
-                <LocalCarWash/>
-                <div>{car.make}</div>
-                <div>{car.model}</div>
-                <div>{car.regNumber}</div>
-                <button onClick={this.remove}>X</button>
-            </CardContent>
+            <LocalCarWash className={classes.carIcon}/>
+            <div className={classes.details}>
+                <CardContent className={classes.content}>
+                    <Typography component="h5" variant="h5">
+                        <b>{car.make}</b> <i>{car.model}</i>
+                    </Typography>
+                    <Typography className={classes.carNumber}>
+                        <div>{car.regNumber}</div>
+                    </Typography>
+                </CardContent>
+                <CardActions className={classes.controls}>
+                    <IconButton
+                        onClick={this.remove}
+                        title="Remove this car from garage"
+                    >
+                        <Delete/>
+                    </IconButton>
+                </CardActions>
+            </div>
         </Card>;
     }
 }

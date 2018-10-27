@@ -28,6 +28,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import ExitToApp from '@material-ui/icons/ExitToApp';
 import Avatar from '@material-ui/core/Avatar';
 import Waves from '@material-ui/icons/Waves';
 
@@ -69,7 +70,8 @@ const styles = theme => ({
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing.unit * 3,
-        minWidth: 0, // So the Typography noWrap works
+        minWidth: 0,
+        overflow: 'auto',
     },
     toolbar: theme.mixins.toolbar,
 });
@@ -111,10 +113,10 @@ class AppView extends Component {
                             CarWash Reservations
                         </Typography>
                         <div>
-                            <span>{`Hello ${user['firstName']}`}</span>
-                            <IconButton
-                                disableRipple={true}
-                            >
+                            <span>
+                                {`Hello, ${user.firstName} ${user.lastName}`}
+                            </span>
+                            <IconButton disableRipple={true}>
                                 { user.avatarUrl ?
                                     <Avatar
                                         alt={fullName}
@@ -122,29 +124,23 @@ class AppView extends Component {
                                     /> : <Avatar>{letters}</Avatar>
                                 }
                             </IconButton>
-                            <IconButton
-                                onClick={this.logout}
-                            >
-                                <svg style={{'width': 24, 'height':24}} viewBox="0 0 24 24">
-                                    <path fill="white" d="M17,17.25V14H10V10H17V6.75L22.25,12L17,17.25M13,2A2,2 0 0,1 15,4V8H13V4H4V20H13V16H15V20A2,2 0 0,1 13,22H4A2,2 0 0,1 2,20V4A2,2 0 0,1 4,2H13Z" />
-                                </svg>
+                            <IconButton onClick={this.logout}>
+                                <ExitToApp/>
                             </IconButton>
                         </div>
                     </Toolbar>
                 </AppBar>
                 <Drawer
                     variant="permanent"
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
+                    classes={{paper: classes.drawerPaper}}
                 >
                     <div className={classes.toolbar}/>
                     <List>
                         <ListItemLink href="/">
-                            <ListItemText primary="TimeTable" />
+                            <ListItemText primary="Car Wash Bookings" />
                         </ListItemLink>
                         <ListItemLink href="/profile">
-                            <ListItemText primary="Profile" />
+                            <ListItemText primary="My Profile" />
                         </ListItemLink>
                     </List>
                 </Drawer>
