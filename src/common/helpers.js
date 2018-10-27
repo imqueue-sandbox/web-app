@@ -15,9 +15,20 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export * from './clone';
-export * from './Storage';
-export * from './AuthStorage';
-export * from './uuid';
-export * from './md5';
-export * from './helpers';
+/**
+ * Builds and returns generic error handler
+ *
+ * @param {string} key - data key in response to bypass its value to success handler
+ * @param {Function} success - success callback
+ * @param {Function} failure - failure callback
+ * @return {Function}
+ */
+export function resultHandler(key, success, failure) {
+    return (response, errors) => {
+        if (errors && errors.length) {
+            return failure && failure(errors);
+        }
+
+        success && success(key ? response[key] : response);
+    }
+}

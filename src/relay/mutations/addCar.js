@@ -18,6 +18,7 @@
 import { commitMutation, graphql } from 'react-relay';
 import environment from '../Environment';
 import { logger } from '../../config';
+import {resultHandler} from "../../common";
 
 export function addCar({ idOrEmail, carId, regNumber }, success, failure) {
     if (!addCar.id) {
@@ -58,13 +59,7 @@ export function addCar({ idOrEmail, carId, regNumber }, success, failure) {
             logger.error('addCarMutation:request', err);
             failure && failure([err]);
         },
-        onCompleted: (response, errors) => {
-            if (errors && errors.length) {
-                return failure && failure(errors);
-            }
-
-            success && success(response.addCar);
-        }
+        onCompleted: resultHandler('addCar', success, failure)
     };
 
     commitMutation(environment, config);

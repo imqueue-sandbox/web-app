@@ -17,6 +17,7 @@
  */
 import { commitMutation, graphql } from 'react-relay';
 import environment from '../Environment';
+import { resultHandler } from '../../common';
 import { logger } from '../../config';
 
 export function removeCar({ carId }, success, failure) {
@@ -53,13 +54,7 @@ export function removeCar({ carId }, success, failure) {
             logger.error('removeCarMutation:request', err);
             failure && failure([err]);
         },
-        onCompleted: (response, errors) => {
-            if (errors && errors.length) {
-                return failure && failure(errors);
-            }
-
-            success && success(response.removeCar);
-        }
+        onCompleted: resultHandler('removeCar', success, failure),
     };
 
     commitMutation(environment, config);
