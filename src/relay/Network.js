@@ -19,11 +19,12 @@
 /* eslint-disable */
 import { Network } from 'relay-runtime';
 import { AuthStorage } from '../common';
+import { APP_BACKEND_URL } from '../config';
 
 const network = Network.create((
     operation,
     variables,
-) => fetch('http://localhost:8888/', {
+) => fetch(APP_BACKEND_URL, {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json',

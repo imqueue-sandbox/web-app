@@ -18,6 +18,20 @@
 import { commitMutation, graphql } from 'react-relay';
 import environment from '../Environment';
 import { logger } from '../../config';
+import {resultHandler} from "../../common";
+
+const mutation = graphql`
+mutation registerMutation($input: updateUserInput!) {
+    updateUser(input: $input) {
+        user {
+            id
+            email
+            firstName
+            lastName
+        }
+        clientMutationId
+    }
+}`;
 
 export function register(userData, success, failure) {
     if (!register.id) {
@@ -25,17 +39,7 @@ export function register(userData, success, failure) {
     }
 
     const config = {
-        mutation: graphql`mutation registerMutation($input: updateUserInput!) {
-            updateUser(input: $input) {
-                user {
-                    id
-                    email
-                    firstName
-                    lastName
-                }
-                clientMutationId
-            }
-        }`,
+        mutation,
         variables: {
             input: { ...userData, clientMutationId: String(++register.id) }
         },
@@ -43,13 +47,7 @@ export function register(userData, success, failure) {
             logger.error('registerMutation:request', err);
             failure && failure([err]);
         },
-        onCompleted: (response, errors) => {
-            if (errors && errors.length) {
-                return failure && failure(errors);
-            }
-
-            success && success(response.updateUser);
-        }
+        onCompleted: resultHandler('updateUser', success, failure),
     };
 
     commitMutation(environment, config);

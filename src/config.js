@@ -16,3 +16,4 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 export const logger = console;
+export const APP_BACKEND_URL = 'http://localhost:8888/';

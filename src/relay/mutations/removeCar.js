@@ -20,33 +20,36 @@ import environment from '../Environment';
 import { resultHandler } from '../../common';
 import { logger } from '../../config';
 
+const mutation = graphql`
+mutation removeCarMutation($input: removeCarInput!) {
+    removeCar(input: $input) {
+        user {
+            id
+            email
+            firstName
+            lastName
+            isAdmin
+            isActive
+            cars {
+                id
+                carId
+                make
+                model
+                type
+                regNumber
+            }
+        }
+        clientMutationId
+    }
+}`;
+
 export function removeCar({ carId }, success, failure) {
     if (!removeCar.id) {
         removeCar.id = 0;
     }
 
     const config = {
-        mutation: graphql`mutation removeCarMutation($input: removeCarInput!) {
-            removeCar(input: $input) {
-                user {
-                    id
-                    email
-                    firstName
-                    lastName
-                    isAdmin
-                    isActive
-                    cars {
-                        id
-                        carId
-                        make
-                        model
-                        type
-                        regNumber
-                    }
-                }
-                clientMutationId
-            }
-        }`,
+        mutation,
         variables: {
             input: { carId, clientMutationId: String(++removeCar.id) }
         },

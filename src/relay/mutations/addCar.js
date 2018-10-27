@@ -20,33 +20,36 @@ import environment from '../Environment';
 import { logger } from '../../config';
 import {resultHandler} from "../../common";
 
+const mutation = graphql`
+mutation addCarMutation($input: addCarInput!) {
+    addCar(input: $input) {
+        user {
+            id
+            email
+            firstName
+            lastName
+            isAdmin
+            isActive
+            cars {
+                id
+                carId
+                make
+                model
+                type
+                regNumber
+            }
+        }
+        clientMutationId
+    }
+}`;
+
 export function addCar({ idOrEmail, carId, regNumber }, success, failure) {
     if (!addCar.id) {
         addCar.id = 0;
     }
 
     const config = {
-        mutation: graphql`mutation addCarMutation($input: addCarInput!) {
-            addCar(input: $input) {
-                user {
-                    id
-                    email
-                    firstName
-                    lastName
-                    isAdmin
-                    isActive
-                    cars {
-                        id
-                        carId
-                        make
-                        model
-                        type
-                        regNumber
-                    }
-                }
-                clientMutationId
-            }
-        }`,
+        mutation,
         variables: {
             input: {
                 idOrEmail,

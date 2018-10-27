@@ -20,34 +20,37 @@ import environment from '../Environment';
 import { AuthStorage } from '../../common/index';
 import { logger } from '../../config';
 
+const mutation = graphql`
+mutation loginMutation($input: loginInput!) {
+    login(input: $input) {
+        token
+        user {
+            id
+            email
+            firstName
+            lastName
+            isAdmin
+            isActive
+            cars {
+                id
+                carId
+                make
+                model
+                type
+                regNumber
+            }
+        }
+        clientMutationId
+    }
+}`;
+
 export function login({ email, password }, success, failure) {
     if (!login.id) {
         login.id = 0;
     }
 
     const config = {
-        mutation: graphql`mutation loginMutation($input: loginInput!) {
-            login(input: $input) {
-                token
-                user {
-                    id
-                    email
-                    firstName
-                    lastName
-                    isAdmin
-                    isActive
-                    cars {
-                        id
-                        carId
-                        make
-                        model
-                        type
-                        regNumber
-                    }
-                }
-                clientMutationId
-            }
-        }`,
+        mutation,
         variables: {
             input: { email, password, clientMutationId: String(++login.id) }
         },

@@ -20,18 +20,21 @@ import environment from '../Environment';
 import { AuthStorage } from '../../common/index';
 import { logger } from '../../config';
 
+const mutation = graphql`
+mutation logoutMutation($input: logoutInput!) {
+    logout(input: $input) {
+        success
+        clientMutationId
+    }
+}`;
+
 export function logout(token) {
     if (!logout.id) {
         logout.id = 0;
     }
 
     const config = {
-        mutation: graphql`mutation logoutMutation($input: logoutInput!) {
-            logout(input: $input) {
-                success
-                clientMutationId
-            }
-        }`,
+        mutation,
         variables: { input: { token, clientMutationId: String(logout.id++) } },
         onError: logger.error.bind(logger, 'LogoutMutation:request'),
         onCompleted: (response, errors) => {
@@ -44,7 +47,7 @@ export function logout(token) {
             if (response) {
                 AuthStorage.clear();
             }
-        }
+        },
     };
 
     commitMutation(environment, config);
