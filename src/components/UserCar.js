@@ -76,10 +76,6 @@ const styles = theme => ({
     },
 });
 
-
-/**
- * Car
- */
 class UserCar extends Component {
     remove = () => {
         const carId = this.props.car && this.props.car.id;
@@ -115,6 +111,12 @@ class UserCar extends Component {
 
 UserCar.propTypes = {
     classes: PropTypes.object.isRequired,
+    car: {
+        id: PropTypes.string.isRequired,
+        make: PropTypes.string.isRequired,
+        model: PropTypes.string.isRequired,
+        regNumber: PropTypes.string.isRequired,
+    },
 };
 
 UserCar = withStyles(styles)(UserCar)
