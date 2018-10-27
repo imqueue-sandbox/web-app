@@ -17,11 +17,17 @@
  */
 import React, { Component } from 'react';
 import LocalCarWash from '@material-ui/icons/LocalCarWash';
+import { removeCar } from '../relay/mutations';
 
 /**
  * Car
  */
-export default class UserCar extends Component { // eslint-disable-line react/prefer-stateless-function
+export default class UserCar extends Component {
+    remove = () => {
+        const carId = this.props.car && this.props.car.id;
+        carId && removeCar({ carId });
+    }
+
     render() {
         const { car } = this.props;
 
@@ -30,6 +36,7 @@ export default class UserCar extends Component { // eslint-disable-line react/pr
             <div>{car.make}</div>
             <div>{car.model}</div>
             <div>{car.regNumber}</div>
+            <button onClick={this.remove}>X</button>
         </div>;
     }
 }

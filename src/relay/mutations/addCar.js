@@ -21,7 +21,7 @@ import { logger } from '../../config';
 
 export function addCar({ idOrEmail, carId, regNumber }, success, failure) {
     if (!addCar.id) {
-        addCar().id = 0;
+        addCar.id = 0;
     }
 
     const config = {

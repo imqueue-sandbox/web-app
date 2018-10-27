@@ -30,7 +30,7 @@ class UserCars extends Component {
 
         if (cars) {
             return <div className="cars">
-                {cars.map(car => <UserCar key={car.id} car={car}/>)}
+                {cars.map((car, i) => <UserCar key={i} car={car}/>)}
             </div>;
         }
 

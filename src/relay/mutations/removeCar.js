@@ -21,7 +21,7 @@ import { logger } from '../../config';
 
 export function removeCar({ carId }, success, failure) {
     if (!removeCar.id) {
-        removeCar().id = 0;
+        removeCar.id = 0;
     }
 
     const config = {
