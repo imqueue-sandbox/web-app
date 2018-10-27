@@ -60,7 +60,7 @@ class User extends PureComponent {
                     <b>Cars in garage:</b> {user.carsCount}
                 </Typography>
                 <Typography>
-                    <b>Reservations requested:</b> {0}
+                    <b>Bookings made:</b> {0}
                 </Typography>
                 <Typography>
                     <b>Cars washed:</b> {0}
