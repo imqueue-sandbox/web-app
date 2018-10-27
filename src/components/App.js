@@ -54,9 +54,9 @@ export class App extends Component {
                 <AppMessage
                     message={error.message}
                     variant="error"
-                />}
-            onLoading={() =>
-                <div>Loading...</div>}
+                />
+            }
+            onLoading={() => <div>Loading...</div>}
         />;
     }
 }
