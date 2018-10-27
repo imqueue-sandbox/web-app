@@ -16,20 +16,31 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { Component } from 'react';
-import UserCar from './UserCar';
 import { createFragmentContainer } from 'react-relay';
+import { withStyles } from '@material-ui/core';
+import UserCar from './UserCar';
 import { UserCarsFragment } from '../relay/queries';
+import {PropTypes} from "prop-types";
+
+const styles = theme => ({
+    cars: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignContent: 'flex-start',
+    },
+});
 
 /**
  * Cars
  */
 class UserCars extends Component {
     render() {
-        const { data } = this.props;
+        const { data, classes } = this.props;
         const cars = data ? data.cars || [] : [];
 
         if (cars) {
-            return <div className="cars">
+            return <div className={classes.cars}>
                 {cars.map((car, i) => <UserCar key={i} car={car}/>)}
             </div>;
         }
@@ -40,6 +51,13 @@ class UserCars extends Component {
     }
 }
 
-UserCars = createFragmentContainer(UserCars, UserCarsFragment);
+UserCar.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+UserCars = createFragmentContainer(
+    withStyles(styles)(UserCars),
+    UserCarsFragment
+);
 
 export default UserCars;

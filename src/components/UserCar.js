@@ -16,27 +16,69 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
 import LocalCarWash from '@material-ui/icons/LocalCarWash';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import { withStyles } from '@material-ui/core';
 import { removeCar } from '../relay/mutations';
+
+const styles = theme => ({
+    card: {
+        display: 'flex',
+        marginLeft: '20px',
+    },
+    details: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    content: {
+        flex: '1 0 auto',
+    },
+    cover: {
+        width: 151,
+    },
+    controls: {
+        display: 'flex',
+        alignItems: 'center',
+        paddingLeft: theme.spacing.unit,
+        paddingBottom: theme.spacing.unit,
+    },
+    playIcon: {
+        height: 38,
+        width: 38,
+    },
+});
+
 
 /**
  * Car
  */
-export default class UserCar extends Component {
+class UserCar extends Component {
     remove = () => {
         const carId = this.props.car && this.props.car.id;
         carId && removeCar({ carId });
     }
 
     render() {
-        const { car } = this.props;
+        const { car, classes } = this.props;
 
-        return <div className="car">
-            <LocalCarWash/>
-            <div>{car.make}</div>
-            <div>{car.model}</div>
-            <div>{car.regNumber}</div>
-            <button onClick={this.remove}>X</button>
-        </div>;
+        return <Card className={classes.card}>
+            <CardContent>
+                <LocalCarWash/>
+                <div>{car.make}</div>
+                <div>{car.model}</div>
+                <div>{car.regNumber}</div>
+                <button onClick={this.remove}>X</button>
+            </CardContent>
+        </Card>;
     }
 }
+
+UserCar.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+UserCar = withStyles(styles)(UserCar)
+
+export default UserCar;
