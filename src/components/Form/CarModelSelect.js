@@ -21,25 +21,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField/TextField';
 import { withStyles } from '@material-ui/core';
 import { withQuery, CarModelsQuery } from '../../relay/queries';
-
-const styles = theme => ({
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-    },
-    menu: {
-    },
-});
+import SelectStyle, { selectHandler } from './SelectStyle';
 
 class CarModelSelect extends Component {
     state = {
         model: '',
     }
 
-    select = (event) => {
-        this.setState({ model: event.target.value });
-        this.props.onChange && this.props.onChange(event.target.value);
-    }
+    select = selectHandler.bind(this)('model')
 
     render() {
         const { classes, data } = this.props;
@@ -83,7 +72,7 @@ CarModelSelect.propTypes = {
     onChange: PropTypes.func,
 };
 
-CarModelSelect = withStyles(styles)(CarModelSelect);
+CarModelSelect = withStyles(SelectStyle)(CarModelSelect);
 CarModelSelect = withQuery(CarModelsQuery)(CarModelSelect);
 
 export { CarModelSelect };

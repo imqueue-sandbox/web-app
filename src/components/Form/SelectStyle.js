@@ -15,6 +15,19 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export * from './CarBrandsSelect';
-export * from './CarModelSelect';
-export * from './SelectStyle';
+const SelectStyle = theme => ({
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+    },
+    menu: {},
+});
+
+export function selectHandler(what) {
+    return (event) => {
+        this.setState({ [what]: event.target.value });
+        this.props.onChange && this.props.onChange(event.target.value);
+    }
+}
+
+export default SelectStyle;
