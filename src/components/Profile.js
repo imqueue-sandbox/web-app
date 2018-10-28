@@ -27,7 +27,7 @@ import Divider from '@material-ui/core/Divider';
 import User from './User';
 import UserCars from './UserCars';
 import { withStyles } from '@material-ui/core';
-import { AddCar } from './Dialog';
+import { AddCarDialog } from './Dialog';
 
 const styles = theme => ({
     root: {
@@ -117,7 +117,7 @@ class Profile extends PureComponent {
                     (<div>
                         <Divider />
                         <ExpansionPanelActions className={classes.carActions}>
-                            <AddCar userId={userId} />
+                            <AddCarDialog userId={userId} />
                         </ExpansionPanelActions>
                     </div>)}
                 </ExpansionPanel>
