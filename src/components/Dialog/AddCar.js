@@ -28,9 +28,11 @@ import Add from '@material-ui/icons/Add';
 import Clear from '@material-ui/icons/Clear';
 import Done from '@material-ui/icons/Done';
 import TextField from '@material-ui/core/TextField';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core';
 import { CarModelSelect, CarBrandsSelect } from '../Form';
 import { AppMessage } from '../AppMessage';
+import { clone } from '../../common';
 
 const styles = theme => ({
     carForm: {
@@ -38,7 +40,9 @@ const styles = theme => ({
         overflow: 'hidden',
     },
     carActions: {
-
+    },
+    invisible: {
+        visibility: 'hidden',
     },
 });
 
@@ -49,23 +53,35 @@ function Transition(props) {
 class AddCar extends Component {
 
     state = {
+        loading: false,
         open: false,
-        modelsDisabled: true,
-        addDisabled: true,
         brand: '',
         model: '',
+        regNumber: ''
     }
+
+    initialState = clone(this.state)
 
     close = () => {
         this.setState({ open: false });
     }
 
     open = () => {
-        this.setState({ open: true });
+        this.setState({
+            ...this.initialState,
+            open: true,
+        });
     }
 
     select = (what) => {
-
+        switch (what) {
+            case 'brand':
+                return (brand) => this.setState({ brand });
+            case 'model':
+                return (model) => this.setState({ model });
+            default:
+                return () => false;
+        }
     }
 
     addCar = () => {
@@ -87,19 +103,28 @@ class AddCar extends Component {
                 <DialogTitle id="responsive-dialog-title">
                     Choose your car
                 </DialogTitle>
+                <LinearProgress
+                    color="secondary"
+                    className={!this.state.loading ? classes.invisible : ''}
+                />
                 <DialogContent className={classes.carForm}>
                     <CarBrandsSelect
-                        onChange={this.select('brand')}
+                        childProps={{
+                            onChange: this.select('brand'),
+                            disabled: this.state.loading,
+                        }}
                         onError={error => <AppMessage
                             message={error.message}
                             variant="error"
                         />}
-                        onLoading={() => <div>Loading&hellip;</div>}
                     />
                     <CarModelSelect
-                        onChange={this.select('model')}
-                        disabled={this.state.modelsDisabled}
-                        brand={this.state.brand}
+                        childProps={{
+                            onChange: this.select('model'),
+                            disabled: !this.state.brand || this.state.loading,
+                            brand: this.state.brand,
+                        }}
+                        vars={{ brand: this.state.brand }}
                     />
                     <TextField
                         fullWidth
@@ -108,6 +133,10 @@ class AddCar extends Component {
                         label="Car registration number"
                         className={classes.textField}
                         margin="normal"
+                        value={this.state.regNumber}
+                        onChange={(event) => this.setState({
+                            regNumber: event.target.value
+                        })}
                     />
                 </DialogContent>
                 <DialogActions className={classes.carActions}>
@@ -116,7 +145,11 @@ class AddCar extends Component {
                         color="primary"
                     ><Clear/> Cancel</Button>
                     <Button
-                        disabled={this.state.addDisabled}
+                        disabled={!(
+                            this.state.brand &&
+                            this.state.model &&
+                            this.state.regNumber
+                        )}
                         onClick={this.addCar}
                         autoFocus
                         color="primary"

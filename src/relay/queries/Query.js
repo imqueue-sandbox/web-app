@@ -31,7 +31,13 @@ import environment from '../Environment';
 export const withQuery = (query) => (RenderComponent) => {
     class Query extends Component {
         render() {
-            const { vars, onError, onLoading } = this.props;
+            const {
+                vars,
+                onError,
+                onLoading,
+                onLoaded,
+                childProps,
+            } = this.props;
 
             return <QueryRenderer
                 environment={environment}
@@ -39,14 +45,18 @@ export const withQuery = (query) => (RenderComponent) => {
                 variables={vars || {}}
                 render={({error, props}) => {
                     if (error) {
-                        return onError && (onError(error) || null);
+                        return (onError && onError(error)) || null;
                     }
 
                     else if (props) {
-                        return <RenderComponent data={props} />;
+                        onLoaded && onLoaded();
+                        return <RenderComponent
+                            data={props}
+                            {...(childProps || {})}
+                        />;
                     }
 
-                    return onLoading && (onLoading() || null);
+                    return (onLoading && onLoading()) || null;
                 }}
             />;
         }
@@ -56,6 +66,8 @@ export const withQuery = (query) => (RenderComponent) => {
         vars: PropTypes.object,
         onError: PropTypes.func,
         onLoading: PropTypes.func,
+        onLoaded: PropTypes.func,
+        childProps: PropTypes.object,
     };
 
     return Query;

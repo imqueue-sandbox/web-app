@@ -27,14 +27,12 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
     },
-    menu: {
-    },
+    menu: {},
 });
 
 class CarBrandsSelect extends Component {
     state = {
         brand: '',
-        brands: [],
     }
 
     select = (event) => {
