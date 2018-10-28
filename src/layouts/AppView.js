@@ -114,7 +114,7 @@ class AppView extends Component {
                         </Typography>
                         <div>
                             <span>
-                                {`Hello, ${user.firstName} ${user.lastName}`}
+                                {`Hello, ${fullName})`}
                             </span>
                             <IconButton disableRipple={true}>
                                 { user.avatarUrl ?

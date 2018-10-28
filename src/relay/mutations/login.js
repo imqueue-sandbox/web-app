@@ -31,14 +31,7 @@ mutation loginMutation($input: loginInput!) {
             lastName
             isAdmin
             isActive
-            cars {
-                id
-                carId
-                make
-                model
-                type
-                regNumber
-            }
+            carsCount
         }
         clientMutationId
     }
