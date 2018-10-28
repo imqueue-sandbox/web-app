@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
-import { md5 } from '../common';
+import { md5 } from 'md5';
 
 const bigSize = 60;
 const styles = {
