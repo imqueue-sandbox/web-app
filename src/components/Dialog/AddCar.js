@@ -33,6 +33,7 @@ import { withStyles } from '@material-ui/core';
 import { CarModelSelect, CarBrandsSelect } from '../Form';
 import { AppMessage } from '../AppMessage';
 import { clone } from '../../common';
+import { addCar } from '../../relay/mutations';
 
 const styles = theme => ({
     carForm: {
@@ -85,6 +86,15 @@ class AddCar extends Component {
     }
 
     addCar = () => {
+        addCar({
+            idOrEmail: this.props.userId,
+            carId: this.state.model,
+            regNumber: this.state.regNumber
+        }, () => {
+            console.log('car successfully added');
+        }, (err) => {
+            console.error(err);
+        });
         this.close();
     }
 
