@@ -20,6 +20,7 @@ import { PropTypes } from 'prop-types';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField/TextField';
 import { withStyles } from '@material-ui/core';
+import { CarBrandsQuery, withQuery } from '../../relay/queries';
 
 const styles = theme => ({
     textField: {
@@ -42,7 +43,8 @@ class CarBrandsSelect extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, data } = this.props;
+        const { brands } = data;
 
         return <TextField
             id="car-make"
@@ -58,21 +60,19 @@ class CarBrandsSelect extends Component {
             }}}
             helperText="Please, select car make"
             margin="normal"
-        >
-        {this.state.brands.map(option => (
-            <MenuItem key={option.value} value={option.value}>
-                {option.label}
-            </MenuItem>
-        ))}
-        </TextField>;
+        >{brands.map((brand, i) => (
+            <MenuItem key={i} value={brand}>{brand}</MenuItem>
+        ))}</TextField>;
     }
 }
 
 CarBrandsSelect.propTypes = {
     classes: PropTypes.object.isRequired,
+    data: PropTypes.object.isRequired,
     onChange: PropTypes.func,
 };
 
 CarBrandsSelect = withStyles(styles)(CarBrandsSelect);
+CarBrandsSelect = withQuery(CarBrandsQuery)(CarBrandsSelect);
 
 export { CarBrandsSelect };

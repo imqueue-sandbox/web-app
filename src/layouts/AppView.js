@@ -35,7 +35,7 @@ import Waves from '@material-ui/icons/Waves';
 import { logout } from '../relay/mutations';
 import { TimeTable, Profile } from '../components';
 import { AuthStorage } from '../common';
-import { withAppRootQuery } from '../relay/queries';
+import { AppRootQuery, withQuery } from '../relay/queries';
 
 const drawerWidth = 240;
 
@@ -165,6 +165,6 @@ AppView.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-AppView = withAppRootQuery(withStyles(styles)(AppView));
+AppView = withQuery(AppRootQuery)(withStyles(styles)(AppView));
 
 export { AppView };

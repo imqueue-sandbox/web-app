@@ -17,13 +17,7 @@
  */
 import { graphql } from 'react-relay';
 
-export const AppRootQuery = graphql`
-query AppRootQuery(
-    $withUser: Boolean!
-    $withUserCars: Boolean!
-) {
-    user {
-        ...CurrentUser @include(if: $withUser)
-        ...UserCars @include(if: $withUserCars)
-    }
+export const CarBrandsQuery = graphql`
+query CarBrandsQuery {
+    brands
 }`;

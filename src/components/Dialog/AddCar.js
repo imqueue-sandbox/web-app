@@ -30,6 +30,7 @@ import Done from '@material-ui/icons/Done';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core';
 import { CarModelSelect, CarBrandsSelect } from '../Form';
+import { AppMessage } from '../AppMessage';
 
 const styles = theme => ({
     carForm: {
@@ -89,6 +90,11 @@ class AddCar extends Component {
                 <DialogContent className={classes.carForm}>
                     <CarBrandsSelect
                         onChange={this.select('brand')}
+                        onError={error => <AppMessage
+                            message={error.message}
+                            variant="error"
+                        />}
+                        onLoading={() => <div>Loading&hellip;</div>}
                     />
                     <CarModelSelect
                         onChange={this.select('model')}
