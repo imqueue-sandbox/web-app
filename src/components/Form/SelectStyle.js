@@ -23,6 +23,13 @@ const SelectStyle = theme => ({
     menu: {},
 });
 
+/**
+ * Typical select handler producer. Should be bound to a component for
+ * correct work.
+ *
+ * @param {string} what - property to change by the target value in the component state
+ * @return {Function} - select change handler
+ */
 export function selectHandler(what) {
     return (event) => {
         this.setState({ [what]: event.target.value });
