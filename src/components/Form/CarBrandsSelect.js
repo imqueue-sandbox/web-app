@@ -17,65 +17,60 @@
  */
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import Select from '@material-ui/core/Select';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField/TextField';
 import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
     },
-    formControl: {
-        margin: theme.spacing.unit,
-        minWidth: 120,
-    },
-    selectEmpty: {
-        marginTop: theme.spacing.unit * 2,
+    menu: {
     },
 });
 
 class CarBrandsSelect extends Component {
     state = {
         brand: '',
-        disabled: false,
+        brands: [],
     }
 
     select = (event) => {
-        this.setState({ brand: event.target.value })
+        this.setState({ brand: event.target.value });
+        this.props.onChange && this.props.onChange(event.target.value);
     }
 
     render() {
         const { classes } = this.props;
 
-        return <>
-            <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="car-brand-select">Make</InputLabel>
-                <Select
-                    value={this.state.brand}
-                    onChange={this.select}
-                    inputProps={{
-                        name: 'car-brand',
-                        id: 'car-brand-select',
-                    }}
-                    disabled={this.state.disabled}
-                >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-            </FormControl>
-        </>
+        return <TextField
+            id="car-make"
+            select={true}
+            label="Make"
+            fullWidth
+            required
+            className={classes.textField}
+            value={this.state.brand}
+            onChange={this.select}
+            SelectProps={{MenuProps: {
+                className: classes.menu,
+            }}}
+            helperText="Please, select car make"
+            margin="normal"
+        >
+        {this.state.brands.map(option => (
+            <MenuItem key={option.value} value={option.value}>
+                {option.label}
+            </MenuItem>
+        ))}
+        </TextField>;
     }
 }
 
 CarBrandsSelect.propTypes = {
     classes: PropTypes.object.isRequired,
+    onChange: PropTypes.func,
 };
 
 CarBrandsSelect = withStyles(styles)(CarBrandsSelect);

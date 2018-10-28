@@ -25,7 +25,21 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import Slide from '@material-ui/core/Slide';
 import Add from '@material-ui/icons/Add';
+import Clear from '@material-ui/icons/Clear';
+import Done from '@material-ui/icons/Done';
+import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core';
 import { CarModelSelect, CarBrandsSelect } from '../Form';
+
+const styles = theme => ({
+    carForm: {
+        paddingRight: 40,
+        overflow: 'hidden',
+    },
+    carActions: {
+
+    },
+});
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
@@ -35,6 +49,10 @@ class AddCar extends Component {
 
     state = {
         open: false,
+        modelsDisabled: true,
+        addDisabled: true,
+        brand: '',
+        model: '',
     }
 
     close = () => {
@@ -45,19 +63,19 @@ class AddCar extends Component {
         this.setState({ open: true });
     }
 
-    addCar = () => {
+    select = (what) => {
 
+    }
+
+    addCar = () => {
         this.close();
     }
 
     render() {
-        const { fullScreen } = this.props;
+        const { fullScreen, classes } = this.props;
 
         return (<>
-            <Button onClick={this.open}>
-                <Add/>
-                Add car
-            </Button>
+            <Button onClick={this.open}><Add/> Add car</Button>
             <Dialog
                 fullScreen={fullScreen}
                 TransitionComponent={Transition}
@@ -68,17 +86,35 @@ class AddCar extends Component {
                 <DialogTitle id="responsive-dialog-title">
                     Choose your car
                 </DialogTitle>
-                <DialogContent>
-                    <CarBrandsSelect/>
-                    <CarModelSelect/>
+                <DialogContent className={classes.carForm}>
+                    <CarBrandsSelect
+                        onChange={this.select('brand')}
+                    />
+                    <CarModelSelect
+                        onChange={this.select('model')}
+                        disabled={this.state.modelsDisabled}
+                        brand={this.state.brand}
+                    />
+                    <TextField
+                        fullWidth
+                        required={true}
+                        id="car-reg-number"
+                        label="Car registration number"
+                        className={classes.textField}
+                        margin="normal"
+                    />
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.close} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={this.addCar} autoFocus color="primary">
-                        Add
-                    </Button>
+                <DialogActions className={classes.carActions}>
+                    <Button
+                        onClick={this.close}
+                        color="primary"
+                    ><Clear/> Cancel</Button>
+                    <Button
+                        disabled={this.state.addDisabled}
+                        onClick={this.addCar}
+                        autoFocus
+                        color="primary"
+                    ><Done/> Add</Button>
                 </DialogActions>
             </Dialog>
         </>);
@@ -86,10 +122,12 @@ class AddCar extends Component {
 }
 
 AddCar.propTypes = {
+    classes: PropTypes.object.isRequired,
     fullScreen: PropTypes.bool.isRequired,
     userId: PropTypes.string.isRequired,
 };
 
 AddCar = withMobileDialog()(AddCar);
+AddCar = withStyles(styles)(AddCar);
 
 export { AddCar };
