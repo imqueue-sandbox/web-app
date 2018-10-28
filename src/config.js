@@ -15,5 +15,10 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+import { config } from 'dotenv';
+
+config();
+
 export const logger = console;
-export const APP_BACKEND_URL = 'http://localhost:8888/';
+export const APP_BACKEND_URL = process.env['WEB_API_URL'] ||
+    'http://localhost:8888/';
