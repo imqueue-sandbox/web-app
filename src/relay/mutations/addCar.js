@@ -25,11 +25,6 @@ mutation addCarMutation($input: addCarInput!) {
     addCar(input: $input) {
         user {
             id
-            email
-            firstName
-            lastName
-            isAdmin
-            isActive
             carsCount
             cars {
                 id

@@ -25,11 +25,6 @@ mutation removeCarMutation($input: removeCarInput!) {
     removeCar(input: $input) {
         user {
             id
-            email
-            firstName
-            lastName
-            isAdmin
-            isActive
             carsCount
             cars {
                 id
