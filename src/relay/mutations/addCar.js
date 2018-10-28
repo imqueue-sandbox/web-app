@@ -30,6 +30,7 @@ mutation addCarMutation($input: addCarInput!) {
             lastName
             isAdmin
             isActive
+            carsCount
             cars {
                 id
                 carId

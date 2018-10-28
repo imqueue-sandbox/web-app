@@ -30,6 +30,7 @@ mutation removeCarMutation($input: removeCarInput!) {
             lastName
             isAdmin
             isActive
+            carsCount
             cars {
                 id
                 carId

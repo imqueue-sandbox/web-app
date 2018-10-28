@@ -64,12 +64,14 @@ class CarModelSelect extends Component {
             }
             margin="normal"
         >
-        {cars.map(car => (
-            <MenuItem key={car.id} value={car.id}>
-                {car.model}&nbsp;
-                ({Math.min(...car.years)} - {Math.max(...car.years)})
+        {cars.map(car => {
+            const [min, max] = [Math.min(...car.years), Math.max(...car.years)];
+            const years = min !== max ? `${min} - ${max}` : max;
+
+            return <MenuItem key={car.id} value={car.id}>
+                {car.model} (<i>{years}</i>)
             </MenuItem>
-        ))}
+        })}
         </TextField>;
     }
 }
