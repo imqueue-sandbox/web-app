@@ -61,6 +61,7 @@ const styles = theme => ({
         flexGrow: 1,
     },
     appBar: {
+        background: '#333',
         zIndex: theme.zIndex.drawer + 1,
         '& *': {
             color: '#fff !important',
@@ -86,7 +87,7 @@ const styles = theme => ({
     },
     toolbar: theme.mixins.toolbar,
     supTitle: {
-        color: theme.palette.primary.light + ' !important',
+        color: theme.palette.secondary.light + ' !important',
         marginLeft: '.5em',
     },
 });

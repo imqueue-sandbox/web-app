@@ -39,17 +39,12 @@ const styles = theme => ({
     grey: {
         background: '#f5f5f5',
     },
-    summary: {
-        background: theme.palette.secondary.main,
-        '& *': {
-            color: theme.palette.primary.contrastText + ' !important',
-        },
-    },
+    summary: {},
     carActions: {
         justifyContent: 'flex-start',
     },
     heading: {
-        fontSize: theme.typography.pxToRem(18),
+        fontSize: theme.typography.pxToRem(16),
     },
     icon: {
         verticalAlign: 'bottom',
@@ -58,7 +53,7 @@ const styles = theme => ({
     },
     details: {
         alignItems: 'center',
-        marginTop: 40 + 'px',
+        marginTop: '.5em',
     },
     column: {
         flexBasis: '33.33%',
@@ -110,6 +105,7 @@ class Profile extends PureComponent {
                                 </Typography>
                             </div>
                         </ExpansionPanelSummary>
+                        <Divider/>
                         <ExpansionPanelDetails className={classes.details}>
                             <Child data={data.user} />
                     </ExpansionPanelDetails>

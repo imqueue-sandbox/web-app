@@ -59,10 +59,10 @@ const styles = theme => ({
     carIcon: {
         height: 'initial !important',
         width: '3em',
-        background: '#eee',
+        background: '#333',
         alignSelf: 'stretch',
         padding: '0 2em 0 2em',
-        color: theme.palette.secondary.light,
+        color: '#fff',
     },
     carNumber: {
         '& span': {
