@@ -18,5 +18,4 @@
 export * from './clone';
 export * from './Storage';
 export * from './AuthStorage';
-export * from './uuid';
 export * from './helpers';

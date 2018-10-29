@@ -32,7 +32,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core';
 import { CarModelSelect, CarBrandsSelect } from '../Form';
 import { AppMessage } from '../AppMessage';
-import { clone } from '../../common';
+import {clone, withoutElement} from '../../common';
 import { addCar } from '../../relay/mutations';
 
 const styles = theme => ({
@@ -80,10 +80,7 @@ class AddCarDialog extends Component {
     }
 
     errorClose = (i) => () => {
-        const errors = this.state.errors.slice(0);
-
-        errors.splice(i, 1);
-        this.setState({ errors });
+        this.setState({ errors: withoutElement(this.state.errors, i) });
     }
 
     select = (what) => {

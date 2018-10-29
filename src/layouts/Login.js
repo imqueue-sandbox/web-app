@@ -38,7 +38,7 @@ import green from '@material-ui/core/colors/green';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import { login, register } from '../relay/mutations';
 import { AppMessage } from '../components';
-import { clone, uuid } from '../common';
+import { clone, withoutElement } from '../common';
 
 const styles = () => ({
     buttonProgress: {
@@ -203,7 +203,9 @@ class Login extends PureComponent {
     /**
      * Clears errors off
      */
-    clearErrors = () => this.setState({ errors: [] });
+    clearErrors = (i) => () => {
+        this.setState({ errors: withoutElement(this.state.errors, i) });
+    }
 
     /**
      * Returns flags for button state actions build from a given state
@@ -284,13 +286,13 @@ class Login extends PureComponent {
               }
             />
             <DialogContent className="login-content">
-                {this.state.errors.map(error =>
+                {this.state.errors.map((error, i) =>
                     <AppMessage
                         className="app-message"
                         variant="error"
                         message={error.message}
                         onClose={this.clearErrors}
-                        key={(error.extensions || {}).code || uuid()}
+                        key={i}
                     />)
                 }
                 <form>

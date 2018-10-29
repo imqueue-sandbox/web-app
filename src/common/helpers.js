@@ -46,3 +46,18 @@ export function carType(type) {
         default: return 'Regular Car';
     }
 }
+
+/**
+ * Returns copy of the given array without an element at position pos
+ * in that array
+ *
+ * @param {*[]} arr - source array of elements
+ * @param {number} pos - element position to remove
+ * @return {*[]} - copy of a source array without an element at the given source position
+ */
+export function withoutElement(arr, pos) {
+    arr = arr.slice(0);
+    arr.splice(pos, 1);
+
+    return arr;
+}
