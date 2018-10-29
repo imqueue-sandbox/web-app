@@ -30,6 +30,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ExitToApp from '@material-ui/icons/ExitToApp';
+import Person from '@material-ui/icons/Person';
+import Timelapse from '@material-ui/icons/Timelapse';
 import Avatar from '@material-ui/core/Avatar';
 import Waves from '@material-ui/icons/Waves';
 
@@ -142,12 +144,11 @@ class AppView extends Component {
                     <div className={classes.toolbar}/>
                     <List>
                         <ListItemLink href="/">
-                            <ListItemIcon>
-                                <Waves />
-                            </ListItemIcon>
+                            <ListItemIcon><Timelapse /></ListItemIcon>
                             <ListItemText primary="Car Wash Bookings" />
                         </ListItemLink>
                         <ListItemLink href="/profile">
+                            <ListItemIcon><Person /></ListItemIcon>
                             <ListItemText primary="My Profile" />
                         </ListItemLink>
                     </List>
