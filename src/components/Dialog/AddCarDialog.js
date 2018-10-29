@@ -90,12 +90,10 @@ class AddCarDialog extends Component {
             idOrEmail: this.props.userId,
             carId: this.state.model,
             regNumber: this.state.regNumber
-        }, () => {
-            console.log('car successfully added');
-        }, (err) => {
+        }, this.close, (err) => {
             console.error(err);
+            this.close();
         });
-        this.close();
     }
 
     render() {

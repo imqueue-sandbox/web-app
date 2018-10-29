@@ -90,7 +90,11 @@ class UserCar extends Component {
             <div className={classes.details}>
                 <CardContent className={classes.content}>
                     <Typography component="h5" variant="h5">
-                        <b>{car.make}</b> <i>{car.model}</i>
+                        <b>{car.make}</b><br/>
+                        <i>{car.model}</i>
+                    </Typography>
+                    <Typography>
+                        {car.type}
                     </Typography>
                     <Typography className={classes.carNumber}>
                         <span>{car.regNumber}</span>

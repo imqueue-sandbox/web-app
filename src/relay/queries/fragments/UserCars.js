@@ -24,6 +24,7 @@ fragment UserCars on User {
         carId
         make
         model
+        type
         regNumber
     }
 }`;
