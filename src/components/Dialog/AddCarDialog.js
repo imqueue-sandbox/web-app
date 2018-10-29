@@ -45,6 +45,9 @@ const styles = theme => ({
     invisible: {
         visibility: 'hidden',
     },
+    error: {
+        flexGrow: 0,
+    },
 });
 
 function Transition(props) {
@@ -58,7 +61,8 @@ class AddCarDialog extends Component {
         open: false,
         brand: '',
         model: '',
-        regNumber: ''
+        regNumber: '',
+        errors: [],
     }
 
     initialState = clone(this.state)
@@ -72,6 +76,13 @@ class AddCarDialog extends Component {
             ...this.initialState,
             open: true,
         });
+    }
+
+    errorClose = (i) => () => {
+        const errors = this.state.errors.slice(0);
+
+        errors.splice(i, 1);
+        this.setState({ errors });
     }
 
     select = (what) => {
@@ -90,10 +101,7 @@ class AddCarDialog extends Component {
             idOrEmail: this.props.userId,
             carId: this.state.model,
             regNumber: this.state.regNumber
-        }, this.close, (err) => {
-            console.error(err);
-            this.close();
-        });
+        }, this.close, errors => this.setState({ errors }));
     }
 
     render() {
@@ -115,6 +123,16 @@ class AddCarDialog extends Component {
                     color="secondary"
                     className={!this.state.loading ? classes.invisible : ''}
                 />
+                {this.state.errors.length > 0 &&
+                 this.state.errors.map((error, i) =>
+                    <AppMessage
+                        className={classes.error}
+                        key={i}
+                        variant="error"
+                        message={error.message}
+                        onClose={this.errorClose(i)}
+                    />
+                )}
                 <DialogContent className={classes.carForm}>
                     <CarBrandsSelect
                         childProps={{
