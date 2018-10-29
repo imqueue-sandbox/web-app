@@ -52,7 +52,7 @@ class User extends PureComponent {
         }
 
         return <div className="user-box">
-            <Gravatar user={user} size={100} editable={true}/>
+            <Gravatar user={user} size={100} editable/>
             <div className="divider"/>
             <div className="user-info">
                 <Typography>

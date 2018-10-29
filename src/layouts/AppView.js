@@ -75,6 +75,10 @@ const styles = theme => ({
         overflow: 'auto',
     },
     toolbar: theme.mixins.toolbar,
+    supTitle: {
+        color: theme.palette.primary.light + ' !important',
+        marginLeft: '.5em',
+    },
 });
 
 function ListItemLink(props) {
@@ -105,21 +109,23 @@ class AppView extends Component {
                             <Waves className={classes.logo}/>
                         </Link>
                         <Typography
-                            component={Link} to="/"
                             variant="h6"
                             color="inherit"
                             className={classes.grow}
                             noWrap
                         >
-                            CarWash Reservations
+                            Car Wash Tutorial App
+                            <sup className={classes.supTitle}>for @imqueue</sup>
                         </Typography>
                         <div>
-                            <span>{`Hello, ${fullName}`}</span>
-                            <IconButton disableRipple >
+                            <span>
+                                {`Hello, ${fullName}`}
+                            </span>
+                            <IconButton disableRipple>
                                 {
-                                 user.email ?
-                                     <Gravatar user={user} size={50} editable /> :
-                                     <Avatar>{letters}</Avatar>
+                                    user.email ?
+                                        <Gravatar user={user} size={50} editable /> :
+                                        <Avatar>{letters}</Avatar>
                                 }
                             </IconButton>
                             <IconButton onClick={this.logout}>
