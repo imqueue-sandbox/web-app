@@ -43,10 +43,9 @@ const styles = theme => ({
     },
     content: {
         flex: '1 0 auto',
-        '& h5': {
-            marginTop: '.5em',
-        },
         paddingBottom: 0,
+        padding: 0,
+        margin: 0,
     },
     controls: {
         margin: 0,
@@ -61,19 +60,23 @@ const styles = theme => ({
         width: '3em',
         background: '#333',
         alignSelf: 'stretch',
-        padding: '0 2em 0 2em',
+        padding: '0 1em 0 1em',
         color: '#fff',
     },
     carNumber: {
+        fontSize: '1em',
+        marginTop: '.5em',
+        fontWeight: 'bold',
         '& span': {
             display: 'inline-block',
             border: '.2rem solid #666',
-            borderRadius: 5,
-            padding: 5,
-            fontSize: '1.3em',
-            fontWeight: 'bold',
-            marginTop: '1em',
+            borderRadius: '.5em',
+            padding: '.2em .5em'
         },
+    },
+    carModel: {
+        fontSize: '1.3em',
+        marginTop: '1.2em',
     },
     carType: {
         fontSize: '.9em',
@@ -94,7 +97,7 @@ class UserCar extends Component {
             <LocalCarWash className={classes.carIcon}/>
             <div className={classes.details}>
                 <CardContent className={classes.content}>
-                    <Typography component="h5" variant="h5">
+                    <Typography className={classes.carModel}>
                         <b>{car.make}</b><br/>
                         <i>{car.model}</i>
                     </Typography>

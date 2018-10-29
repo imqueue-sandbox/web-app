@@ -29,6 +29,7 @@ const styles = theme => ({
         alignItems: 'center',
         alignContent: 'flex-start',
         flexWrap: 'wrap',
+        fontSize: 14,
     },
 });
 
