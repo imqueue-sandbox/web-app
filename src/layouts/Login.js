@@ -433,7 +433,7 @@ class Login extends PureComponent {
 }
 
 Login.propTypes = {
-    fullScreen: PropTypes.bool.isRequired,
+    fullScreen: PropTypes.bool,
 };
 
 Login = withMobileDialog()(withStyles(styles)(Login));

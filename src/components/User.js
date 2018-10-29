@@ -18,15 +18,16 @@
 import React, { PureComponent } from 'react';
 import { PropTypes } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
-import { createFragmentContainer } from 'react-relay';
+import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import { Gravatar } from './Gravatar';
 import { AuthStorage } from '../common';
 import { CurrentUserFragment } from '../relay/queries';
 
+import { createFragmentContainer } from 'react-relay';
+
 class User extends PureComponent {
     state = {
-        inProgress: true,
+        inProgress: true
     }
 
     render() {
@@ -42,9 +43,12 @@ class User extends PureComponent {
         }
 
         if (!user) {
-            return <LinearProgress color="secondary" className={
-                this.state.inProgress ? "" : "invisible"
-            }/>;
+            return (
+                <LinearProgress
+                    color="secondary"
+                    className={this.state.inProgress ? "" : "invisible"}
+                />
+            )
         }
 
         return <div className="user-box">
