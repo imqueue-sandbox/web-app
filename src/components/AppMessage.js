@@ -105,7 +105,7 @@ export class AppMessage extends Component {
 }
 
 AppMessage.propTypes = {
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.object,
     className: PropTypes.string,
     message: PropTypes.node,
     onClose: PropTypes.func,

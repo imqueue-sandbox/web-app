@@ -57,29 +57,31 @@ class Gravatar extends PureComponent {
     render() {
         const { user, classes, large, size, editable } = this.props;
 
-        return <Avatar
-            onClick={this.props.editable ? this.edit : () => {}}
-            title={`${user.firstName} ${user.lastName}${
-                this.props.editable ? '. Click to change...' : ''
-            }`}
-            src={`https://s.gravatar.com/avatar/${
-                md5((user.email || '').trim().toLowerCase())
-            }` + ((size || large) && `?s=${size ? size : bigSize}`)}
-            className={classNames(
-                classes.avatar,
-                large && classes.bigAvatar,
-                editable && classes.editable,
-            )}
-            style={size && {
-                width: size,
-                height: size,
-            }}
-        />;
+        return (
+            <Avatar
+                onClick={this.props.editable ? this.edit : () => {}}
+                title={`${user.firstName} ${user.lastName}${
+                    this.props.editable ? '. Click to change...' : ''
+                }`}
+                src={`https://s.gravatar.com/avatar/${
+                    md5((user.email || '').trim().toLowerCase())
+                }` + ((size || large) && `?s=${size ? size : bigSize}`)}
+                className={classNames(
+                    classes.avatar,
+                    large && classes.bigAvatar,
+                    editable && classes.editable,
+                )}
+                style={size && {
+                    width: size,
+                    height: size,
+                }}
+            />
+        )
     }
 }
 
 Gravatar.propTypes = {
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.object,
     user: PropTypes.object.isRequired,
     large: PropTypes.bool,
     size: PropTypes.number,

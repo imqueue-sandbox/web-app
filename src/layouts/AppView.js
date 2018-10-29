@@ -35,6 +35,7 @@ import Waves from '@material-ui/icons/Waves';
 
 import { logout } from '../relay/mutations';
 import { TimeTable, Profile } from '../components';
+import { Gravatar } from '../components/Gravatar';
 import { AuthStorage } from '../common';
 import { AppRootQuery, withQuery } from '../relay/queries';
 
@@ -95,8 +96,8 @@ class AppView extends Component {
     render() {
         const { classes } = this.props;
         const user = AuthStorage.user();
-        const letters = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase()
-        const fullName = `${user.firstName} ${user.lastName}`
+        const letters = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+        const fullName = `${user.firstName} ${user.lastName}`;
 
         return (
             <div className={classes.root}>
@@ -122,11 +123,10 @@ class AppView extends Component {
                                 {`Hello, ${fullName}`}
                             </span>
                             <IconButton disableRipple>
-                                { user.avatarUrl ?
-                                    <Avatar
-                                        alt={fullName}
-                                        src={user.avatarUrl}
-                                    /> : <Avatar>{letters}</Avatar>
+                                {
+                                    user.email ?
+                                        <Gravatar user={user} size={50} editable /> :
+                                        <Avatar>{letters}</Avatar>
                                 }
                             </IconButton>
                             <IconButton onClick={this.logout}>
@@ -170,7 +170,7 @@ class AppView extends Component {
 }
 
 AppView.propTypes = {
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.object,
 };
 
 AppView = withQuery(AppRootQuery)(withStyles(styles)(AppView));
