@@ -34,6 +34,7 @@ import Person from '@material-ui/icons/Person';
 import Timelapse from '@material-ui/icons/Timelapse';
 import Avatar from '@material-ui/core/Avatar';
 import Waves from '@material-ui/icons/Waves';
+import Divider from '@material-ui/core/Divider';
 
 import { logout } from '../relay/mutations';
 import { TimeTable, Profile } from '../components';
@@ -146,6 +147,7 @@ class AppView extends Component {
                 >
                     <div className={classes.toolbar}/>
                     <List>
+                        <Divider/>
                         <ListItemLink href="/">
                             <ListItemIcon><Timelapse /></ListItemIcon>
                             <ListItemText primary="Car Wash Bookings" />
@@ -154,6 +156,7 @@ class AppView extends Component {
                             <ListItemIcon><Person /></ListItemIcon>
                             <ListItemText primary="My Profile" />
                         </ListItemLink>
+                        <Divider/>
                     </List>
                 </Drawer>
                 <main className={classes.content}>
