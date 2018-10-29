@@ -130,11 +130,10 @@ class AppView extends Component {
                             <span>
                                 {`Hello, ${fullName}`}
                             </span>
-                                {
-                                    user.email ?
-                                        <Gravatar user={user} size={40} editable /> :
-                                        <Avatar>{letters}</Avatar>
-                                }
+                            {user.email
+                                ? <Gravatar user={user} size={40} />
+                                : <Avatar>{letters}</Avatar>
+                            }
                             <IconButton onClick={this.logout}>
                                 <ExitToApp/>
                             </IconButton>

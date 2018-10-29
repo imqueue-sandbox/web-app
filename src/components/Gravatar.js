@@ -30,12 +30,12 @@ const styles = {
     },
     avatar: {
         margin: 10,
-        cursor: 'pointer',
         border: '5px solid transparent',
     },
     editable: {
         transition: 'border-color 0.5s ease-in-out, ' +
             'box-shadow: 0.5s ease-in-out',
+        cursor: 'pointer',
         opacity: 1,
         '&:hover': {
             borderColor: '#fff',
