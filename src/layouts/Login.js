@@ -49,6 +49,13 @@ const styles = () => ({
         marginTop: -12,
         marginLeft: -12,
     },
+    buttonAction: {
+        backgroundColor: '#333',
+        color: '#fff',
+        '& :hover': {
+            color: '#333',
+        },
+    },
 });
 
 /**
@@ -264,7 +271,7 @@ class Login extends PureComponent {
     }
 
     render() {
-        const { fullScreen } = this.props;
+        const { fullScreen, classes } = this.props;
 
         return <Dialog
             fullScreen={fullScreen}
@@ -411,7 +418,7 @@ class Login extends PureComponent {
                     onClick={this.state.isRegForm
                         ? this.register
                         : this.login}
-                    color="primary"
+                    className={classes.buttonAction}
                     autoFocus
                     size={"large"}
                     disabled={!this.state.canSubmit || this.state.inProgress}
@@ -423,7 +430,7 @@ class Login extends PureComponent {
                     {this.state.inProgress &&
                         <CircularProgress
                             size={24}
-                            className={this.props.classes.buttonProgress}
+                            className={classes.buttonProgress}
                         />
                     }
                 </Button>
