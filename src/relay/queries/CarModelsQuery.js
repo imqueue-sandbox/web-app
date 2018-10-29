@@ -22,6 +22,7 @@ query CarModelsQuery($brand: String!) {
     cars(brand: $brand) {
         id
         model
+        type
         years
     }
 }`;

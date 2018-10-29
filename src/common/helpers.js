@@ -32,3 +32,17 @@ export function resultHandler(key, success, failure) {
         success && success(key ? response[key] : response);
     }
 }
+
+/**
+ * Returns presentation string for a given car type
+ *
+ * @param {string} type - db stored type
+ * @return {string} - presentational type
+ */
+export function carType(type) {
+    switch (type) {
+        case 'mini': return 'Small Car';
+        case 'large': return 'Large Car';
+        default: return 'Regular Car';
+    }
+}

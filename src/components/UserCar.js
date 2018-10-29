@@ -26,6 +26,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Delete from '@material-ui/icons/Delete';
 import { withStyles } from '@material-ui/core';
 import { removeCar } from '../relay/mutations';
+import { carType } from '../common';
 
 const styles = theme => ({
     card: {
@@ -74,6 +75,10 @@ const styles = theme => ({
             marginTop: '1em',
         },
     },
+    carType: {
+        fontSize: '.9em',
+        color: '#777',
+    },
 });
 
 class UserCar extends Component {
@@ -93,8 +98,8 @@ class UserCar extends Component {
                         <b>{car.make}</b><br/>
                         <i>{car.model}</i>
                     </Typography>
-                    <Typography>
-                        {car.type}
+                    <Typography className={classes.carType}>
+                        {carType(car.type)}
                     </Typography>
                     <Typography className={classes.carNumber}>
                         <span>{car.regNumber}</span>

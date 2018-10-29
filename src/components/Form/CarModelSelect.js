@@ -22,6 +22,14 @@ import TextField from '@material-ui/core/TextField/TextField';
 import { withStyles } from '@material-ui/core';
 import { withQuery, CarModelsQuery } from '../../relay/queries';
 import SelectStyle, { selectHandler } from './SelectStyle';
+import { carType } from '../../common';
+
+const style = theme => (Object.assign(SelectStyle(theme), {
+    carType: {
+        color: '#777',
+        fontSize: '.8em',
+    },
+}));
 
 class CarModelSelect extends Component {
     state = {
@@ -59,6 +67,9 @@ class CarModelSelect extends Component {
 
             return <MenuItem key={car.id} value={car.id}>
                 {car.model} (<i>{years}</i>)
+                <span className={classes.carType}>
+                    &nbsp;&ndash;&nbsp;{carType(car.type)}
+                </span>
             </MenuItem>
         })}
         </TextField>;
@@ -72,7 +83,7 @@ CarModelSelect.propTypes = {
     onChange: PropTypes.func,
 };
 
-CarModelSelect = withStyles(SelectStyle)(CarModelSelect);
+CarModelSelect = withStyles(style)(CarModelSelect);
 CarModelSelect = withQuery(CarModelsQuery)(CarModelSelect);
 
 export { CarModelSelect };
