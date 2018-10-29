@@ -63,9 +63,15 @@ const styles = theme => ({
             textDecoration: 'none',
         },
     },
+    appBarUser: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
     drawerPaper: {
         position: 'relative',
         width: drawerWidth,
+        paddingTop: '5px'
     },
     content: {
         flexGrow: 1,
@@ -117,17 +123,15 @@ class AppView extends Component {
                             Car Wash Tutorial App
                             <sup className={classes.supTitle}>for @imqueue</sup>
                         </Typography>
-                        <div>
+                        <div className={classes.appBarUser}>
                             <span>
                                 {`Hello, ${fullName}`}
                             </span>
-                            <IconButton disableRipple>
                                 {
                                     user.email ?
-                                        <Gravatar user={user} size={50} editable /> :
+                                        <Gravatar user={user} size={40} editable /> :
                                         <Avatar>{letters}</Avatar>
                                 }
-                            </IconButton>
                             <IconButton onClick={this.logout}>
                                 <ExitToApp/>
                             </IconButton>
