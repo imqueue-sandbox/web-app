@@ -47,6 +47,7 @@ const styles = theme => ({
     },
     error: {
         flexGrow: 0,
+        margin: '0 20px',
     },
 });
 
