@@ -46,6 +46,7 @@ export class App extends Component {
         }
 
         return <AppView
+            childProps={{route: this.props.location.pathname}}
             vars={{
                 withUser: true,
                 withUserCars: this.is('profile'),

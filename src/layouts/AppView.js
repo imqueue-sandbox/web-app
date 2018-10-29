@@ -104,7 +104,7 @@ class AppView extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, route } = this.props;
         const user = AuthStorage.user();
         const letters = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
         const fullName = `${user.firstName} ${user.lastName}`;
@@ -149,11 +149,17 @@ class AppView extends Component {
                     <div className={classes.toolbar}/>
                     <List>
                         <Divider/>
-                        <ListItemLink href="/">
+                        <ListItemLink
+                            href="/"
+                            selected={route === '/'}
+                        >
                             <ListItemIcon><Timelapse /></ListItemIcon>
                             <ListItemText primary="Car Wash Bookings" />
                         </ListItemLink>
-                        <ListItemLink href="/profile">
+                        <ListItemLink
+                            href="/profile"
+                            selected={route === '/profile'}
+                        >
                             <ListItemIcon><Person /></ListItemIcon>
                             <ListItemText primary="My Profile" />
                         </ListItemLink>
@@ -178,7 +184,8 @@ class AppView extends Component {
 }
 
 AppView.propTypes = {
-    classes: PropTypes.object,
+    classes: PropTypes.object.isRequired,
+    route: PropTypes.string.isRequired,
 };
 
 AppView = withQuery(AppRootQuery)(withStyles(styles)(AppView));
