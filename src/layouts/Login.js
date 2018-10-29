@@ -203,7 +203,7 @@ class Login extends PureComponent {
     /**
      * Clears errors off
      */
-    clearErrors = (i) => () => {
+    clearError = (i) => () => {
         this.setState({ errors: withoutElement(this.state.errors, i) });
     }
 
@@ -286,12 +286,13 @@ class Login extends PureComponent {
               }
             />
             <DialogContent className="login-content">
-                {this.state.errors.map((error, i) =>
+                {this.state.errors.length > 0 &&
+                 this.state.errors.map((error, i) =>
                     <AppMessage
                         className="app-message"
                         variant="error"
                         message={error.message}
-                        onClose={this.clearErrors}
+                        onClose={this.clearError(i)}
                         key={i}
                     />)
                 }
