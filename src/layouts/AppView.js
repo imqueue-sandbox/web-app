@@ -26,6 +26,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ExitToApp from '@material-ui/icons/ExitToApp';
@@ -37,7 +38,7 @@ import { TimeTable, Profile } from '../components';
 import { AuthStorage } from '../common';
 import { AppRootQuery, withQuery } from '../relay/queries';
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const styles = theme => ({
     root: {
@@ -141,6 +142,9 @@ class AppView extends Component {
                     <div className={classes.toolbar}/>
                     <List>
                         <ListItemLink href="/">
+                            <ListItemIcon>
+                                <Waves />
+                            </ListItemIcon>
                             <ListItemText primary="Car Wash Bookings" />
                         </ListItemLink>
                         <ListItemLink href="/profile">
