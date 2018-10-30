@@ -21,11 +21,14 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Update from '@material-ui/icons/Update';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel/ExpansionPanel';
 import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Divider from '@material-ui/core/Divider';
+import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core';
-import { User, UserCars, Security, AddCarDialog } from '.';
+import { User, UserCars, Security, AddCarDialog, AppMessage } from '.';
 
 const styles = theme => ({
     root: {
@@ -70,7 +73,6 @@ const styles = theme => ({
     },
 });
 
-
 export class Profile extends Component {
     state = {
         addCarOpen: false,
@@ -80,12 +82,31 @@ export class Profile extends Component {
         this.setState({ addCarOpen: true });
     }
 
+    updateUser = (data) => {
+
+    }
+
     render() {
         const { classes, data } = this.props;
+
+        if (!data.user) {
+            return <AppMessage variant="Error" message="Unauthorized!" />
+        }
+
         const userId = (data.user || {}).__id;
         const panels = {
-            'Customer Details': { component: User, actions: [] },
-            'Security': { component: Security, actions: [] },
+            'Customer Details': { component: User, actions: [{
+                component: (props) => <Button {...props}>
+                    <SaveAlt />&nbsp;Save
+                </Button>,
+                props: {},
+            }]},
+            'Security': { component: Security, actions: [{
+                component: (props) => <Button {...props}>
+                    <Update />&nbsp;Update
+                </Button>,
+                props: {},
+            }]},
             'Garage': { component: UserCars, actions: [
                 { component: AddCarDialog, props: { userId } },
             ]},
@@ -96,19 +117,19 @@ export class Profile extends Component {
                 const Child = panels[name].component;
 
                 return <ExpansionPanel key={key} defaultExpanded>
-                        <ExpansionPanelSummary
-                            expandIcon={<ExpandMore/>}
-                            className={classes.summary}
-                        >
-                            <div className={classes.column}>
-                                <Typography className={classes.heading}>
-                                    {name}
-                                </Typography>
-                            </div>
-                        </ExpansionPanelSummary>
-                        <Divider/>
-                        <ExpansionPanelDetails className={classes.details}>
-                            <Child data={data.user} />
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMore/>}
+                        className={classes.summary}
+                    >
+                        <div className={classes.column}>
+                            <Typography className={classes.heading}>
+                                {name}
+                            </Typography>
+                        </div>
+                    </ExpansionPanelSummary>
+                    <Divider/>
+                    <ExpansionPanelDetails className={classes.details}>
+                        <Child data={data.user} />
                     </ExpansionPanelDetails>
                     {panels[name].actions.length > 0 &&
                     (<div>
