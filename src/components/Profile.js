@@ -136,6 +136,17 @@ export class Profile extends Component {
         this.setState({ expanded: expanded ? panel : false });
     }
 
+    updaterProps = (type) => {
+        return {
+            onClick: this.updateUser,
+            disabled: this.state.type !== type,
+        };
+    }
+
+    updaterBtn = (Icon, text, props) => {
+        return <Button {...props}><Icon />&nbsp;{text}</Button>;
+    }
+
     render() {
         const { classes, data } = this.props;
         const { expanded } = this.state;
@@ -151,22 +162,12 @@ export class Profile extends Component {
         const userId = (data.user || {}).__id;
         const panels = {
             'Customer Details': { component: User, actions: [{
-                component: (props) => <Button {...props}>
-                    <SaveAlt />&nbsp;Save
-                </Button>,
-                props: {
-                    onClick: this.updateUser,
-                    disabled: this.state.type !== 'user',
-                },
+                component: (props) => this.updaterBtn(SaveAlt, 'Save', props),
+                props: this.updaterProps('user'),
             }]},
             'Security': { component: Security, actions: [{
-                component: (props) => <Button {...props}>
-                    <Update />&nbsp;Update
-                </Button>,
-                props: {
-                    onClick: this.updateUser,
-                    disabled: this.state.type !== 'password',
-                },
+                component: (props) => this.updaterBtn(Update, 'Update', props),
+                props: this.updaterProps('password'),
             }]},
             'Garage': { component: UserCars, actions: [
                 { component: AddCarDialog, props: { userId } },
