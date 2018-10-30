@@ -24,7 +24,6 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
@@ -62,7 +61,6 @@ export class Security extends Component {
         const { classes } = this.props;
 
         return <div className={classes.passwordForm}>
-            <Typography variant="h6">Password Change</Typography>
             <FormControl className={classNames(
                 classes.margin,
                 classes.textField
