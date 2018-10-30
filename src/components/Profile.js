@@ -30,7 +30,7 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core';
 import { User, UserCars, Security, AddCarDialog, AppMessage } from '.';
 import { updateUser } from '../relay/mutations';
-import { AuthStorage, clone } from '../common';
+import { AuthStorage, Storage, clone } from '../common';
 
 const styles = theme => ({
     root: {
@@ -78,7 +78,7 @@ const styles = theme => ({
 export class Profile extends Component {
     state = {
         addCarOpen: false,
-        expanded: 0,
+        expanded: null,
         userErrors: [],
         passwordErrors: [],
         user: {
@@ -133,8 +133,12 @@ export class Profile extends Component {
         }
     }
 
+    key = () => `profile-panel`
+
     open = panel => (event, expanded) => {
-        this.setState({ expanded: expanded ? panel : false });
+        this.setState({ expanded: expanded ? panel : 0 }, () => {
+            Storage.set(this.key(), panel);
+        });
     }
 
     updaterProps = (type) => {
@@ -148,9 +152,24 @@ export class Profile extends Component {
         return <Button {...props}><Icon />&nbsp;{text}</Button>;
     }
 
+    expanded = () => {
+        let { expanded } = this.state;
+
+        if (expanded === null) {
+            expanded = Storage.get(this.key());
+
+            if (expanded === null || expanded === undefined) {
+                expanded = 0;
+                Storage.set(this.key(), expanded);
+            }
+        }
+
+        return expanded;
+    }
+
     render() {
         const { classes, data } = this.props;
-        const { expanded } = this.state;
+        const expanded = this.expanded();
 
         if (!data.user) {
             return <AppMessage
