@@ -69,12 +69,13 @@ export class User extends Component {
     }
 
     change = (what) => (event) => {
-        this.setState({ [what]: event.target.value });
-        const { firstName, lastName, email } = this.state;
-        this.props.onChange && this.props.onChange('user', {
-            firstName,
-            lastName,
-            email,
+        this.setState({ [what]: event.target.value }, () => {
+            const { firstName, lastName, email } = this.state;
+            this.props.onChange && this.props.onChange('user', {
+                firstName,
+                lastName,
+                email,
+            });
         });
     }
 
