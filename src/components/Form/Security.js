@@ -62,7 +62,7 @@ export class Security extends Component {
         const { classes } = this.props;
 
         return <div className={classes.passwordForm}>
-            <Typography variant="h3">Change Password</Typography>
+            <Typography variant="h6">Password Change</Typography>
             <FormControl className={classNames(
                 classes.margin,
                 classes.textField
@@ -80,7 +80,7 @@ export class Security extends Component {
                             <IconButton
                                 aria-label="Toggle password visibility"
                                 onClick={this.showPassword('Old')}
-                            >{this.state.showNew
+                            >{this.state.showOld
                                 ? <Visibility />
                                 : <VisibilityOff />}
                             </IconButton>
