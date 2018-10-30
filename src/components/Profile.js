@@ -76,6 +76,7 @@ const styles = theme => ({
 export class Profile extends Component {
     state = {
         addCarOpen: false,
+        expanded: 0,
     }
 
     addCar = () => {
@@ -86,8 +87,13 @@ export class Profile extends Component {
 
     }
 
+    open = panel => (event, expanded) => {
+        this.setState({ expanded: expanded ? panel : false });
+    }
+
     render() {
         const { classes, data } = this.props;
+        const { expanded } = this.state;
 
         if (!data.user) {
             return <AppMessage variant="Error" message="Unauthorized!" />
@@ -116,7 +122,11 @@ export class Profile extends Component {
             {Object.keys(panels).map((name, key) => {
                 const Child = panels[name].component;
 
-                return <ExpansionPanel key={key} defaultExpanded>
+                return <ExpansionPanel
+                    key={key}
+                    expanded={expanded === key}
+                    onChange={this.open(key)}
+                >
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMore/>}
                         className={classes.summary}
