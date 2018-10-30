@@ -113,7 +113,6 @@ export class Profile extends Component {
 
     dataChange = (type, data) => {
         const id = this.props.data.user.__id;
-        console.log(data);
 
         if (!id) {
             throw new Error('user identifier expected, but was not provided!');
