@@ -280,10 +280,9 @@ class Login extends PureComponent {
             aria-labelledby="responsive-dialog-title"
         >
             <DialogTitle id="responsive-dialog-title">
-              {
-                this.state.isRegForm
-                    ? "Customer Registration"
-                    : "Customer Login"
+              {this.state.isRegForm
+                  ? "Customer Registration"
+                  : "Customer Login"
               }
             </DialogTitle>
             <LinearProgress

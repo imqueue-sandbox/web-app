@@ -40,11 +40,6 @@ const styles = theme => ({
         paddingRight: 40,
         overflow: 'hidden',
     },
-    carActions: {
-    },
-    invisible: {
-        visibility: 'hidden',
-    },
     error: {
         flexGrow: 0,
         margin: '0 20px',
@@ -119,7 +114,7 @@ class AddCarDialog extends Component {
                 </DialogTitle>
                 <LinearProgress
                     color="secondary"
-                    className={!this.state.loading ? classes.invisible : ''}
+                    className={!this.state.loading ? "invisible" : ""}
                 />
                 {this.state.errors.length > 0 &&
                  this.state.errors.map((error, i) =>
@@ -163,7 +158,7 @@ class AddCarDialog extends Component {
                         })}
                     />
                 </DialogContent>
-                <DialogActions className={classes.carActions}>
+                <DialogActions>
                     <Button
                         onClick={this.close}
                         color="primary"

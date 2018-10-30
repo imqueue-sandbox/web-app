@@ -80,7 +80,7 @@ const styles = theme => ({
     },
     content: {
         flexGrow: 1,
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: '#eee',
         padding: theme.spacing.unit * 3,
         minWidth: 0,
         overflow: 'auto',
@@ -89,6 +89,9 @@ const styles = theme => ({
     supTitle: {
         color: theme.palette.secondary.light + ' !important',
         marginLeft: '.5em',
+    },
+    selected: {
+        backgroundColor: '#eee',
     },
 });
 
@@ -104,7 +107,7 @@ class AppView extends Component {
     }
 
     render() {
-        const { classes, route } = this.props;
+        const { classes, route, data } = this.props;
         const user = AuthStorage.user();
         const letters = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
         const fullName = `${user.firstName} ${user.lastName}`;
@@ -147,18 +150,18 @@ class AppView extends Component {
                     classes={{paper: classes.drawerPaper}}
                 >
                     <div className={classes.toolbar}/>
-                    <List>
+                    <List className={classes.menuList}>
                         <Divider/>
                         <ListItemLink
                             href="/"
-                            selected={route === '/'}
+                            className={route === '/' && classes.selected}
                         >
                             <ListItemIcon><Timelapse /></ListItemIcon>
                             <ListItemText primary="Car Wash Bookings" />
                         </ListItemLink>
                         <ListItemLink
                             href="/profile"
-                            selected={route === '/profile'}
+                            className={route === '/profile' && classes.selected}
                         >
                             <ListItemIcon><Person /></ListItemIcon>
                             <ListItemText primary="My Profile" />
@@ -171,11 +174,11 @@ class AppView extends Component {
                     <Route
                         exact
                         path="/"
-                        component={() => <TimeTable data={this.props.data}/>}
+                        component={() => <TimeTable data={data}/>}
                     />
                     <Route
                         path="/profile"
-                        component={() => <Profile data={this.props.data}/>}
+                        component={() => <Profile data={data}/>}
                     />
                 </main>
             </div>

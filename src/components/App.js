@@ -19,6 +19,7 @@ import React, { Component } from 'react';
 import { AuthStorage } from '../common';
 import { Login, AppView } from '../layouts';
 import { AppMessage } from './AppMessage';
+import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 
 export class App extends Component {
 
@@ -57,7 +58,7 @@ export class App extends Component {
                     variant="error"
                 />
             }
-            onLoading={() => <div>Loading...</div>}
+            onLoading={() => <LinearProgress color="secondary"/>}
         />;
     }
 }
