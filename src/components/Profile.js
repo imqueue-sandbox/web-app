@@ -42,6 +42,7 @@ const styles = theme => ({
     summary: {},
     carActions: {
         justifyContent: 'flex-start',
+        paddingLeft: '1.5em',
     },
     heading: {
         fontSize: theme.typography.pxToRem(16),

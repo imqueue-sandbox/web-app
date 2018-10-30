@@ -101,7 +101,7 @@ class AddCarDialog extends Component {
         const { fullScreen, classes } = this.props;
 
         return (<>
-            <Button onClick={this.open}><Add/> Add car</Button>
+            <Button onClick={this.open}><Add/>&nbsp;Add car</Button>
             <Dialog
                 fullScreen={fullScreen}
                 TransitionComponent={Transition}
@@ -159,10 +159,7 @@ class AddCarDialog extends Component {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button
-                        onClick={this.close}
-                        color="primary"
-                    ><Clear/> Cancel</Button>
+                    <Button onClick={this.close}><Clear/> Cancel</Button>
                     <Button
                         disabled={!(
                             this.state.brand &&
@@ -171,7 +168,6 @@ class AddCarDialog extends Component {
                         )}
                         onClick={this.addCar}
                         autoFocus
-                        color="primary"
                     ><Done/> Add</Button>
                 </DialogActions>
             </Dialog>
