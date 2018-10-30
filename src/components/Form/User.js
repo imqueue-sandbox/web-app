@@ -115,7 +115,7 @@ export class User extends Component {
             ): null}
             <div className={classes.userBox}>
                 <div className={classes.avatar}>
-                    <Gravatar user={user} size={100} editable />
+                    <Gravatar user={user} size={160} editable />
                 </div>
                 <div className={classes.userInfo}>
                     <div className={classes.userName}>
@@ -140,6 +140,10 @@ export class User extends Component {
                         value={this.state.email}
                         onChange={this.change('email')}
                         margin="normal"
+                        // disabling e-mail change because it will cause
+                        // current user token invalidation and will break
+                        // current user view
+                        disabled
                     />
                     <Typography className={classes.stats}>
                         <em>Cars in garage: {user.carsCount}</em>

@@ -143,8 +143,8 @@ export class AuthStorage {
         const data = AuthStorage.fetch();
 
         for (let field of Object.keys(user)) {
-            if (user[field]) {
-                data[field] = user[field];
+            if (user[field] && data.user[field]) {
+                data.user[field] = user[field];
             }
         }
 

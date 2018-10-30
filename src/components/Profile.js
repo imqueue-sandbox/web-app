@@ -30,7 +30,7 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core';
 import { User, UserCars, Security, AddCarDialog, AppMessage } from '.';
 import { updateUser } from '../relay/mutations';
-import { clone } from '../common';
+import { AuthStorage, clone } from '../common';
 
 const styles = theme => ({
     root: {
@@ -106,7 +106,9 @@ export class Profile extends Component {
         }
 
         updateUser(userData, () => {
-            this.setState({ type: '' });
+            this.setState({ type: '' }, () => {
+                AuthStorage.update(userData);
+            });
         }, errors => {
             const errKey = `${this.state.type}Errors`;
             this.setState({ [errKey]: errors });
@@ -139,7 +141,11 @@ export class Profile extends Component {
         const { expanded } = this.state;
 
         if (!data.user) {
-            return <AppMessage variant="error" message="Unauthorized!" />
+            return <AppMessage
+                variant="error"
+                message="Unauthorized!"
+                style={{ maxWidth: 'initial' }}
+            />
         }
 
         const userId = (data.user || {}).__id;
