@@ -40,9 +40,17 @@ const styles = theme => ({
     },
     stats: {
         marginTop: '2em',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     avatar: {
         margin: '0 5em 0 3em !important',
+    },
+    userName: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
     },
 });
 
@@ -86,7 +94,7 @@ export class User extends Component {
                 <Gravatar user={user} size={100} editable />
             </div>
             <div className={classes.userInfo}>
-                <div>
+                <div className={classes.userName}>
                     <TextField
                         id="first-name"
                         label="First Name"
@@ -110,9 +118,8 @@ export class User extends Component {
                     margin="normal"
                 />
                 <Typography className={classes.stats}>
-                    <em>Cars in garage: {user.carsCount}</em> &nbsp;|&nbsp;
-                    <em>Bookings made: {0}</em> &nbsp;|&nbsp;
-                    <em>Cars washed: {0}</em>
+                    <em>Cars in garage: {user.carsCount}</em>
+                    <em>Bookings made: {0}</em>
                 </Typography>
             </div>
         </div>;
