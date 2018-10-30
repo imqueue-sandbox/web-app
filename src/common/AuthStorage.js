@@ -78,14 +78,14 @@ export class AuthStorage {
 
     /**
      * Saves user data locally
-     * @param userData
+     * @param authData
      * @return {*}
      */
-    static save(userData) {
+    static save(authData) {
         const oldData = AuthStorage.fetch();
-        const res = Storage.set(AuthStorage.key(), userData);
+        const res = Storage.set(AuthStorage.key(), authData);
 
-        emit('change', userData, oldData);
+        emit('change', authData, oldData);
 
         return res;
     }
@@ -137,6 +137,18 @@ export class AuthStorage {
         }
 
         return data.token || null;
+    }
+
+    static update(user) {
+        const data = AuthStorage.fetch();
+
+        for (let field of Object.keys(user)) {
+            if (user[field]) {
+                data[field] = user[field];
+            }
+        }
+
+        AuthStorage.save(data);
     }
 
 }

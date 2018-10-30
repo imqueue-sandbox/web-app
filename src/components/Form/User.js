@@ -54,6 +54,7 @@ const styles = theme => ({
     },
     userContainer: {
         maxWidth: 'initial !important',
+        width: '100%',
     },
     userError: {
         maxWidth: 'initial !important',
