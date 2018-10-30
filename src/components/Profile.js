@@ -96,7 +96,7 @@ export class Profile extends Component {
         const { expanded } = this.state;
 
         if (!data.user) {
-            return <AppMessage variant="Error" message="Unauthorized!" />
+            return <AppMessage variant="error" message="Unauthorized!" />
         }
 
         const userId = (data.user || {}).__id;
