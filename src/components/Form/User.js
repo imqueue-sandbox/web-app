@@ -140,7 +140,6 @@ export class User extends Component {
                         value={this.state.email}
                         onChange={this.change('email')}
                         margin="normal"
-                        disabled
                     />
                     <Typography className={classes.stats}>
                         <em>Cars in garage: {user.carsCount}</em>
