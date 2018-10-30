@@ -158,7 +158,7 @@ class AppView extends Component {
                             className={route === '/' && classes.selected}
                         >
                             <ListItemIcon><Timelapse /></ListItemIcon>
-                            <ListItemText primary="Car Wash Bookings" />
+                            <ListItemText primary="My Car Wash Bookings" />
                         </ListItemLink>
                         <ListItemLink
                             href="/profile"
