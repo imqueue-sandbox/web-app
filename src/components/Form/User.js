@@ -22,9 +22,9 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import { withStyles } from '@material-ui/core';
-import { AppMessage, Gravatar } from '.';
-import { AuthStorage } from '../common';
-import { CurrentUserFragment } from '../relay/queries';
+import { AppMessage, Gravatar } from '../index';
+import { AuthStorage } from '../../common/index';
+import { CurrentUserFragment } from '../../relay/queries/index';
 
 const styles = theme => ({
     userBox: {
@@ -70,6 +70,12 @@ export class User extends Component {
 
     change = (what) => (event) => {
         this.setState({ [what]: event.target.value });
+        const { firstName, lastName, email } = this.state;
+        this.props.onChange && this.props.onChange('user', {
+            firstName,
+            lastName,
+            email,
+        });
     }
 
     render() {
@@ -128,6 +134,7 @@ export class User extends Component {
 
 User.propTypes = {
     classes: PropTypes.object.isRequired,
+    onChange: PropTypes.func,
     error: PropTypes.shape({
         message: PropTypes.string,
     }),

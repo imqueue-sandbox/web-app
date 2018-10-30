@@ -20,3 +20,4 @@ export * from './logout';
 export * from './register';
 export * from './addCar';
 export * from './removeCar';
+export * from './updateUser';

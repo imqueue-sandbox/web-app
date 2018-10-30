@@ -50,8 +50,11 @@ export class Security extends Component {
         this.setState({ [`show${which}`]: !this.state[`show${which}`] });
     }
 
-    handleChange = (which) => (event) => {
+    change = (which) => (event) => {
         this.setState({ [which]: event.target.value });
+        this.props.onChange && this.props.onChange('password', {
+            password: this.state.newPassword,
+        });
     }
 
     render() {
@@ -69,7 +72,7 @@ export class Security extends Component {
                     id="old-password"
                     type={this.state.showOld ? 'text' : 'password'}
                     value={this.state.oldPassword}
-                    onChange={this.handleChange('oldPassword')}
+                    onChange={this.change('oldPassword')}
                     endAdornment={<PasswordEye
                         onClick={this.showPassword('Old')}
                         enabled={this.state.showOld}
@@ -88,7 +91,7 @@ export class Security extends Component {
                     id="new-password"
                     type={this.state.showNew ? 'text' : 'password'}
                     value={this.state.newPassword}
-                    onChange={this.handleChange('newPassword')}
+                    onChange={this.change('newPassword')}
                     endAdornment={<PasswordEye
                         onClick={this.showPassword('New')}
                         enabled={this.state.showNew}
@@ -101,6 +104,7 @@ export class Security extends Component {
 
 Security.propTypes = {
     classes: PropTypes.object.isRequired,
+    onChange: PropTypes.func,
 };
 
 Security = withStyles(styles)(Security);

@@ -29,6 +29,8 @@ import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core';
 import { User, UserCars, Security, AddCarDialog, AppMessage } from '.';
+import { updateUser } from '../relay/mutations';
+import { clone } from '../common';
 
 const styles = theme => ({
     root: {
@@ -77,14 +79,48 @@ export class Profile extends Component {
     state = {
         addCarOpen: false,
         expanded: 0,
+        user: {
+            id: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+        },
+        type: '',
     }
 
     addCar = () => {
         this.setState({ addCarOpen: true });
     }
 
-    updateUser = (data) => {
+    updateUser = () => {
+        if (!this.state.type) {
+            return ;
+        }
 
+        const userData = clone(this.state.user);
+
+        if (this.state.type !== 'password') {
+            delete userData.password;
+        }
+
+        updateUser(userData, () => {
+            Object.assign(this.state, { type: '' });
+        }, error => {
+            console.log('user update error:', error);
+        });
+    }
+
+    dataChange = (type, data) => {
+        const id = this.props.data.user.__id;
+
+        if (!id) {
+            throw new Error('user identifier expected, but was not provided!');
+        }
+
+        if (type === 'user' || type === 'password') {
+            this.setState({ user: Object.assign(data, { id }), type });
+        }
     }
 
     open = panel => (event, expanded) => {
@@ -105,13 +141,19 @@ export class Profile extends Component {
                 component: (props) => <Button {...props}>
                     <SaveAlt />&nbsp;Save
                 </Button>,
-                props: {},
+                props: {
+                    onClick: this.updateUser,
+                    disabled: this.state.type !== 'user'
+                },
             }]},
             'Security': { component: Security, actions: [{
                 component: (props) => <Button {...props}>
                     <Update />&nbsp;Update
                 </Button>,
-                props: {},
+                props: {
+                    onClick: this.updateUser,
+                    disabled: this.state.type !== 'password'
+                },
             }]},
             'Garage': { component: UserCars, actions: [
                 { component: AddCarDialog, props: { userId } },
@@ -139,7 +181,7 @@ export class Profile extends Component {
                     </ExpansionPanelSummary>
                     <Divider/>
                     <ExpansionPanelDetails className={classes.details}>
-                        <Child data={data.user} />
+                        <Child data={data.user} onChange={this.dataChange} />
                     </ExpansionPanelDetails>
                     {panels[name].actions.length > 0 &&
                     (<div>
