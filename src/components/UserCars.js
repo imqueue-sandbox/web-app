@@ -17,10 +17,10 @@
  */
 import React, { Component } from 'react';
 import { createFragmentContainer } from 'react-relay';
+import { PropTypes } from 'prop-types';
 import { withStyles } from '@material-ui/core';
-import UserCar from './UserCar';
+import { UserCar } from '.';
 import { UserCarsFragment } from '../relay/queries';
-import {PropTypes} from "prop-types";
 
 const styles = theme => ({
     cars: {
@@ -36,7 +36,7 @@ const styles = theme => ({
 /**
  * Cars
  */
-class UserCars extends Component {
+export class UserCars extends Component {
     render() {
         const { data, classes } = this.props;
         const cars = data ? data.cars || [] : [];
@@ -64,5 +64,3 @@ UserCars = createFragmentContainer(
     withStyles(styles)(UserCars),
     UserCarsFragment
 );
-
-export default UserCars;

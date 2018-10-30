@@ -15,7 +15,7 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
@@ -24,10 +24,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel/ExpansionPanel';
 import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Divider from '@material-ui/core/Divider';
-import User from './User';
-import UserCars from './UserCars';
 import { withStyles } from '@material-ui/core';
-import { AddCarDialog } from './Dialog';
+import { User, UserCars, Security, AddCarDialog } from '.';
 
 const styles = theme => ({
     root: {
@@ -73,12 +71,7 @@ const styles = theme => ({
 });
 
 
-class Profile extends PureComponent {
-    panels = {
-        'Customer Details': User,
-        'Garage': UserCars,
-    }
-
+export class Profile extends Component {
     state = {
         addCarOpen: false,
     }
@@ -90,10 +83,17 @@ class Profile extends PureComponent {
     render() {
         const { classes, data } = this.props;
         const userId = (data.user || {}).__id;
+        const panels = {
+            'Customer Details': { component: User, actions: [
+                { component: AddCarDialog, props: { userId } },
+            ]},
+            'Security': { component: Security, actions: [] },
+            'Garage': { component: UserCars, actions: [] },
+        };
 
         return <div>
-            {Object.keys(this.panels).map((name, key) => {
-                const Child = this.panels[name];
+            {Object.keys(panels).map((name, key) => {
+                const Child = panels[name].component;
 
                 return <ExpansionPanel key={key} defaultExpanded>
                         <ExpansionPanelSummary
@@ -110,11 +110,14 @@ class Profile extends PureComponent {
                         <ExpansionPanelDetails className={classes.details}>
                             <Child data={data.user} />
                     </ExpansionPanelDetails>
-                    {Child === UserCars &&
+                    {panels[name].actions.length > 0 &&
                     (<div>
                         <Divider />
                         <ExpansionPanelActions className={classes.carActions}>
-                            <AddCarDialog userId={userId} />
+                            {panels[name].actions.map((action, i) => {
+                                const Action = action.component;
+                                return <Action key={i} {...action.props} />
+                            })}
                         </ExpansionPanelActions>
                     </div>)}
                 </ExpansionPanel>
@@ -128,5 +131,3 @@ Profile.propTypes = {
 };
 
 Profile = withStyles(styles)(Profile);
-
-export { Profile };

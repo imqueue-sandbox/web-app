@@ -15,7 +15,7 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -48,7 +48,7 @@ const styles = {
     },
 };
 
-class Gravatar extends PureComponent {
+export class Gravatar extends Component {
 
     edit = () => {
         window.open('https://gravatar.com/gravatars/new', '_blank');
@@ -87,6 +87,5 @@ Gravatar.propTypes = {
     size: PropTypes.number,
     editable: PropTypes.bool,
 };
-Gravatar = withStyles(styles)(Gravatar);
 
-export { Gravatar };
+Gravatar = withStyles(styles)(Gravatar);

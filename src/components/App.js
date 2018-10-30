@@ -18,7 +18,7 @@
 import React, { Component } from 'react';
 import { AuthStorage } from '../common';
 import { Login, AppView } from '../layouts';
-import { AppMessage } from './AppMessage';
+import { AppMessage } from '.';
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 
 export class App extends Component {

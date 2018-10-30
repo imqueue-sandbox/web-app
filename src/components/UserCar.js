@@ -84,7 +84,7 @@ const styles = theme => ({
     },
 });
 
-class UserCar extends Component {
+export class UserCar extends Component {
     remove = () => {
         const carId = this.props.car && this.props.car.id;
         carId && removeCar({ carId });
@@ -132,5 +132,3 @@ UserCar.propTypes = {
 };
 
 UserCar = withStyles(styles)(UserCar);
-
-export default UserCar;

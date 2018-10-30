@@ -21,7 +21,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField/TextField';
 import { withStyles } from '@material-ui/core';
 import { CarBrandsQuery, withQuery } from '../../relay/queries';
-import SelectStyle, {selectHandler} from './SelectStyle';
+import { SelectStyle, selectHandler } from './SelectStyle';
 
 class CarBrandsSelect extends Component {
     state = {

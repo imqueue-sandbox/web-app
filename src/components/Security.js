@@ -15,6 +15,25 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export class DateSelector {
+import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
+import { withStyles } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
 
+const styles = theme => ({
+
+});
+
+export class Security extends Component {
+    state = {}
+
+    render() {
+        return <TextField />;
+    }
 }
+
+Security.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+Security = withStyles(styles)(Security);

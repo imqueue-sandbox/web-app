@@ -21,7 +21,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField/TextField';
 import { withStyles } from '@material-ui/core';
 import { withQuery, CarModelsQuery } from '../../relay/queries';
-import SelectStyle, { selectHandler } from './SelectStyle';
+import { SelectStyle, selectHandler } from './SelectStyle';
 import { carType } from '../../common';
 
 const style = theme => (Object.assign(SelectStyle(theme), {

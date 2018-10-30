@@ -15,17 +15,16 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
+import { createFragmentContainer } from 'react-relay';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
-import { Gravatar } from './Gravatar';
+import { Gravatar } from '.';
 import { AuthStorage } from '../common';
 import { CurrentUserFragment } from '../relay/queries';
 
-import { createFragmentContainer } from 'react-relay';
-
-class User extends PureComponent {
+export class User extends Component {
     state = {
         inProgress: true
     }
@@ -90,5 +89,3 @@ User.propTypes = {
 };
 
 User = createFragmentContainer(User, CurrentUserFragment);
-
-export default User;

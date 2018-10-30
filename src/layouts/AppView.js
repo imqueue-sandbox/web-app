@@ -155,14 +155,18 @@ class AppView extends Component {
                         <Divider/>
                         <ListItemLink
                             href="/"
-                            className={route === '/' && classes.selected}
+                            className={route === '/'
+                                ? classes.selected
+                                : ''}
                         >
                             <ListItemIcon><Timelapse /></ListItemIcon>
                             <ListItemText primary="My Car Wash Bookings" />
                         </ListItemLink>
                         <ListItemLink
                             href="/profile"
-                            className={route === '/profile' && classes.selected}
+                            className={route === '/profile'
+                                ? classes.selected
+                                : ''}
                         >
                             <ListItemIcon><Person /></ListItemIcon>
                             <ListItemText primary="My Profile" />

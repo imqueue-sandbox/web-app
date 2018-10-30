@@ -17,5 +17,13 @@
  */
 export * from './AppMessage';
 export * from './App';
+export * from './Gravatar';
+export * from './Security';
+export * from './User';
+export * from './UserCar';
+export * from './UserCars';
 export * from './TimeTable';
 export * from './Profile';
+export * from './Form';
+export * from './Dialog';
+export * from './Drawer';

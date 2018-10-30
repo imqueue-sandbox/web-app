@@ -50,7 +50,7 @@ function Transition(props) {
     return <Slide direction="up" {...props} />;
 }
 
-class AddCarDialog extends Component {
+export class AddCarDialog extends Component {
 
     state = {
         loading: false,
@@ -183,5 +183,3 @@ AddCarDialog.propTypes = {
 
 AddCarDialog = withMobileDialog()(AddCarDialog);
 AddCarDialog = withStyles(styles)(AddCarDialog);
-
-export { AddCarDialog };

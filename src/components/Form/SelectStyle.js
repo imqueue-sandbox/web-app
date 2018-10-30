@@ -15,7 +15,7 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-const SelectStyle = theme => ({
+export const SelectStyle = theme => ({
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
@@ -36,5 +36,3 @@ export function selectHandler(what) {
         this.props.onChange && this.props.onChange(event.target.value);
     }
 }
-
-export default SelectStyle;
