@@ -21,9 +21,12 @@ import { resultHandler } from '../../common';
 import { logger } from '../../config';
 
 const mutation = graphql`
-mutation updateUserMutation($input: updateUserInput!) {
+mutation updateUserMutation(
+    $input: updateUserInput!,
+    $withoutUser: Boolean!
+) {
     updateUser(input: $input) {
-        user {
+        user @skip(if: $withoutUser) {
             id
             firstName
             lastName
@@ -36,7 +39,7 @@ mutation updateUserMutation($input: updateUserInput!) {
     }
 }`;
 
-export function updateUser(userData, success, failure) {
+export function updateUser(userData, success, failure, withoutUser = false) {
     if (!updateUser.id) {
         updateUser.id = 0;
     }
@@ -45,7 +48,7 @@ export function updateUser(userData, success, failure) {
 
     const config = {
         mutation,
-        variables: { input: userData },
+        variables: { input: userData, withoutUser },
         onError: (err) => {
             logger.error('updateUserMutation:request', err);
             failure && failure([err]);

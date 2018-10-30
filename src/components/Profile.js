@@ -80,6 +80,7 @@ export class Profile extends Component {
         addCarOpen: false,
         expanded: 0,
         userErrors: [],
+        passwordErrors: [],
         user: {
             id: '',
             firstName: '',
@@ -112,7 +113,7 @@ export class Profile extends Component {
         }, errors => {
             const errKey = `${this.state.type}Errors`;
             this.setState({ [errKey]: errors });
-        });
+        }, this.state.type === 'password');
     }
 
     dataChange = (type, data, errors) => {
@@ -161,22 +162,34 @@ export class Profile extends Component {
 
         const userId = (data.user || {}).__id;
         const panels = {
-            'Customer Details': { component: User, actions: [{
-                component: (props) => this.updaterBtn(SaveAlt, 'Save', props),
-                props: this.updaterProps('user'),
-            }]},
-            'Security': { component: Security, actions: [{
-                component: (props) => this.updaterBtn(Update, 'Update', props),
-                props: this.updaterProps('password'),
-            }]},
-            'Garage': { component: UserCars, actions: [
-                { component: AddCarDialog, props: { userId } },
-            ]},
+            'Customer Details': {
+                component: User,
+                actions: [{
+                    component: props => this.updaterBtn(SaveAlt, 'Save', props),
+                    props: this.updaterProps('user'),
+                }],
+                type: 'user',
+            },
+            'Security': {
+                component: Security,
+                actions: [{
+                    component: props => this.updaterBtn(Update, 'Update', props),
+                    props: this.updaterProps('password'),
+                }],
+                type: 'password',
+            },
+            'Garage': {
+                component: UserCars,
+                actions: [{ component: AddCarDialog, props: { userId } }],
+                type: 'garage',
+            },
         };
 
         return <div>
             {Object.keys(panels).map((name, key) => {
                 const Child = panels[name].component;
+                const errKey = `${panels[name].type}Errors`;
+                const errors = this.state[errKey];
 
                 return <ExpansionPanel
                     key={key}
@@ -187,30 +200,27 @@ export class Profile extends Component {
                         expandIcon={<ExpandMore/>}
                         className={classes.summary}
                     >
-                        <div className={classes.column}>
-                            <Typography className={classes.heading}>
-                                {name}
-                            </Typography>
-                        </div>
+                        <Typography className={classes.heading}>
+                            {name}
+                        </Typography>
                     </ExpansionPanelSummary>
                     <Divider/>
                     <ExpansionPanelDetails className={classes.details}>
                         <Child
                             data={data.user}
                             onChange={this.dataChange}
-                            errors={this.state.userErrors}
+                            errors={errors}
                         />
                     </ExpansionPanelDetails>
                     {panels[name].actions.length > 0 &&
-                    (<div>
-                        <Divider />
-                        <ExpansionPanelActions className={classes.carActions}>
-                            {panels[name].actions.map((action, i) => {
-                                const Action = action.component;
-                                return <Action key={i} {...action.props} />
-                            })}
-                        </ExpansionPanelActions>
-                    </div>)}
+                    (<div><Divider />
+                    <ExpansionPanelActions className={classes.carActions}>
+                        {panels[name].actions.map((action, i) => {
+                            const Action = action.component;
+                            const props = action.props || {};
+                            return <Action key={i} {...props}/>
+                        })}
+                    </ExpansionPanelActions></div>)}
                 </ExpansionPanel>
             })}
         </div>;

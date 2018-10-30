@@ -23,6 +23,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import { PasswordEye } from '.';
+import {AppMessage} from "../AppMessage";
 
 const styles = theme => ({
     textField: {
@@ -35,6 +36,9 @@ const styles = theme => ({
     },
     margin: {
         margin: theme.spacing.unit,
+    },
+    passwordError: {
+        maxWidth: 'initial !important',
     },
 });
 
@@ -58,20 +62,29 @@ export class Security extends Component {
 
             this.props.onChange && this.props.onChange('password', {
                 password: this.state.newPassword,
+                oldPassword: this.state.oldPassword,
             });
         });
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, errors } = this.props;
 
         return <div className={classes.passwordForm}>
+            {errors && errors.length ? errors.map((err, i) =>
+                <AppMessage
+                    key={i}
+                    variant="error"
+                    message={err.message}
+                    className={classes.passwordError}
+                />
+            ): null}
             <FormControl className={classNames(
                 classes.margin,
                 classes.textField
             )}>
                 <InputLabel htmlFor="adornment-password">
-                    Old Password
+                    Current Password
                 </InputLabel>
                 <Input
                     id="old-password"
@@ -110,6 +123,9 @@ export class Security extends Component {
 Security.propTypes = {
     classes: PropTypes.object.isRequired,
     onChange: PropTypes.func,
+    errors: PropTypes.arrayOf(PropTypes.shape({
+        message: PropTypes.string.isRequired,
+    })),
 };
 
 Security = withStyles(styles)(Security);
