@@ -84,11 +84,11 @@ export class Profile extends Component {
         const { classes, data } = this.props;
         const userId = (data.user || {}).__id;
         const panels = {
-            'Customer Details': { component: User, actions: [
+            'Customer Details': { component: User, actions: [] },
+            'Security': { component: Security, actions: [] },
+            'Garage': { component: UserCars, actions: [
                 { component: AddCarDialog, props: { userId } },
             ]},
-            'Security': { component: Security, actions: [] },
-            'Garage': { component: UserCars, actions: [] },
         };
 
         return <div>
