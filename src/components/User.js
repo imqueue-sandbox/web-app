@@ -20,13 +20,13 @@ import { PropTypes } from 'prop-types';
 import { createFragmentContainer } from 'react-relay';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
-import { Gravatar } from '.';
+import { AppMessage, Gravatar } from '.';
 import { AuthStorage } from '../common';
 import { CurrentUserFragment } from '../relay/queries';
 
 export class User extends Component {
     state = {
-        inProgress: true
+        inProgress: true,
     }
 
     render() {
@@ -35,19 +35,15 @@ export class User extends Component {
 
         if (!user) {
             AuthStorage.clear();
+
+            return <LinearProgress
+                color="secondary"
+                className={this.state.inProgress ? "" : "invisible"}
+            />;
         }
 
         if (error) {
-            return <div>{error.message}</div>;
-        }
-
-        if (!user) {
-            return (
-                <LinearProgress
-                    color="secondary"
-                    className={this.state.inProgress ? "" : "invisible"}
-                />
-            )
+            return <AppMessage variant="error" message={error} />;
         }
 
         return <div className="user-box">
