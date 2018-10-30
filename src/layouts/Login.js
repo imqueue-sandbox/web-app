@@ -25,19 +25,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
 import LockOpen from '@material-ui/icons/LockOpen';
 import NotInterested from '@material-ui/icons/NotInterested';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import Visibility from '@material-ui/icons/Visibility';
 import PersonAdd from '@material-ui/icons/PersonAdd';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import { login, register } from '../relay/mutations';
-import { AppMessage } from '../components';
+import { AppMessage, PasswordEye } from '../components';
 import { clone, withoutElement } from '../common';
 
 const styles = () => ({
@@ -246,7 +242,7 @@ class Login extends PureComponent {
     /**
      * Handles show password button click
      */
-    handleClickShowPassword = () => {
+    showPassword = () => {
         this.setState({ showPassword: !this.state.showPassword });
     }
 
@@ -336,19 +332,10 @@ class Login extends PureComponent {
                             shrink: this.state.shrink || !!this.state.password
                         }}
                         InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="Toggle password visibility"
-                                        onClick={this.handleClickShowPassword}
-                                    >
-                                        {this.state.showPassword
-                                            ? <VisibilityOff />
-                                            : <Visibility />
-                                        }
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
+                            endAdornment: <PasswordEye
+                                onClick={this.showPassword}
+                                enabled={this.state.showPassword}
+                            />,
                         }}
                         onChange={this.handleChange.bind(this, 'password')}
                     />

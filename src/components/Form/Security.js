@@ -22,10 +22,7 @@ import { withStyles } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { PasswordEye } from '.';
 
 const styles = theme => ({
     textField: {
@@ -73,17 +70,10 @@ export class Security extends Component {
                     type={this.state.showOld ? 'text' : 'password'}
                     value={this.state.oldPassword}
                     onChange={this.handleChange('oldPassword')}
-                    endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="Toggle password visibility"
-                                onClick={this.showPassword('Old')}
-                            >{this.state.showOld
-                                ? <Visibility />
-                                : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                    }
+                    endAdornment={<PasswordEye
+                        onClick={this.showPassword('Old')}
+                        enabled={this.state.showOld}
+                    />}
                 />
             </FormControl>
 
@@ -99,17 +89,10 @@ export class Security extends Component {
                     type={this.state.showNew ? 'text' : 'password'}
                     value={this.state.newPassword}
                     onChange={this.handleChange('newPassword')}
-                    endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="Toggle password visibility"
-                                onClick={this.showPassword('New')}
-                            >{this.state.showNew
-                                ? <Visibility />
-                                : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                    }
+                    endAdornment={<PasswordEye
+                        onClick={this.showPassword('New')}
+                        enabled={this.state.showNew}
+                    />}
                 />
             </FormControl>
         </div>;

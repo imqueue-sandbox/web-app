@@ -15,14 +15,26 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export * from './AppMessage';
-export * from './Form';
-export * from './Dialog';
-export * from './Drawer';
-export * from './App';
-export * from './Gravatar';
-export * from './User';
-export * from './UserCar';
-export * from './UserCars';
-export * from './TimeTable';
-export * from './Profile';
+import React from 'react';
+import  { PropTypes } from 'prop-types';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+
+export function PasswordEye(props) {
+    return <InputAdornment position="end">
+        <IconButton
+            aria-label="Toggle password visibility"
+            onClick={props.onClick}
+        >{props.enabled
+            ? <Visibility />
+            : <VisibilityOff />}
+        </IconButton>
+    </InputAdornment>
+}
+
+PasswordEye.propTypes = {
+    enabled: PropTypes.bool,
+    onClick: PropTypes.func,
+};
