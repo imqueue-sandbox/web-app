@@ -87,7 +87,7 @@ export class AppMessage extends Component {
                         {message}
                     </span>
                 }
-                action={[
+                action={onClose ? [
                     <IconButton
                         key="close"
                         aria-label="Close"
@@ -97,7 +97,7 @@ export class AppMessage extends Component {
                     >
                         <CloseIcon className={classes.icon}/>
                     </IconButton>,
-                ]}
+                ]: []}
                 {...other}
             />
         );

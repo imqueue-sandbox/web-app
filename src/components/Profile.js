@@ -79,6 +79,7 @@ export class Profile extends Component {
     state = {
         addCarOpen: false,
         expanded: 0,
+        userErrors: [],
         user: {
             id: '',
             firstName: '',
@@ -105,13 +106,14 @@ export class Profile extends Component {
         }
 
         updateUser(userData, () => {
-            Object.assign(this.state, { type: '' });
-        }, error => {
-            console.log('user update error:', error);
+            this.setState({ type: '' });
+        }, errors => {
+            const errKey = `${this.state.type}Errors`;
+            this.setState({ [errKey]: errors });
         });
     }
 
-    dataChange = (type, data) => {
+    dataChange = (type, data, errors) => {
         const id = this.props.data.user.__id;
 
         if (!id) {
@@ -119,7 +121,12 @@ export class Profile extends Component {
         }
 
         if (type === 'user' || type === 'password') {
-            this.setState({ user: Object.assign(data, { id }), type });
+            const errKey = `${type}Errors`;
+            this.setState({
+                type,
+                user: Object.assign(data, { id, }),
+                [errKey]: errors
+            });
         }
     }
 
@@ -143,7 +150,7 @@ export class Profile extends Component {
                 </Button>,
                 props: {
                     onClick: this.updateUser,
-                    disabled: this.state.type !== 'user'
+                    disabled: this.state.type !== 'user',
                 },
             }]},
             'Security': { component: Security, actions: [{
@@ -152,7 +159,7 @@ export class Profile extends Component {
                 </Button>,
                 props: {
                     onClick: this.updateUser,
-                    disabled: this.state.type !== 'password'
+                    disabled: this.state.type !== 'password',
                 },
             }]},
             'Garage': { component: UserCars, actions: [
@@ -181,7 +188,11 @@ export class Profile extends Component {
                     </ExpansionPanelSummary>
                     <Divider/>
                     <ExpansionPanelDetails className={classes.details}>
-                        <Child data={data.user} onChange={this.dataChange} />
+                        <Child
+                            data={data.user}
+                            onChange={this.dataChange}
+                            errors={this.state.userErrors}
+                        />
                     </ExpansionPanelDetails>
                     {panels[name].actions.length > 0 &&
                     (<div>

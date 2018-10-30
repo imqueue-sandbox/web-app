@@ -52,6 +52,12 @@ const styles = theme => ({
         flexDirection: 'row',
         flexWrap: 'nowrap',
     },
+    userContainer: {
+        maxWidth: 'initial !important',
+    },
+    userError: {
+        maxWidth: 'initial !important',
+    },
 });
 
 export class User extends Component {
@@ -64,8 +70,9 @@ export class User extends Component {
 
     constructor(props) {
         super(props);
+        const { errors } = props;
         const { firstName, lastName, email } = props.data || {};
-        Object.assign(this.state, { firstName, lastName, email });
+        Object.assign(this.state, { firstName, lastName, email, errors });
     }
 
     change = (what) => (event) => {
@@ -75,13 +82,17 @@ export class User extends Component {
                 firstName,
                 lastName,
                 email,
-            });
+            }, this.state.errors);
         });
     }
 
     render() {
-        const { error, data, classes } = this.props;
+        const { error, data, classes, errors } = this.props;
         const user = data;
+
+        if (error) {
+            errors.push(error);
+        }
 
         if (!user) {
             AuthStorage.clear();
@@ -92,43 +103,49 @@ export class User extends Component {
             />;
         }
 
-        if (error) {
-            return <AppMessage variant="error" message={error} />;
-        }
-
-        return <div className={classes.userBox}>
-            <div className={classes.avatar}>
-                <Gravatar user={user} size={100} editable />
-            </div>
-            <div className={classes.userInfo}>
-                <div className={classes.userName}>
-                    <TextField
-                        id="first-name"
-                        label="First Name"
-                        value={this.state.firstName}
-                        onChange={this.change('firstName')}
-                        margin="normal"
-                    />
-                    <TextField
-                        id="last-name"
-                        label="Last Name"
-                        value={this.state.lastName}
-                        onChange={this.change('lastName')}
-                        margin="normal"
-                    />
-                </div>
-                <TextField
-                    id="email"
-                    label="Email"
-                    value={this.state.email}
-                    onChange={this.change('email')}
-                    margin="normal"
-                    disabled
+        return <div className={classes.userContainer}>
+            {errors && errors.length ? errors.map((err, i) =>
+                <AppMessage
+                    key={i}
+                    variant="error"
+                    message={err.message}
+                    className={classes.userError}
                 />
-                <Typography className={classes.stats}>
-                    <em>Cars in garage: {user.carsCount}</em>
-                    <em>Bookings made: {0}</em>
-                </Typography>
+            ): null}
+            <div className={classes.userBox}>
+                <div className={classes.avatar}>
+                    <Gravatar user={user} size={100} editable />
+                </div>
+                <div className={classes.userInfo}>
+                    <div className={classes.userName}>
+                        <TextField
+                            id="first-name"
+                            label="First Name"
+                            value={this.state.firstName}
+                            onChange={this.change('firstName')}
+                            margin="normal"
+                        />
+                        <TextField
+                            id="last-name"
+                            label="Last Name"
+                            value={this.state.lastName}
+                            onChange={this.change('lastName')}
+                            margin="normal"
+                        />
+                    </div>
+                    <TextField
+                        id="email"
+                        label="Email"
+                        value={this.state.email}
+                        onChange={this.change('email')}
+                        margin="normal"
+                        disabled
+                    />
+                    <Typography className={classes.stats}>
+                        <em>Cars in garage: {user.carsCount}</em>
+                        <em>Bookings made: {0}</em>
+                    </Typography>
+                </div>
             </div>
         </div>;
     }
@@ -137,9 +154,9 @@ export class User extends Component {
 User.propTypes = {
     classes: PropTypes.object.isRequired,
     onChange: PropTypes.func,
-    error: PropTypes.shape({
+    errors: PropTypes.arrayOf(PropTypes.shape({
         message: PropTypes.string,
-    }),
+    })),
     data: PropTypes.shape({
         user: PropTypes.shape({
             firstName: PropTypes.string,
