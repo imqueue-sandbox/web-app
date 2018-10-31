@@ -22,8 +22,7 @@ import { withStyles } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import { PasswordEye } from '.';
-import {AppMessage} from "../AppMessage";
+import { PasswordEye, errorList } from '.';
 
 const styles = theme => ({
     textField: {
@@ -36,9 +35,6 @@ const styles = theme => ({
     },
     margin: {
         margin: theme.spacing.unit,
-    },
-    passwordError: {
-        maxWidth: 'initial !important',
     },
 });
 
@@ -71,14 +67,7 @@ export class Security extends Component {
         const { classes, errors } = this.props;
 
         return <div className={classes.passwordForm}>
-            {errors && errors.length ? errors.map((err, i) =>
-                <AppMessage
-                    key={i}
-                    variant="error"
-                    message={err.message}
-                    className={classes.passwordError}
-                />
-            ): null}
+            {errorList(errors)}
             <FormControl className={classNames(
                 classes.margin,
                 classes.textField

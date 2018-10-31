@@ -22,7 +22,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import { withStyles } from '@material-ui/core';
-import { AppMessage, Gravatar } from '../index';
+import { errorList, Gravatar} from '../index';
 import { AuthStorage } from '../../common/index';
 import { CurrentUserFragment } from '../../relay/queries/index';
 
@@ -55,9 +55,6 @@ const styles = theme => ({
     userContainer: {
         maxWidth: 'initial !important',
         width: '100%',
-    },
-    userError: {
-        maxWidth: 'initial !important',
     },
 });
 
@@ -105,14 +102,7 @@ export class User extends Component {
         }
 
         return <div className={classes.userContainer}>
-            {errors && errors.length ? errors.map((err, i) =>
-                <AppMessage
-                    key={i}
-                    variant="error"
-                    message={err.message}
-                    className={classes.userError}
-                />
-            ): null}
+            {errorList(errors)}
             <div className={classes.userBox}>
                 <div className={classes.avatar}>
                     <Gravatar user={user} size={160} editable />
