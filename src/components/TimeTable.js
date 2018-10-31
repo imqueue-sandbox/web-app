@@ -44,6 +44,7 @@ export class TimeTable extends Component {
             step="15"
             timeslots="4"
             views={['day', 'agenda']}
+            selectable
         />;
     }
 }
