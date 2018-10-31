@@ -161,14 +161,14 @@ export class Profile extends Component {
         });
     }
 
-    updaterProps = (type) => {
+    actionProps = (type) => {
         return {
             onClick: this.updateUser,
             disabled: this.state[`${type}BtnDisabled`],
         };
     }
 
-    updaterBtn = (Icon, text, props) => {
+    actionBtn = (Icon, text, props) => {
         return <Button {...props}><Icon />&nbsp;{text}</Button>;
     }
 
@@ -206,16 +206,16 @@ export class Profile extends Component {
             'Customer Details': {
                 component: User,
                 actions: [{
-                    component: props => this.updaterBtn(SaveAlt, 'Save', props),
-                    props: this.updaterProps('user'),
+                    component: props => this.actionBtn(SaveAlt, 'Save', props),
+                    props: this.actionProps('user'),
                 }],
                 type: 'user',
             },
             'Security': {
                 component: Security,
                 actions: [{
-                    component: props => this.updaterBtn(Update, 'Update', props),
-                    props: this.updaterProps('password'),
+                    component: props => this.actionBtn(Update, 'Update', props),
+                    props: this.actionProps('password'),
                 }],
                 type: 'password',
             },
