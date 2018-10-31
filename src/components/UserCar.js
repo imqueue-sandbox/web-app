@@ -71,7 +71,8 @@ const styles = theme => ({
             display: 'inline-block',
             border: '.2rem solid #666',
             borderRadius: '.5em',
-            padding: '.2em .5em'
+            padding: '.2em .5em',
+            textTransform: 'uppercase',
         },
     },
     carModel: {

@@ -17,6 +17,7 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -32,7 +33,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core';
 import { CarModelSelect, CarBrandsSelect } from '../Form';
 import { AppMessage } from '../AppMessage';
-import {clone, withoutElement} from '../../common';
+import { clone, withoutElement } from '../../common';
 import { addCar } from '../../relay/mutations';
 
 const styles = theme => ({
@@ -43,6 +44,11 @@ const styles = theme => ({
     error: {
         flexGrow: 0,
         margin: '0 20px',
+    },
+    regNumber: {
+        '& input': {
+            textTransform: 'uppercase',
+        },
     },
 });
 
@@ -150,7 +156,10 @@ export class AddCarDialog extends Component {
                         required={true}
                         id="car-reg-number"
                         label="Car registration number"
-                        className={classes.textField}
+                        className={classNames(
+                            classes.textField,
+                            classes.regNumber,
+                        )}
                         margin="normal"
                         value={this.state.regNumber}
                         onChange={(event) => this.setState({
