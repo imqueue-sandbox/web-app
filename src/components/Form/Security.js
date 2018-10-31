@@ -52,10 +52,6 @@ export class Security extends Component {
 
     change = (which) => (event) => {
         this.setState({ [which]: event.target.value }, () => {
-            if (!(this.state.newPassword && this.state.oldPassword)) {
-                return ;
-            }
-
             this.props.onChange && this.props.onChange('password', {
                 password: this.state.newPassword,
                 oldPassword: this.state.oldPassword,

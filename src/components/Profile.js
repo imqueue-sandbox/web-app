@@ -81,6 +81,8 @@ export class Profile extends Component {
         expanded: null,
         userErrors: [],
         passwordErrors: [],
+        userBtnDisabled: true,
+        passwordBtnDisabled: true,
         user: {
             id: '',
             firstName: '',
@@ -125,12 +127,30 @@ export class Profile extends Component {
 
         if (type === 'user' || type === 'password') {
             const errKey = `${type}Errors`;
+            const btnStateKey = `${type}BtnDisabled`;
             this.setState({
                 type,
                 user: Object.assign(data, { id, }),
-                [errKey]: errors
+                [errKey]: errors,
+                [btnStateKey]: this.disabled(type, data),
             });
         }
+    }
+
+    disabled = (type, data) => {
+        if (type === 'password') {
+            return !(data.oldPassword && data.password);
+        }
+
+        else if (type === 'user') {
+            return !(
+                data.firstName.trim() &&
+                data.lastName.trim() &&
+                data.email.trim()
+            );
+        }
+
+        return false;
     }
 
     key = () => `profile-panel`
@@ -144,7 +164,7 @@ export class Profile extends Component {
     updaterProps = (type) => {
         return {
             onClick: this.updateUser,
-            disabled: this.state.type !== type,
+            disabled: this.state[`${type}BtnDisabled`],
         };
     }
 
