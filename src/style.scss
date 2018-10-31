@@ -107,3 +107,25 @@ ul[role=menu] {
 .errorMsg {
   max-width: initial !important;
 }
+.rbc-day-slot {
+  background-color: #f5fff5;
+}
+.rbc-today {
+  background-color: #fff;
+}
+.rbc-row-resource {
+  min-height: 25px !important;
+  .rbc-header {
+    padding: 5px;
+  }
+}
+.time-table {
+  position: fixed;
+  right: 20px;
+  left: 320px;
+  bottom: 0;
+  padding-top: 85px;
+}
+.rbc-timeslot-group {
+  min-height: 60px;
+}

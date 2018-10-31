@@ -16,14 +16,34 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { Component } from 'react';
+import BigCalendar from 'react-big-calendar';
+import moment from 'moment';
+
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 export class TimeTable extends Component {
     state = {};
 
     render() {
-        return (
-          <section className="time-table">
-          </section>
-        )
+        const localizer = BigCalendar.momentLocalizer(moment);
+        const events = [];
+        const resources = [
+            { id: '1', title: 'Box #1' },
+            { id: '2', title: 'Box #2' },
+            { id: '3', title: 'Box #3' },
+            { id: '4', title: 'Box #4' },
+        ];
+
+        return <BigCalendar className="time-table"
+            localizer={localizer}
+            events={events}
+            defaultView="day"
+            startAccessor="start"
+            endAccessor="end"
+            resources={resources}
+            step="15"
+            timeslots="4"
+            views={['day', 'agenda']}
+        />;
     }
 }
