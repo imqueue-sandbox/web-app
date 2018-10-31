@@ -172,11 +172,13 @@ export class Profile extends Component {
         const expanded = this.expanded();
 
         if (!data.user) {
+            AuthStorage.clear();
+
             return <AppMessage
                 variant="error"
                 message="Unauthorized!"
                 style={{ maxWidth: 'initial' }}
-            />
+            />;
         }
 
         const userId = (data.user || {}).__id;
