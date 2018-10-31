@@ -108,7 +108,10 @@ ul[role=menu] {
   max-width: initial !important;
 }
 .rbc-day-slot {
-  background-color: #f5fff5;
+  background-color: #fff;
+  .disabled {
+    background: #eee;
+  }
 }
 .rbc-today {
   background-color: #fff;
@@ -127,5 +130,5 @@ ul[role=menu] {
   padding-top: 85px;
 }
 .rbc-timeslot-group {
-  min-height: 60px;
+  min-height: 4em;
 }

@@ -18,32 +18,53 @@
 import React, { Component } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
-
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { AuthStorage } from '../common';
+
+moment.locale(navigator.userLanguage || navigator.language);
 
 export class TimeTable extends Component {
     state = {};
 
+    customSlot = (date) => {
+        if (date < Date.now()) {
+            return { className: 'disabled' };
+        }
+
+        return {};
+    };
+
+    onSelect = (event) => {
+        return event.start >= Date.now();
+    };
+
     render() {
+        const isAdmin = (AuthStorage.user() || {}).isAdmin;
         const localizer = BigCalendar.momentLocalizer(moment);
         const events = [];
-        const resources = [
+        const resources = isAdmin ? [
             { id: '1', title: 'Box #1' },
             { id: '2', title: 'Box #2' },
             { id: '3', title: 'Box #3' },
             { id: '4', title: 'Box #4' },
-        ];
+        ] : [{ id: 'user-box', title: 'Choose desirable washing time'}];
 
-        return <BigCalendar className="time-table"
+        return <BigCalendar
+            className="time-table"
             localizer={localizer}
             events={events}
             defaultView="day"
             startAccessor="start"
             endAccessor="end"
             resources={resources}
-            step="15"
-            timeslots="4"
+            scrollToTime={new Date()}
+            step={15}
+            timeslots={4}
             views={['day', 'agenda']}
+            slotPropGetter={this.customSlot}
+            onSelecting={this.onSelect}
+            min={new Date(0,0,0,9,0)}
+            max={new Date(0,0,0,20,0)}
             selectable
         />;
     }
