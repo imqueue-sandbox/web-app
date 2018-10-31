@@ -27,7 +27,7 @@ export class App extends Component {
         user: AuthStorage.user(),
     };
 
-    onUserChange = auth => this.setState({ user: auth && auth.user })
+    onUserChange = auth => this.setState({ user: auth && auth.user });
 
     componentWillUnmount() {
         AuthStorage.off('change', this.onUserChange);

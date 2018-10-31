@@ -52,7 +52,7 @@ export class Gravatar extends Component {
 
     edit = () => {
         window.open('https://gravatar.com/gravatars/new', '_blank');
-    }
+    };
 
     render() {
         const { user, classes, large, size, editable } = this.props;

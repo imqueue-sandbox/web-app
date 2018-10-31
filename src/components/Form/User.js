@@ -82,7 +82,7 @@ export class User extends Component {
                 email,
             }, this.state.errors);
         });
-    }
+    };
 
     render() {
         const { error, data, classes, errors } = this.props;

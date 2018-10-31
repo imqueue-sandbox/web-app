@@ -34,9 +34,9 @@ const style = theme => (Object.assign(SelectStyle(theme), {
 class CarModelSelect extends Component {
     state = {
         model: '',
-    }
+    };
 
-    select = selectHandler.bind(this)('model')
+    select = selectHandler.bind(this)('model');
 
     render() {
         const { classes, data } = this.props;

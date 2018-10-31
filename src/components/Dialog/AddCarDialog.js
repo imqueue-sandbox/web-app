@@ -57,7 +57,6 @@ function Transition(props) {
 }
 
 export class AddCarDialog extends Component {
-
     state = {
         loading: false,
         open: false,
@@ -65,24 +64,24 @@ export class AddCarDialog extends Component {
         model: '',
         regNumber: '',
         errors: [],
-    }
+    };
 
-    initialState = clone(this.state)
+    initialState = clone(this.state);
 
     close = () => {
         this.setState({ open: false });
-    }
+    };
 
     open = () => {
         this.setState({
             ...this.initialState,
             open: true,
         });
-    }
+    };
 
     errorClose = (i) => () => {
         this.setState({ errors: withoutElement(this.state.errors, i) });
-    }
+    };
 
     select = (what) => {
         switch (what) {
@@ -93,7 +92,7 @@ export class AddCarDialog extends Component {
             default:
                 return () => false;
         }
-    }
+    };
 
     addCar = () => {
         addCar({
@@ -101,7 +100,7 @@ export class AddCarDialog extends Component {
             carId: this.state.model,
             regNumber: this.state.regNumber
         }, this.close, errors => this.setState({ errors }));
-    }
+    };
 
     render() {
         const { fullScreen, classes } = this.props;

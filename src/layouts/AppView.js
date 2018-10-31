@@ -105,7 +105,7 @@ class AppView extends Component {
         const token = AuthStorage.token();
         token && logout(token);
         AuthStorage.clear();
-    }
+    };
 
     render() {
         const { classes, route, data } = this.props;

@@ -89,7 +89,7 @@ export class UserCar extends Component {
     remove = () => {
         const carId = this.props.car && this.props.car.id;
         carId && removeCar({ carId });
-    }
+    };
 
     render() {
         const { classes, car } = this.props;

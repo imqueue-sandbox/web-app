@@ -18,10 +18,7 @@
 import React, { Component } from 'react';
 
 export class TimeTable extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
+    state = {};
 
     render() {
         return (

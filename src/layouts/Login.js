@@ -75,23 +75,23 @@ class Login extends PureComponent {
         wrongLastName: '',
         isRegForm: false,
         inProgress: false,
-    }
+    };
 
-    initialState = clone(this.state)
-    mounted = false
+    initialState = clone(this.state);
+    mounted = false;
 
     onAutoFillStart = () => {
         this.setState({
             shrink: true,
             ...this.checkActions(this.state)
         });
-    }
+    };
 
     onAnimationStart = ({ target, animationName }) => {
         if (animationName === 'onAutoFillStart') {
             return this.onAutoFillStart(target);
         }
-    }
+    };
 
     /**
      * handling component insertion into DOM
@@ -164,7 +164,7 @@ class Login extends PureComponent {
                 inProgress: false
             }),
         );
-    }
+    };
 
     /**
      * Performs new user registration action
@@ -192,7 +192,7 @@ class Login extends PureComponent {
                 inProgress: false,
             }),
         );
-    }
+    };
 
     /**
      * Resets the login form to initial state
@@ -201,14 +201,14 @@ class Login extends PureComponent {
         const newState = clone(this.initialState);
         newState.isRegForm = this.state.isRegForm;
         this.setState(newState);
-    }
+    };
 
     /**
      * Clears errors off
      */
     clearError = (i) => () => {
         this.setState({ errors: withoutElement(this.state.errors, i) });
-    }
+    };
 
     /**
      * Returns flags for button state actions build from a given state
@@ -225,7 +225,7 @@ class Login extends PureComponent {
             : state.email && state.password);
 
         return { canReset, canSubmit };
-    }
+    };
 
     /**
      * Handles changes on a form fields and updates local state
@@ -237,14 +237,14 @@ class Login extends PureComponent {
         let newState = { ...this.state, [name]: event.target.value };
         newState = { ...newState, ...this.checkActions(newState) };
         this.setState(newState);
-    }
+    };
 
     /**
      * Handles show password button click
      */
     showPassword = () => {
         this.setState({ showPassword: !this.state.showPassword });
-    }
+    };
 
     /**
      * Handles switch to login form link click
@@ -254,7 +254,7 @@ class Login extends PureComponent {
             isRegForm: false,
             ...this.checkActions(this.state)
         });
-    }
+    };
 
     /**
      * Handles registration link click
@@ -264,7 +264,7 @@ class Login extends PureComponent {
             isRegForm: true,
             ...this.checkActions(this.state)
         });
-    }
+    };
 
     render() {
         const { fullScreen, classes } = this.props;

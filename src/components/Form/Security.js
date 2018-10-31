@@ -44,11 +44,11 @@ export class Security extends Component {
         showNew: false,
         oldPassword: '',
         newPassword: '',
-    }
+    };
 
     showPassword = (which) => () => {
         this.setState({ [`show${which}`]: !this.state[`show${which}`] });
-    }
+    };
 
     change = (which) => (event) => {
         this.setState({ [which]: event.target.value }, () => {
@@ -57,7 +57,7 @@ export class Security extends Component {
                 oldPassword: this.state.oldPassword,
             });
         });
-    }
+    };
 
     render() {
         const { classes, errors } = this.props;

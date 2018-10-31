@@ -26,9 +26,9 @@ import { SelectStyle, selectHandler } from './SelectStyle';
 class CarBrandsSelect extends Component {
     state = {
         brand: '',
-    }
+    };
 
-    select = selectHandler.bind(this)('brand')
+    select = selectHandler.bind(this)('brand');
 
     render() {
         const { classes, data } = this.props;

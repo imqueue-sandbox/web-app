@@ -71,4 +71,4 @@ export const withQuery = (query) => (RenderComponent) => {
     };
 
     return Query;
-}
+};

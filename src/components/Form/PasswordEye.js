@@ -31,7 +31,7 @@ export function PasswordEye(props) {
             ? <Visibility />
             : <VisibilityOff />}
         </IconButton>
-    </InputAdornment>
+    </InputAdornment>;
 }
 
 PasswordEye.propTypes = {

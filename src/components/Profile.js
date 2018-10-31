@@ -91,11 +91,11 @@ export class Profile extends Component {
             password: '',
         },
         type: '',
-    }
+    };
 
     addCar = () => {
         this.setState({ addCarOpen: true });
-    }
+    };
 
     updateUser = () => {
         if (!this.state.type) {
@@ -116,7 +116,7 @@ export class Profile extends Component {
             const errKey = `${this.state.type}Errors`;
             this.setState({ [errKey]: errors });
         }, this.state.type === 'password');
-    }
+    };
 
     dataChange = (type, data, errors) => {
         const id = this.props.data.user.__id;
@@ -135,7 +135,7 @@ export class Profile extends Component {
                 [btnStateKey]: this.disabled(type, data),
             });
         }
-    }
+    };
 
     disabled = (type, data) => {
         if (type === 'password') {
@@ -151,26 +151,26 @@ export class Profile extends Component {
         }
 
         return false;
-    }
+    };
 
-    key = () => `profile-panel`
+    key = () => `profile-panel`;
 
     open = panel => (event, expanded) => {
         this.setState({ expanded: expanded ? panel : 0 }, () => {
             Storage.set(this.key(), panel);
         });
-    }
+    };
 
     actionProps = (type) => {
         return {
             onClick: this.updateUser,
             disabled: this.state[`${type}BtnDisabled`],
         };
-    }
+    };
 
     actionBtn = (Icon, text, props) => {
         return <Button {...props}><Icon />&nbsp;{text}</Button>;
-    }
+    };
 
     expanded = () => {
         let { expanded } = this.state;
@@ -185,7 +185,7 @@ export class Profile extends Component {
         }
 
         return expanded;
-    }
+    };
 
     render() {
         const { classes, data } = this.props;
