@@ -17,7 +17,7 @@
  */
 import { commitMutation, graphql } from 'react-relay';
 import environment from '../Environment';
-import { AuthStorage } from '../../common/index';
+import { AppStore, AUTH_KEY } from '../../common/index';
 import { logger } from '../../config';
 
 const mutation = graphql`
@@ -45,7 +45,7 @@ export function logout(token) {
             }
 
             if (response) {
-                AuthStorage.clear();
+                AppStore.del(AUTH_KEY);
             }
         },
     };

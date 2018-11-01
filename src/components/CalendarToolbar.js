@@ -18,7 +18,7 @@
 import React from 'react';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
-import { AuthStorage } from '../common';
+import { AppStore, AUTH_KEY } from '../common';
 
 export const CalendarToolbar = (
     onToday,
@@ -26,7 +26,7 @@ export const CalendarToolbar = (
     onChange,
     noToday = false,
 ) => (toolbar) => {
-    const isAdmin = (AuthStorage.user() || {}).isAdmin;
+    const isAdmin = ((AppStore.get(AUTH_KEY) || {}).user || {}).isAdmin;
     const hasPast = () => {
         if (isAdmin) {
             return true;

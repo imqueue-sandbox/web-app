@@ -15,7 +15,6 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export * from './clone';
-export * from './helpers';
-export * from './AppStore';
-export * from './constants';
+export const AUTH_KEY = 'AuthUser';
+export const SLOT_KEY = 'TimeSlotDuration';
+export const CAR_KEY = 'UserCar';

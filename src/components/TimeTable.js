@@ -17,9 +17,10 @@
  */
 import React, { Component } from 'react';
 import BigCalendar  from 'react-big-calendar';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { AuthStorage } from '../common';
+import { AppStore, AUTH_KEY } from '../common';
 import { CalendarToolbar } from '.';
 
 /* these constants below are the things which should be obtained
@@ -34,6 +35,10 @@ const RX_DISABLED = /\bdisabled\b/;
 moment.locale(navigator.userLanguage || navigator.language);
 
 export class TimeTable extends Component {
+    static propTypes = {
+        timeSlotDuration: PropTypes.number,
+    };
+
     state = {
         calendarDate: this.closestSlot(),
         // scrollTime: new Date(),
@@ -80,6 +85,14 @@ export class TimeTable extends Component {
                 });
 
                 return tomorrow;
+            }
+
+            if (current < start) {
+                return start;
+            }
+
+            if (next.toDate() >= endTime) {
+                return startTime;
             }
 
             if (next.toDate() > current) {
@@ -138,7 +151,7 @@ export class TimeTable extends Component {
             title: "Click to reserve this time..."
         };
 
-        if (date < now || date < start || date >= end) {
+        if (date < now || date < start || date > end) {
             Object.assign(props, {
                 className: 'disabled',
                 title: date < now
@@ -174,8 +187,10 @@ export class TimeTable extends Component {
     }
 
     render() {
-        const isAdmin = (AuthStorage.user() || {}).isAdmin;
+        const isAdmin = ((AppStore.get(AUTH_KEY) || {}).user || {}).isAdmin;
         const localizer = BigCalendar.momentLocalizer(moment);
+        const timeSlotDuration = this.props.timeSlotDuration ||
+            TIME_SLOT_DURATION;
         const events = [];
         const resources = isAdmin ? [
             { id: '1', title: 'Box #1' },
@@ -205,7 +220,7 @@ export class TimeTable extends Component {
                     this.closestSlot().getTime() > new Date().getTime(),
                 ),
             }}
-            step={TIME_SLOT_DURATION}
+            step={timeSlotDuration}
             timeslots={1}
             views={[BigCalendar.Views.DAY]}
             slotPropGetter={this.customSlot}

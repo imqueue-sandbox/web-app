@@ -23,7 +23,7 @@ import TextField from '@material-ui/core/TextField';
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import { withStyles } from '@material-ui/core';
 import { errorList, Gravatar} from '../index';
-import { AuthStorage } from '../../common/index';
+import { AppStore, AUTH_KEY } from '../../common/index';
 import { CurrentUserFragment } from '../../relay/queries/index';
 
 const styles = theme => ({
@@ -109,7 +109,7 @@ export class User extends Component {
         }
 
         if (!user) {
-            AuthStorage.clear();
+            AppStore.del(AUTH_KEY);
 
             return <LinearProgress
                 color="secondary"

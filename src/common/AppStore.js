@@ -15,7 +15,18 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export class Storage {
+import { EventEmitter } from 'events';
+
+class Storage extends EventEmitter {
+    /**
+     * Fires any time value for a key changed in storage
+     * whenever delete is performed it will provide undefined as a new value
+     * for this event
+     *
+     * @event change
+     * @param {(key, newData, oldData) => *}
+     */
+
     /**
      * Stores given json data under a given key
      *
@@ -23,7 +34,8 @@ export class Storage {
      * @param {*} jsonData
      * @return {*}
      */
-    static set(key, jsonData) {
+    set(key, jsonData) {
+        this.emit('change', key, jsonData, localStorage.getItem(key));
         return localStorage.setItem(key, JSON.stringify(jsonData));
     }
 
@@ -33,7 +45,7 @@ export class Storage {
      * @param {string} key
      * @return {*}
      */
-    static get(key) {
+    get(key) {
         let data = localStorage.getItem(key);
 
         if (!data) {
@@ -55,7 +67,11 @@ export class Storage {
      * @param {string} key
      * @return {*}
      */
-    static del(key) {
+    del(key) {
+        this.emit('change', key, undefined, localStorage.getItem(key));
         return localStorage.removeItem(key);
     }
+
 }
+
+export const AppStore = new Storage();

@@ -39,10 +39,10 @@ import Divider from '@material-ui/core/Divider';
 import { logout } from '../relay/mutations';
 import { TimeTable, Profile, WashingTypeSelector } from '../components';
 import { Gravatar } from '../components/Gravatar';
-import { AuthStorage } from '../common';
+import { AppStore, AUTH_KEY, SLOT_KEY } from '../common';
 import { AppRootQuery, withQuery } from '../relay/queries';
 
-const drawerWidth = 300;
+const drawerWidth = 350;
 
 const styles = theme => ({
     root: {
@@ -101,19 +101,39 @@ function ListItemLink(props) {
 }
 
 class AppView extends Component {
-    logout = () => {
-        const token = AuthStorage.token();
-        token && logout(token);
-        AuthStorage.clear();
+    state = {
+        timeSlotDuration: AppStore.get(SLOT_KEY) | 0,
     };
+
+    componentDidMount() {
+        AppStore.on('change', this.storeChange);
+    }
+
+    componentWillUnmount() {
+        AppStore.off('change', this.storeChange);
+    }
 
     is(routePath) {
         return this.props.route === `/${routePath}`;
     }
 
+    storeChange = (key, timeSlotDuration) => {
+        timeSlotDuration = timeSlotDuration | 0;
+
+        if (timeSlotDuration && key === SLOT_KEY) {
+            this.setState({ timeSlotDuration });
+        }
+    }
+
+    logout = () => {
+        const token = (AppStore.get(AUTH_KEY) || {}).token;
+        token && logout(token);
+        AppStore.del(AUTH_KEY);
+    };
+
     render() {
         const { classes, data } = this.props;
-        const user = AuthStorage.user();
+        const user = (AppStore.get(AUTH_KEY) || {}).user;
         const letters = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
         const fullName = `${user.firstName} ${user.lastName}`;
 
@@ -162,7 +182,7 @@ class AppView extends Component {
                             className={this.is('') ? classes.selected : ''}
                         >
                             <ListItemIcon><Timelapse /></ListItemIcon>
-                            <ListItemText primary="My Car Wash Bookings" />
+                            <ListItemText primary="Washing Time Reservations" />
                         </ListItemLink>
                         <ListItemLink
                             href="/profile"
@@ -170,7 +190,7 @@ class AppView extends Component {
                                 classes.selected : ''}
                         >
                             <ListItemIcon><Person /></ListItemIcon>
-                            <ListItemText primary="My Profile" />
+                            <ListItemText primary="User Profile" />
                         </ListItemLink>
                         <Divider/>
                     </List>
@@ -181,7 +201,10 @@ class AppView extends Component {
                     <Route
                         exact
                         path="/"
-                        component={() => <TimeTable data={data}/>}
+                        component={() => <TimeTable
+                            data={data}
+                            timeSlotDuration={this.state.timeSlotDuration}
+                        />}
                     />
                     <Route
                         path="/profile"

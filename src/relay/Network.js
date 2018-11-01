@@ -18,7 +18,7 @@
  */
 /* eslint-disable */
 import { Network } from 'relay-runtime';
-import { AuthStorage } from '../common';
+import { AppStore, AUTH_KEY } from '../common';
 import { APP_BACKEND_URL } from '../config';
 
 const network = Network.create((
@@ -29,7 +29,7 @@ const network = Network.create((
         headers: new Headers({
             'Content-Type': 'application/json',
             get ['X-Auth-User']() {
-                return AuthStorage.token();
+                return (AppStore.get(AUTH_KEY) || {}).token;
             },
         }),
         body: JSON.stringify({

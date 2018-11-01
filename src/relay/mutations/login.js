@@ -17,7 +17,7 @@
  */
 import { commitMutation, graphql } from 'react-relay';
 import environment from '../Environment';
-import { AuthStorage } from '../../common/index';
+import { AppStore, AUTH_KEY } from '../../common/index';
 import { logger } from '../../config';
 
 const mutation = graphql`
@@ -56,7 +56,7 @@ export function login({ email, password }, success, failure) {
                 return failure && failure(errors);
             }
 
-            AuthStorage.save(response.login);
+            AppStore.set(AUTH_KEY, response.login);
             success && success(response.login);
         }
     };

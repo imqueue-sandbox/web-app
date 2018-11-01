@@ -25,6 +25,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import { createFragmentContainer } from 'react-relay';
 import { OptionsFragment } from '../../relay/queries/fragments';
+import { AppStore, SLOT_KEY } from '../../common';
 
 const styles = theme => ({
     root: {
@@ -45,11 +46,12 @@ export class WashingTypeSelector extends Component {
     };
 
     state = {
-        value: '30',
+        value: AppStore.get(SLOT_KEY) || '30',
     };
 
     change = (event) => {
-        this.setState({ value: event.target.value })
+        AppStore.set(SLOT_KEY, event.target.value);
+        this.setState({ value: event.target.value });
     }
 
     render() {

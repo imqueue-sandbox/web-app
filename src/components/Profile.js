@@ -30,7 +30,7 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core';
 import { User, UserCars, Security, AddCarDialog, AppMessage } from '.';
 import { updateUser } from '../relay/mutations';
-import { AuthStorage, Storage, clone } from '../common';
+import { AppStore, AUTH_KEY, clone } from '../common';
 
 const styles = theme => ({
     root: {
@@ -113,14 +113,24 @@ export class Profile extends Component {
         }
 
         updateUser(userData, () => {
-            this.setState({ type: '' }, () => {
-                AuthStorage.update(userData);
-            });
+            this.setState({ type: '' }, () => this.updateStore(userData));
         }, errors => {
             const errKey = `${this.state.type}Errors`;
             this.setState({ [errKey]: errors });
         }, this.state.type === 'password');
     };
+
+    updateStore = user => {
+        const data = (AppStore.get(AUTH_KEY) || { user: {} });
+
+        for (let field of Object.keys(user)) {
+            if (user[field] && data.user[field]) {
+                data.user[field] = user[field];
+            }
+        }
+
+        AppStore.set(AUTH_KEY, data);
+    }
 
     dataChange = (type, data, errors) => {
         const id = this.props.data.user.__id;
@@ -196,7 +206,7 @@ export class Profile extends Component {
         const expanded = this.expanded();
 
         if (!data.user) {
-            AuthStorage.clear();
+            AppStore.del(AUTH_KEY);
 
             return <AppMessage
                 variant="error"

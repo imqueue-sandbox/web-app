@@ -16,7 +16,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { Component } from 'react';
-import { AuthStorage } from '../common';
+import { AppStore, AUTH_KEY } from '../common';
 import { Login, AppView } from '../layouts';
 import { AppMessage } from '.';
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
@@ -24,17 +24,18 @@ import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 export class App extends Component {
 
     state = {
-        user: AuthStorage.user(),
+        user: (AppStore.get(AUTH_KEY) || {}).user,
     };
 
-    onUserChange = auth => this.setState({ user: auth && auth.user });
+    onUserChange = (key, auth) =>
+        key === AUTH_KEY && this.setState({ user: auth && auth.user });
 
     componentWillUnmount() {
-        AuthStorage.off('change', this.onUserChange);
+        AppStore.off('change', this.onUserChange);
     }
 
     componentDidMount() {
-        AuthStorage.on('change', this.onUserChange);
+        AppStore.on('change', this.onUserChange);
     }
 
     is(routePath) {
