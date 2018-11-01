@@ -22,8 +22,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { AuthStorage } from '../common';
 import { CalendarToolbar } from '.';
 
-const WORKING_TIME_START = '09:00';
-const WORKING_TIME_END = '20:00';
+const WORKING_TIME_START = '08:00';
+const WORKING_TIME_END = '21:00';
 
 moment.locale(navigator.userLanguage || navigator.language);
 
@@ -90,16 +90,28 @@ export class TimeTable extends Component {
     customSlot = (date) => {
         const start = this.toTime(date, WORKING_TIME_START);
         const end = this.toTime(date, WORKING_TIME_END);
+        const now = new Date();
 
-        if (date < Date.now() || date < start || date >= end) {
-            return { className: 'disabled' };
+        if (date < now || date < start || date >= end) {
+            return {
+                className: 'disabled',
+                title: date < now
+                    ? 'This time has been already passed'
+                    : 'Car Wash is closed at this time'
+            };
         }
 
         return {};
     };
 
     onSelect = (event) => {
-        return event.start >= Date.now();
+        const start = this.toTime(event.start, WORKING_TIME_START);
+        const end = this.toTime(event.start, WORKING_TIME_END);
+
+        return event.start >= Date.now() &&
+            event.start >= start &&
+            event.end <= end
+        ;
     };
 
     toTime(date, timeStr) {
