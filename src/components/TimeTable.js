@@ -133,7 +133,9 @@ export class TimeTable extends Component {
         const start = this.toTime(date, WORKING_TIME_START);
         const end = this.toTime(date, WORKING_TIME_END);
         const props = {
+            className: 'active',
             onClick: this.onSlotSelect(date),
+            title: "Click to reserve this time..."
         };
 
         if (date < now || date < start || date >= end) {
