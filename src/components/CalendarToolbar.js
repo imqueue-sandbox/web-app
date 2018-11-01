@@ -18,17 +18,25 @@
 import React from 'react';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
+import { AuthStorage } from '../common';
 
 export const CalendarToolbar = (onToday, onOther) => (toolbar) => {
+    const isAdmin = (AuthStorage.user() || {}).isAdmin;
     const hasPast = () => {
+        if (isAdmin) {
+            return true;
+        }
+
         const toolDate = moment(toolbar.date).format('YYYYMMDD') | 0;
         const current = moment().format('YYYYMMDD') | 0;
+
         return current < toolDate;
     };
 
     const isToday = (diff) => {
         const toolDate = (moment(toolbar.date).format('YYYYMMDD') | 0) + diff;
         const current = moment().format('YYYYMMDD') | 0;
+
         return toolDate === current;
     };
 
