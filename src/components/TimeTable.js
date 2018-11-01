@@ -91,17 +91,18 @@ export class TimeTable extends Component {
         const start = this.toTime(date, WORKING_TIME_START);
         const end = this.toTime(date, WORKING_TIME_END);
         const now = new Date();
+        const props = {};
 
         if (date < now || date < start || date >= end) {
-            return {
+            Object.assign(props, {
                 className: 'disabled',
                 title: date < now
                     ? 'This time has been already passed'
-                    : 'Car Wash is closed at this time'
-            };
+                    : 'Car Wash is closed at this time',
+            });
         }
 
-        return {};
+        return props;
     };
 
     onSelect = (event) => {
@@ -155,12 +156,12 @@ export class TimeTable extends Component {
                     this.onDateChange,
                 ),
             }}
-            step={15}
-            timeslots={4}
+            step={45}
+            timeslots={1}
             views={[BigCalendar.Views.DAY]}
             slotPropGetter={this.customSlot}
             onSelecting={this.onSelect}
-            selectable
+            // selectable
         />;
     }
 }

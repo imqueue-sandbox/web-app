@@ -107,11 +107,23 @@ ul[role=menu] {
 .errorMsg {
   max-width: initial !important;
 }
-.rbc-day-slot {
-  background-color: #fff;
-  .disabled {
-    background: #eee;
+div.rbc-day-slot {
+  .rbc-timeslot-group {
+    .rbc-time-slot {
+      background-color: #fff;
+      cursor: pointer;
+      &:hover {
+        background-color: #777;
+      }
+      &.disabled {
+        cursor: default;
+        background-color: #eee;
+      }
+    }
   }
+}
+.rbc-events-container {
+  pointer-events:none;
 }
 .rbc-today {
   background-color: #fff;
