@@ -24,6 +24,12 @@ import { CarBrandsQuery, withQuery } from '../../relay/queries';
 import { SelectStyle, selectHandler } from './SelectStyle';
 
 class CarBrandsSelect extends Component {
+    static propTypes = {
+        classes: PropTypes.object.isRequired,
+        data: PropTypes.object.isRequired,
+        onChange: PropTypes.func,
+    };
+
     state = {
         brand: '',
     };
@@ -53,12 +59,6 @@ class CarBrandsSelect extends Component {
         ))}</TextField>;
     }
 }
-
-CarBrandsSelect.propTypes = {
-    classes: PropTypes.object.isRequired,
-    data: PropTypes.object.isRequired,
-    onChange: PropTypes.func,
-};
 
 CarBrandsSelect = withStyles(SelectStyle)(CarBrandsSelect);
 CarBrandsSelect = withQuery(CarBrandsQuery)(CarBrandsSelect);

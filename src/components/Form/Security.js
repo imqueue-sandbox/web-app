@@ -39,6 +39,14 @@ const styles = theme => ({
 });
 
 export class Security extends Component {
+    static propTypes = {
+        classes: PropTypes.object.isRequired,
+        onChange: PropTypes.func,
+        errors: PropTypes.arrayOf(PropTypes.shape({
+            message: PropTypes.string.isRequired,
+        })),
+    };
+
     state = {
         showOld: false,
         showNew: false,
@@ -104,13 +112,5 @@ export class Security extends Component {
         </div>;
     }
 }
-
-Security.propTypes = {
-    classes: PropTypes.object.isRequired,
-    onChange: PropTypes.func,
-    errors: PropTypes.arrayOf(PropTypes.shape({
-        message: PropTypes.string.isRequired,
-    })),
-};
 
 Security = withStyles(styles)(Security);

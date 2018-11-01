@@ -59,6 +59,22 @@ const styles = theme => ({
 });
 
 export class User extends Component {
+    static propTypes = {
+        classes: PropTypes.object.isRequired,
+        onChange: PropTypes.func,
+        errors: PropTypes.arrayOf(PropTypes.shape({
+            message: PropTypes.string,
+        })),
+        data: PropTypes.shape({
+            user: PropTypes.shape({
+                firstName: PropTypes.string,
+                lastName: PropTypes.string,
+                email: PropTypes.string,
+                carsCount: PropTypes.number,
+            }),
+        }),
+    };
+
     state = {
         inProgress: true,
         firstName: '',
@@ -144,22 +160,6 @@ export class User extends Component {
         </div>;
     }
 }
-
-User.propTypes = {
-    classes: PropTypes.object.isRequired,
-    onChange: PropTypes.func,
-    errors: PropTypes.arrayOf(PropTypes.shape({
-        message: PropTypes.string,
-    })),
-    data: PropTypes.shape({
-        user: PropTypes.shape({
-            firstName: PropTypes.string,
-            lastName: PropTypes.string,
-            email: PropTypes.string,
-            carsCount: PropTypes.number,
-        }),
-    }),
-};
 
 User = withStyles(styles)(User);
 User = createFragmentContainer(User, CurrentUserFragment);

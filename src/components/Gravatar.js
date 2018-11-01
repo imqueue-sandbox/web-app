@@ -49,6 +49,13 @@ const styles = {
 };
 
 export class Gravatar extends Component {
+    static propTypes = {
+        classes: PropTypes.object,
+        user: PropTypes.object.isRequired,
+        large: PropTypes.bool,
+        size: PropTypes.number,
+        editable: PropTypes.bool,
+    };
 
     edit = () => {
         window.open('https://gravatar.com/gravatars/new', '_blank');
@@ -79,13 +86,5 @@ export class Gravatar extends Component {
         )
     }
 }
-
-Gravatar.propTypes = {
-    classes: PropTypes.object,
-    user: PropTypes.object.isRequired,
-    large: PropTypes.bool,
-    size: PropTypes.number,
-    editable: PropTypes.bool,
-};
 
 Gravatar = withStyles(styles)(Gravatar);

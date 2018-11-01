@@ -32,6 +32,13 @@ const style = theme => (Object.assign(SelectStyle(theme), {
 }));
 
 class CarModelSelect extends Component {
+    static propTypes = {
+        classes: PropTypes.object.isRequired,
+        disabled: PropTypes.bool.isRequired,
+        brand: PropTypes.string.isRequired,
+        onChange: PropTypes.func,
+    };
+
     state = {
         model: '',
     };
@@ -75,13 +82,6 @@ class CarModelSelect extends Component {
         </TextField>;
     }
 }
-
-CarModelSelect.propTypes = {
-    classes: PropTypes.object.isRequired,
-    disabled: PropTypes.bool.isRequired,
-    brand: PropTypes.string.isRequired,
-    onChange: PropTypes.func,
-};
 
 CarModelSelect = withStyles(style)(CarModelSelect);
 CarModelSelect = withQuery(CarModelsQuery)(CarModelSelect);

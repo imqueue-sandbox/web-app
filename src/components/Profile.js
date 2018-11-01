@@ -76,6 +76,10 @@ const styles = theme => ({
 });
 
 export class Profile extends Component {
+    static propTypes = {
+        classes: PropTypes.object.isRequired,
+    };
+
     state = {
         addCarOpen: false,
         expanded: null,
@@ -267,9 +271,5 @@ export class Profile extends Component {
         </div>;
     }
 }
-
-Profile.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 Profile = withStyles(styles)(Profile);

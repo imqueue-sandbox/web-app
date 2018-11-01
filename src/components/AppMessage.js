@@ -63,6 +63,19 @@ const styles = theme => ({
 });
 
 export class AppMessage extends Component {
+    static propTypes = {
+        classes: PropTypes.object,
+        className: PropTypes.string,
+        message: PropTypes.node,
+        onClose: PropTypes.func,
+        variant: PropTypes.oneOf([
+            'success',
+            'warning',
+            'error',
+            'info',
+        ]).isRequired,
+    };
+
     render() {
         const {
             classes,
@@ -103,18 +116,5 @@ export class AppMessage extends Component {
         );
     }
 }
-
-AppMessage.propTypes = {
-    classes: PropTypes.object,
-    className: PropTypes.string,
-    message: PropTypes.node,
-    onClose: PropTypes.func,
-    variant: PropTypes.oneOf([
-        'success',
-        'warning',
-        'error',
-        'info',
-    ]).isRequired,
-};
 
 AppMessage = withStyles(styles)(AppMessage);

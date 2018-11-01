@@ -57,6 +57,12 @@ function Transition(props) {
 }
 
 export class AddCarDialog extends Component {
+    static propTypes = {
+        classes: PropTypes.object.isRequired,
+        fullScreen: PropTypes.bool.isRequired,
+        userId: PropTypes.string.isRequired,
+    };
+
     state = {
         loading: false,
         open: false,
@@ -182,12 +188,6 @@ export class AddCarDialog extends Component {
         </>);
     }
 }
-
-AddCarDialog.propTypes = {
-    classes: PropTypes.object.isRequired,
-    fullScreen: PropTypes.bool.isRequired,
-    userId: PropTypes.string.isRequired,
-};
 
 AddCarDialog = withMobileDialog()(AddCarDialog);
 AddCarDialog = withStyles(styles)(AddCarDialog);

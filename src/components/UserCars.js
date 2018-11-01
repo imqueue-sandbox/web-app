@@ -37,6 +37,13 @@ const styles = theme => ({
  * Cars
  */
 export class UserCars extends Component {
+    static propTypes = {
+        classes: PropTypes.object.isRequired,
+        data: PropTypes.shape({
+            cars: PropTypes.arrayOf(Object),
+        }),
+    };
+
     render() {
         const { data, classes } = this.props;
         const cars = data ? data.cars || [] : [];
@@ -52,13 +59,6 @@ export class UserCars extends Component {
         }
     }
 }
-
-UserCars.propTypes = {
-    classes: PropTypes.object.isRequired,
-    data: PropTypes.shape({
-        cars: PropTypes.arrayOf(Object),
-    }),
-};
 
 UserCars = createFragmentContainer(
     withStyles(styles)(UserCars),
