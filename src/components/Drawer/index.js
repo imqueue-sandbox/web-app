@@ -16,4 +16,4 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 export * from './CarSelector';
-export * from './DateSelector';
+export * from './WashingTypeSelector';
