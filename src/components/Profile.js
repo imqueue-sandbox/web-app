@@ -30,7 +30,7 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core';
 import { User, UserCars, Security, AddCarDialog, AppMessage } from '.';
 import { updateUser } from '../relay/mutations';
-import { AppStore, AUTH_KEY, clone } from '../common';
+import { AppStore, AUTH_KEY, PROFILE_PANEL_KEY, clone } from '../common';
 
 const styles = theme => ({
     root: {
@@ -167,11 +167,9 @@ export class Profile extends Component {
         return false;
     };
 
-    key = () => `profile-panel`;
-
     open = panel => (event, expanded) => {
         this.setState({ expanded: expanded ? panel : 0 }, () => {
-            Storage.set(this.key(), panel);
+            AppStore.set(PROFILE_PANEL_KEY, panel);
         });
     };
 
@@ -190,11 +188,11 @@ export class Profile extends Component {
         let { expanded } = this.state;
 
         if (expanded === null) {
-            expanded = Storage.get(this.key());
+            expanded = AppStore.get(PROFILE_PANEL_KEY);
 
             if (expanded === null || expanded === undefined) {
                 expanded = 0;
-                Storage.set(this.key(), expanded);
+                AppStore.set(PROFILE_PANEL_KEY, expanded);
             }
         }
 
