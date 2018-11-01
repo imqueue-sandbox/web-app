@@ -23,6 +23,8 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import { createFragmentContainer } from 'react-relay';
+import { OptionsFragment } from '../../relay/queries/fragments';
 
 const styles = theme => ({
     root: {
@@ -36,69 +38,43 @@ const styles = theme => ({
     },
 });
 
-
 export class WashingTypeSelector extends Component {
     static propTypes = {
         classes: PropTypes.object.isRequired,
+        data: PropTypes.object.isRequired,
     };
 
+    state = {
+        value: '30',
+    };
+
+    change = (event) => {
+        this.setState({ value: event.target.value })
+    }
+
     render() {
-        const { classes } = this.props;
+        const { classes, data } = this.props;
+        const baseTime = (data || {}).baseTime || [];
 
         return <div className={classes.root}>
             <FormControl component="fieldset" className={classes.formControl}>
-                <FormLabel component="legend">Gender</FormLabel>
+                <FormLabel component="legend">
+                    Choose preferred washing type
+                </FormLabel>
                 <RadioGroup
-                    aria-label="Washing type"
+                    aria-label="Choose preferred washing type"
                     name="washing-type"
                     className={classes.group}
                     value={this.state.value}
-                    onChange={this.handleChange}
-                >
+                    onChange={this.change}
+                >{baseTime && baseTime.length && baseTime.map(option =>
                     <FormControlLabel
-                        value="std"
+                        key={option.key}
+                        value={option.duration+''}
                         control={<Radio />}
-                        label="Female"
+                        label={option.title}
                     />
-                    <FormControlLabel
-                        value="male"
-                        control={<Radio />}
-                        label="Male"
-                    />
-                    <FormControlLabel
-                        value="other"
-                        control={<Radio />}
-                        label="Other"
-                    />
-                </RadioGroup>
-            </FormControl>
-            <FormControl component="fieldset" className={classes.formControl}>
-                <FormLabel component="legend">Gender</FormLabel>
-                <RadioGroup
-                    aria-label="gender"
-                    name="gender2"
-                    className={classes.group}
-                    value={this.state.value}
-                    onChange={this.handleChange}
-                >
-                    <FormControlLabel
-                        value="female"
-                        control={<Radio color="primary" />}
-                        label="Female"
-                        labelPlacement="start"
-                    />
-                    <FormControlLabel
-                        value="male"
-                        control={<Radio color="primary" />}
-                        label="Male"
-                        labelPlacement="start"
-                    />
-                    <FormControlLabel
-                        value="other"
-                        control={<Radio color="primary" />}
-                        label="Other"
-                        labelPlacement="start"
-                    />
+                )}
                 </RadioGroup>
             </FormControl>
         </div>;
@@ -106,3 +82,7 @@ export class WashingTypeSelector extends Component {
 }
 
 WashingTypeSelector = withStyles(styles)(WashingTypeSelector);
+WashingTypeSelector = createFragmentContainer(
+    WashingTypeSelector,
+    OptionsFragment,
+);

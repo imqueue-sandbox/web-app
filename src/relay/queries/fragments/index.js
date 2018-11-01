@@ -17,3 +17,4 @@
  */
 export * from './CurrentUser';
 export * from './UserCars';
+export * from './Options';

@@ -37,7 +37,7 @@ import Waves from '@material-ui/icons/Waves';
 import Divider from '@material-ui/core/Divider';
 
 import { logout } from '../relay/mutations';
-import { TimeTable, Profile } from '../components';
+import { TimeTable, Profile, WashingTypeSelector } from '../components';
 import { Gravatar } from '../components/Gravatar';
 import { AuthStorage } from '../common';
 import { AppRootQuery, withQuery } from '../relay/queries';
@@ -107,8 +107,12 @@ class AppView extends Component {
         AuthStorage.clear();
     };
 
+    is(routePath) {
+        return this.props.route === `/${routePath}`;
+    }
+
     render() {
-        const { classes, route, data } = this.props;
+        const { classes, data } = this.props;
         const user = AuthStorage.user();
         const letters = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
         const fullName = `${user.firstName} ${user.lastName}`;
@@ -155,24 +159,22 @@ class AppView extends Component {
                         <Divider/>
                         <ListItemLink
                             href="/"
-                            className={route === '/'
-                                ? classes.selected
-                                : ''}
+                            className={this.is('') ? classes.selected : ''}
                         >
                             <ListItemIcon><Timelapse /></ListItemIcon>
                             <ListItemText primary="My Car Wash Bookings" />
                         </ListItemLink>
                         <ListItemLink
                             href="/profile"
-                            className={route === '/profile'
-                                ? classes.selected
-                                : ''}
+                            className={this.is('profile') ?
+                                classes.selected : ''}
                         >
                             <ListItemIcon><Person /></ListItemIcon>
                             <ListItemText primary="My Profile" />
                         </ListItemLink>
                         <Divider/>
                     </List>
+                    {this.is('') && <WashingTypeSelector data={data.options}/>}
                 </Drawer>
                 <main className={classes.content}>
                     <div className={classes.toolbar}/>

@@ -51,6 +51,7 @@ export class App extends Component {
             vars={{
                 withUser: true,
                 withUserCars: this.is('profile'),
+                withOptions: this.is('')
             }}
             onError={error =>
                 <AppMessage

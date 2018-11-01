@@ -17,17 +17,15 @@
  */
 import { graphql } from 'react-relay';
 
-export const AppRootQuery = graphql`
-query AppRootQuery(
-    $withUser: Boolean!
-    $withUserCars: Boolean!
-    $withOptions: Boolean!
-) {
-    user {
-        ...CurrentUser @include(if: $withUser)
-        ...UserCars @include(if: $withUserCars)
-    }
-    options @include(if: $withOptions) {
-        ...Options
+export const OptionsFragment = graphql`
+fragment Options on Options {
+    id
+    start
+    end
+    boxes
+    baseTime {
+        key
+        title
+        duration
     }
 }`;
