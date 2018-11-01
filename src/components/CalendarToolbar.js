@@ -49,21 +49,11 @@ export const CalendarToolbar = (onToday, onOther) => (toolbar) => {
 
     return <div className="rbc-toolbar">
         <span className="rbc-toolbar-group">
-            <Button
-                size="medium"
-                onClick={goToBack}
-                disabled={!hasPast()}
-            >&larr;</Button>
-            <Button
-                size="medium"
-                onClick={goToCurrent}
-            >today</Button>
-            <Button
-                color="primary"
-                variant="outlined"
-                size="medium"
-                onClick={goToNext}
-            >&rarr;</Button>
+            <Button size="small" onClick={goToBack} disabled={!hasPast()}>
+                &larr;
+            </Button>
+            <Button size="small" onClick={goToCurrent}>today</Button>
+            <Button size="small" onClick={goToNext}>&rarr;</Button>
         </span>
         <span className="rbc-toolbar-label">
             {moment(toolbar.date).format('dddd, LL')}
