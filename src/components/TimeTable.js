@@ -36,7 +36,7 @@ moment.locale(navigator.userLanguage || navigator.language);
 export class TimeTable extends Component {
     state = {
         calendarDate: new Date(),
-        scrollTime: new Date(),
+        // scrollTime: new Date(),
     };
     timeout = null;
     interval = null;
@@ -83,14 +83,30 @@ export class TimeTable extends Component {
         this.timeout = this.interval = null;
     };
 
-    onDateChange = (date, dir) => {
-        const newDate = moment(date).add(dir, 'days').format('YYYYMMDD') | 0;
-        const current = moment().format('YYYYMMDD') | 0;
+    closestSlot(date = new Date()) {
+        let startTime = moment(this.toTime(date, WORKING_TIME_START));
+        const endTime = this.toTime(date, WORKING_TIME_END);
+        const current = new Date();
 
-        this.setState({
-            scrollTime: newDate === current ? new Date()
-                : this.toTime(date, WORKING_TIME_START),
-        });
+        while (true) {
+            const next = moment(startTime).add(TIME_SLOT_DURATION, 'minutes');
+
+            if (next.toDate() > current || next > endTime) {
+                return next.toDate();
+            }
+
+            startTime = next;
+        }
+    }
+
+    onDateChange = (date, dir) => {
+        const newDate = moment(date).add(dir, 'days');
+        const current = moment().format('YYYYMMDD') | 0;
+        const calendarDate = (newDate.format('YYYYMMDD') | 0) === current
+            ? this.closestSlot()
+            : this.toTime(new Date(newDate.toISOString()), WORKING_TIME_START);
+
+        this.setState({ calendarDate });
     };
 
     onSlotSelect = date => event => {
@@ -102,9 +118,9 @@ export class TimeTable extends Component {
     };
 
     customSlot = (date) => {
+        const now = new Date();
         const start = this.toTime(date, WORKING_TIME_START);
         const end = this.toTime(date, WORKING_TIME_END);
-        const now = new Date();
         const props = {
             onClick: this.onSlotSelect(date),
         };
@@ -154,6 +170,9 @@ export class TimeTable extends Component {
             { id: '3', title: 'Box #3' },
             { id: '4', title: 'Box #4' },
         ] : [{ id: 'user-box', title: 'Choose desirable washing time'}];
+        const start = this.toTime(this.state.calendarDate, WORKING_TIME_START);
+        const now = this.closestSlot();
+        const min = start > now ? start : now;
 
         return <BigCalendar
             className="time-table"
@@ -164,7 +183,7 @@ export class TimeTable extends Component {
             endAccessor="end"
             resources={resources}
             defaultDate={this.state.calendarDate}
-            scrollToTime={this.state.scrollTime}
+            // scrollToTime={this.state.scrollTime}
             components={{
                 toolbar: CalendarToolbar(
                     this.initTimers,
@@ -177,7 +196,8 @@ export class TimeTable extends Component {
             views={[BigCalendar.Views.DAY]}
             slotPropGetter={this.customSlot}
             onSelecting={this.onSelect}
-            // selectable
+            min={min}
+            max={this.toTime(this.state.calendarDate, WORKING_TIME_END)}
         />;
     }
 }

@@ -143,11 +143,12 @@ div.rbc-day-slot {
 }
 .rbc-timeslot-group {
   min-height: 4em;
+  max-height: 4em;
+  height: 4em;
 }
 .rbc-toolbar-label {
   margin-left: -140px;
 }
-.rbc-toolbar {
-  button {
-  }
+.rbc-current-time-indicator {
+  display: none;
 }
