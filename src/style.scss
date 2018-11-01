@@ -107,24 +107,28 @@ ul[role=menu] {
 .errorMsg {
   max-width: initial !important;
 }
-div.rbc-day-slot {
-  .rbc-timeslot-group {
-    .rbc-time-slot {
-      background-color: #fff;
-      cursor: pointer;
-      &:hover {
-        background-color: #333;
-      }
-      &.disabled {
-        cursor: default;
-        background-color: #eee;
-      }
-      &.active {
-        transition:
-          background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-          box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-          border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-      }
+.rbc-time-content, .rbc-time-column, .rbc-time-gutter {
+  background-color: #eee !important;
+}
+.rbc-day-bg {
+  background-color: #fff !important;
+}
+.rbc-timeslot-group {
+  .rbc-time-slot {
+    background-color: #fff !important;
+    cursor: pointer;
+    &:hover {
+      background-color: #333 !important;
+    }
+    &.disabled {
+      cursor: default;
+      background-color: #eee;
+    }
+    &.active {
+      transition:
+        background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+        box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+        border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     }
   }
 }
@@ -143,9 +147,6 @@ div.rbc-day-slot {
 }
 .rbc-events-container {
   pointer-events:none;
-}
-.rbc-today {
-  background-color: #fff;
 }
 .rbc-row-resource {
   min-height: 25px !important;

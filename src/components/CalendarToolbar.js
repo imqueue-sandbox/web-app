@@ -81,8 +81,8 @@ export const CalendarToolbar = (
             <Button
                 size="small"
                 onClick={goToCurrent}
-                disabled={noToday}
-                className="today"
+                disabled={noToday || cantGoBack}
+                className={`today${!noToday && cantGoBack ? '-disabled' : ''}`}
             >
                 Today
             </Button>

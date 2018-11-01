@@ -173,17 +173,17 @@ export class TimeTable extends Component {
         ;
     };
 
-    toTime(date, timeStr) {
+    toTime(date, timeStr, subtract = 0) {
         const [hours, minutes] = timeStr.split(':');
 
-        return new Date(
+        return moment(new Date(
             date.getFullYear(),
             date.getMonth(),
             date.getDate(),
             hours | 0,
             minutes | 0,
             0,
-        );
+        )).add(subtract, 'minutes').toDate();
     }
 
     render() {
@@ -201,6 +201,10 @@ export class TimeTable extends Component {
         const start = this.toTime(this.state.calendarDate, WORKING_TIME_START);
         const now = this.closestSlot();
         const min = start > now ? start : now;
+        const max = this.toTime(
+            this.state.calendarDate,
+            WORKING_TIME_END,
+            -1 * (this.props.timeSlotDuration || TIME_SLOT_DURATION));
 
         return <BigCalendar
             className="time-table"
@@ -211,13 +215,12 @@ export class TimeTable extends Component {
             endAccessor="end"
             resources={resources}
             defaultDate={this.state.calendarDate}
-            // scrollToTime={this.state.scrollTime}
             components={{
                 toolbar: CalendarToolbar(
                     this.initTimers,
                     this.clearTimers,
                     this.onDateChange,
-                    this.closestSlot().getTime() > new Date().getTime(),
+                    max < new Date().getTime(),
                 ),
             }}
             step={timeSlotDuration}
@@ -226,7 +229,7 @@ export class TimeTable extends Component {
             slotPropGetter={this.customSlot}
             onSelecting={this.onSelect}
             min={min}
-            max={this.toTime(this.state.calendarDate, WORKING_TIME_END)}
+            max={max}
         />;
     }
 }
