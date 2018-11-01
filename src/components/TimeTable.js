@@ -16,15 +16,63 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { Component } from 'react';
-import BigCalendar from 'react-big-calendar';
+import BigCalendar  from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { AuthStorage } from '../common';
+import { CalendarToolbar } from '.';
 
 moment.locale(navigator.userLanguage || navigator.language);
 
+
 export class TimeTable extends Component {
-    state = {};
+    state = {
+        calendarDate: new Date(),
+    };
+    timeout = null;
+    interval = null;
+
+    constructor(props) {
+        super(props);
+        this.initTimers();
+    }
+
+    componentWillUnmount() {
+        this.clearTimers();
+    }
+
+    closest5Minutes() {
+        const now = new Date();
+        const minutes = 5 - now.getMinutes() % 5 + now.getMinutes();
+        return new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            now.getHours(),
+            minutes,
+            0
+        );
+    }
+
+    initTimers = () => {
+        if (this.timeout || this.interval) {
+            return;
+        }
+
+        this.timeout = setTimeout(() => {
+            this.setState({ calendarDate: new Date() });
+            this.interval = setInterval(
+                () => this.setState({ calendarDate: new Date() }),
+                300000, // each 5 minutes
+            );
+        }, this.closest5Minutes().getTime() - Date.now());
+    };
+
+    clearTimers = () => {
+        this.timeout && clearTimeout(this.timeout);
+        this.interval && clearInterval(this.interval);
+        this.timeout = this.interval = null;
+    };
 
     customSlot = (date) => {
         if (date < Date.now()) {
@@ -57,14 +105,18 @@ export class TimeTable extends Component {
             startAccessor="start"
             endAccessor="end"
             resources={resources}
-            scrollToTime={new Date()}
+            defaultDate={this.state.calendarDate}
+            scrollToTime={this.state.calendarDate}
+            components={{
+                toolbar: CalendarToolbar(this.initTimers, this.clearTimers),
+            }}
             step={15}
             timeslots={4}
-            views={['day', 'agenda']}
+            views={[BigCalendar.Views.DAY]}
             slotPropGetter={this.customSlot}
             onSelecting={this.onSelect}
-            min={new Date(0,0,0,9,0)}
-            max={new Date(0,0,0,20,0)}
+            // min={new Date(0,0,0,9,0)}
+            // max={new Date(0,0,0,20,0)}
             selectable
         />;
     }
