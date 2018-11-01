@@ -113,12 +113,25 @@ div.rbc-day-slot {
       background-color: #fff;
       cursor: pointer;
       &:hover {
-        background-color: #777;
+        background-color: #333;
       }
       &.disabled {
         cursor: default;
         background-color: #eee;
       }
+    }
+  }
+}
+.rbc-toolbar {
+  button:disabled.today {
+    display: none;
+  }
+  .rbc-toolbar-label {
+    margin-left: -140px;
+  }
+  &.no-today {
+    .rbc-toolbar-label {
+      margin-left: -65px;
     }
   }
 }
@@ -145,9 +158,6 @@ div.rbc-day-slot {
   min-height: 4em;
   max-height: 4em;
   height: 4em;
-}
-.rbc-toolbar-label {
-  margin-left: -140px;
 }
 .rbc-current-time-indicator {
   display: none;

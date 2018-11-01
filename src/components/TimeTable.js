@@ -25,7 +25,7 @@ import { CalendarToolbar } from '.';
 /* these constants below are the things which should be obtained
 from a service and/or from a user choice (like car type, washing type) */
 const WORKING_TIME_START = '08:00';
-const WORKING_TIME_END = '21:00';
+const WORKING_TIME_END = '19:00';
 const TIME_SLOT_DURATION = 45;
 /* end of config constants */
 
@@ -35,7 +35,7 @@ moment.locale(navigator.userLanguage || navigator.language);
 
 export class TimeTable extends Component {
     state = {
-        calendarDate: new Date(),
+        calendarDate: this.closestSlot(),
         // scrollTime: new Date(),
     };
     timeout = null;
@@ -63,6 +63,33 @@ export class TimeTable extends Component {
         );
     }
 
+    closestSlot(date = new Date()) {
+        const start = this.toTime(date, WORKING_TIME_START);
+        const endTime = this.toTime(date, WORKING_TIME_END);
+        const current = new Date();
+        let startTime = moment(start);
+
+        while (true) {
+            const next = moment(startTime).add(TIME_SLOT_DURATION, 'minutes');
+
+            if (next > endTime) {
+                const tomorrow = moment(start).add(1, 'days').toDate();
+
+                Object.assign(this.state || {}, {
+                    calendarDate: tomorrow,
+                });
+
+                return tomorrow;
+            }
+
+            if (next.toDate() > current) {
+                return next.toDate();
+            }
+
+            startTime = next;
+        }
+    }
+
     initTimers = () => {
         if (this.timeout || this.interval) {
             return;
@@ -82,22 +109,6 @@ export class TimeTable extends Component {
         this.interval && clearInterval(this.interval);
         this.timeout = this.interval = null;
     };
-
-    closestSlot(date = new Date()) {
-        let startTime = moment(this.toTime(date, WORKING_TIME_START));
-        const endTime = this.toTime(date, WORKING_TIME_END);
-        const current = new Date();
-
-        while (true) {
-            const next = moment(startTime).add(TIME_SLOT_DURATION, 'minutes');
-
-            if (next.toDate() > current || next > endTime) {
-                return next.toDate();
-            }
-
-            startTime = next;
-        }
-    }
 
     onDateChange = (date, dir) => {
         const newDate = moment(date).add(dir, 'days');
@@ -189,6 +200,7 @@ export class TimeTable extends Component {
                     this.initTimers,
                     this.clearTimers,
                     this.onDateChange,
+                    this.closestSlot().getTime() > new Date().getTime(),
                 ),
             }}
             step={TIME_SLOT_DURATION}

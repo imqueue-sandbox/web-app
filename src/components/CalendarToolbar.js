@@ -20,7 +20,12 @@ import moment from 'moment';
 import Button from '@material-ui/core/Button';
 import { AuthStorage } from '../common';
 
-export const CalendarToolbar = (onToday, onOther, onChange) => (toolbar) => {
+export const CalendarToolbar = (
+    onToday,
+    onOther,
+    onChange,
+    noToday = false,
+) => (toolbar) => {
     const isAdmin = (AuthStorage.user() || {}).isAdmin;
     const hasPast = () => {
         if (isAdmin) {
@@ -28,7 +33,11 @@ export const CalendarToolbar = (onToday, onOther, onChange) => (toolbar) => {
         }
 
         const toolDate = moment(toolbar.date).format('YYYYMMDD') | 0;
-        const current = moment().format('YYYYMMDD') | 0;
+        let current = moment().format('YYYYMMDD') | 0;
+
+        if (noToday) {
+            current = moment().add(1, 'days').format('YYYYMMDD') | 0;
+        }
 
         return current < toolDate;
     };
@@ -58,12 +67,25 @@ export const CalendarToolbar = (onToday, onOther, onChange) => (toolbar) => {
         onChange && onChange(new Date(), 0);
     };
 
-    return <div className="rbc-toolbar">
+    const cantGoBack = !hasPast();
+
+    return <div className={`rbc-toolbar${noToday ? ' no-today' : ''}`}>
         <span className="rbc-toolbar-group">
-            <Button size="small" onClick={goToBack} disabled={!hasPast()}>
+            <Button
+                size="small"
+                onClick={goToBack}
+                disabled={cantGoBack}
+            >
                 &larr;
             </Button>
-            <Button size="small" onClick={goToCurrent}>today</Button>
+            <Button
+                size="small"
+                onClick={goToCurrent}
+                disabled={noToday}
+                className="today"
+            >
+                Today
+            </Button>
             <Button size="small" onClick={goToNext}>&rarr;</Button>
         </span>
         <span className="rbc-toolbar-label">
