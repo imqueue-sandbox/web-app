@@ -24,7 +24,6 @@ import { CalendarToolbar } from '.';
 
 moment.locale(navigator.userLanguage || navigator.language);
 
-
 export class TimeTable extends Component {
     state = {
         calendarDate: new Date(),
