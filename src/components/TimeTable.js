@@ -22,11 +22,15 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { AuthStorage } from '../common';
 import { CalendarToolbar } from '.';
 
+const WORKING_TIME_START = '09:00';
+const WORKING_TIME_END = '20:00';
+
 moment.locale(navigator.userLanguage || navigator.language);
 
 export class TimeTable extends Component {
     state = {
         calendarDate: new Date(),
+        scrollTime: new Date(),
     };
     timeout = null;
     interval = null;
@@ -73,8 +77,21 @@ export class TimeTable extends Component {
         this.timeout = this.interval = null;
     };
 
+    onDateChange = (date, dir) => {
+        const newDate = moment(date).add(dir, 'days').format('YYYYMMDD') | 0;
+        const current = moment().format('YYYYMMDD') | 0;
+
+        this.setState({
+            scrollTime: newDate === current ? new Date()
+                : this.toTime(date, WORKING_TIME_START),
+        });
+    };
+
     customSlot = (date) => {
-        if (date < Date.now()) {
+        const start = this.toTime(date, WORKING_TIME_START);
+        const end = this.toTime(date, WORKING_TIME_END);
+
+        if (date < Date.now() || date < start || date >= end) {
             return { className: 'disabled' };
         }
 
@@ -84,6 +101,19 @@ export class TimeTable extends Component {
     onSelect = (event) => {
         return event.start >= Date.now();
     };
+
+    toTime(date, timeStr) {
+        const [hours, minutes] = timeStr.split(':');
+
+        return new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+            hours | 0,
+            minutes | 0,
+            0,
+        );
+    }
 
     render() {
         const isAdmin = (AuthStorage.user() || {}).isAdmin;
@@ -105,17 +135,19 @@ export class TimeTable extends Component {
             endAccessor="end"
             resources={resources}
             defaultDate={this.state.calendarDate}
-            scrollToTime={this.state.calendarDate}
+            scrollToTime={this.state.scrollTime}
             components={{
-                toolbar: CalendarToolbar(this.initTimers, this.clearTimers),
+                toolbar: CalendarToolbar(
+                    this.initTimers,
+                    this.clearTimers,
+                    this.onDateChange,
+                ),
             }}
             step={15}
             timeslots={4}
             views={[BigCalendar.Views.DAY]}
             slotPropGetter={this.customSlot}
             onSelecting={this.onSelect}
-            // min={new Date(0,0,0,9,0)}
-            // max={new Date(0,0,0,20,0)}
             selectable
         />;
     }

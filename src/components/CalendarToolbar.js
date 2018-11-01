@@ -20,7 +20,7 @@ import moment from 'moment';
 import Button from '@material-ui/core/Button';
 import { AuthStorage } from '../common';
 
-export const CalendarToolbar = (onToday, onOther) => (toolbar) => {
+export const CalendarToolbar = (onToday, onOther, onChange) => (toolbar) => {
     const isAdmin = (AuthStorage.user() || {}).isAdmin;
     const hasPast = () => {
         if (isAdmin) {
@@ -43,16 +43,19 @@ export const CalendarToolbar = (onToday, onOther) => (toolbar) => {
     const goToBack = () => {
         toolbar.onNavigate('PREV');
         isToday(-1) ? onToday && onToday() : onOther && onOther();
+        onChange && onChange(toolbar.date, -1);
     };
 
     const goToNext = () => {
         toolbar.onNavigate('NEXT');
         isToday(1) ? onToday && onToday() : onOther && onOther();
+        onChange && onChange(toolbar.date, 1);
     };
 
     const goToCurrent = () => {
         toolbar.onNavigate('TODAY');
         onToday && onToday();
+        onChange && onChange(new Date(), 0);
     };
 
     return <div className="rbc-toolbar">
