@@ -22,8 +22,12 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { AuthStorage } from '../common';
 import { CalendarToolbar } from '.';
 
+/* these constants below are the things which should be obtained
+from a service and/or from a user choice (like car type, washing type) */
 const WORKING_TIME_START = '08:00';
 const WORKING_TIME_END = '21:00';
+const TIME_SLOT_DURATION = 45;
+/* end of config constants */
 
 moment.locale(navigator.userLanguage || navigator.language);
 
@@ -156,7 +160,7 @@ export class TimeTable extends Component {
                     this.onDateChange,
                 ),
             }}
-            step={45}
+            step={TIME_SLOT_DURATION}
             timeslots={1}
             views={[BigCalendar.Views.DAY]}
             slotPropGetter={this.customSlot}
