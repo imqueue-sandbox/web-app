@@ -29,6 +29,8 @@ const WORKING_TIME_END = '21:00';
 const TIME_SLOT_DURATION = 45;
 /* end of config constants */
 
+const RX_DISABLED = /\bdisabled\b/;
+
 moment.locale(navigator.userLanguage || navigator.language);
 
 export class TimeTable extends Component {
@@ -91,11 +93,21 @@ export class TimeTable extends Component {
         });
     };
 
+    onSlotSelect = date => event => {
+        if (RX_DISABLED.test((event.currentTarget || {}).className || '')) {
+            return false;
+        }
+
+        console.log(`Slot clicked: ${date}`);
+    };
+
     customSlot = (date) => {
         const start = this.toTime(date, WORKING_TIME_START);
         const end = this.toTime(date, WORKING_TIME_END);
         const now = new Date();
-        const props = {};
+        const props = {
+            onClick: this.onSlotSelect(date),
+        };
 
         if (date < now || date < start || date >= end) {
             Object.assign(props, {
