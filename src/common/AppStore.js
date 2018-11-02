@@ -28,6 +28,24 @@ class Storage extends EventEmitter {
      */
 
     /**
+     * Removes given handler from a given event listeners.
+     * If handler is not provided will remove all listeners from a specified
+     * event.
+     *
+     * @param {string} event
+     * @param {Function} [handler]
+     */
+    off(event, handler) {
+        if (handler) {
+            this.removeListener(event, handler);
+        }
+
+        else {
+            this.removeAllListeners(event);
+        }
+    }
+
+    /**
      * Stores given json data under a given key
      *
      * @param {string} key
@@ -35,8 +53,9 @@ class Storage extends EventEmitter {
      * @return {*}
      */
     set(key, jsonData) {
+        const retVal = localStorage.setItem(key, JSON.stringify(jsonData));
         this.emit('change', key, jsonData, localStorage.getItem(key));
-        return localStorage.setItem(key, JSON.stringify(jsonData));
+        return retVal;
     }
 
     /**
