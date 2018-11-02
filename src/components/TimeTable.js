@@ -18,10 +18,13 @@
 import React, { Component } from 'react';
 import BigCalendar  from 'react-big-calendar';
 import PropTypes from 'prop-types';
+import {createFragmentContainer} from 'react-relay';
 import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { AppStore, AUTH_KEY } from '../common';
 import { CalendarToolbar } from '.';
+import { AppStore, AUTH_KEY } from '../common';
+import { OptionsFragment } from '../relay/queries/fragments';
+
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 /* these constants below are the things which should be obtained
 from a service and/or from a user choice (like car type, washing type) */
@@ -187,24 +190,22 @@ export class TimeTable extends Component {
     }
 
     render() {
+        const { data, timeSlotDuration } = this.props;
+        const { boxes } = data;
         const isAdmin = ((AppStore.get(AUTH_KEY) || {}).user || {}).isAdmin;
         const localizer = BigCalendar.momentLocalizer(moment);
-        const timeSlotDuration = this.props.timeSlotDuration ||
-            TIME_SLOT_DURATION;
         const events = [];
-        const resources = isAdmin ? [
-            { id: '1', title: 'Box #1' },
-            { id: '2', title: 'Box #2' },
-            { id: '3', title: 'Box #3' },
-            { id: '4', title: 'Box #4' },
-        ] : [{ id: 'user-box', title: 'Choose desirable washing time'}];
+        const resources = isAdmin
+            ? new Array(boxes).fill({}).map((_, i) =>
+                Object.assign(_, { id: i, title: `Box #${i + 1}` }))
+            : [{ id: 'user-box', title: 'Choose desirable washing time'}];
         const start = this.toTime(this.state.calendarDate, WORKING_TIME_START);
         const now = this.closestSlot();
         const min = start > now ? start : now;
         const max = this.toTime(
             this.state.calendarDate,
             WORKING_TIME_END,
-            -1 * (this.props.timeSlotDuration || TIME_SLOT_DURATION));
+            -1 * (timeSlotDuration || TIME_SLOT_DURATION));
 
         return <BigCalendar
             className="time-table"
@@ -223,7 +224,7 @@ export class TimeTable extends Component {
                     max < new Date().getTime(),
                 ),
             }}
-            step={timeSlotDuration}
+            step={timeSlotDuration || TIME_SLOT_DURATION}
             timeslots={1}
             views={[BigCalendar.Views.DAY]}
             slotPropGetter={this.customSlot}
@@ -233,3 +234,5 @@ export class TimeTable extends Component {
         />;
     }
 }
+
+TimeTable = createFragmentContainer(TimeTable, OptionsFragment);

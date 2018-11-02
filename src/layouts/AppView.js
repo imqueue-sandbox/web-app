@@ -209,7 +209,7 @@ class AppView extends Component {
                         exact
                         path="/"
                         component={() => <TimeTable
-                            data={data}
+                            data={data.options}
                             timeSlotDuration={this.state.timeSlotDuration}
                         />}
                     />
