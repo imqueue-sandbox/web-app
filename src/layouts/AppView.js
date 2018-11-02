@@ -37,7 +37,12 @@ import Waves from '@material-ui/icons/Waves';
 import Divider from '@material-ui/core/Divider';
 
 import { logout } from '../relay/mutations';
-import { TimeTable, Profile, WashingTypeSelector } from '../components';
+import {
+    TimeTable,
+    Profile,
+    WashingTypeSelector,
+    CarSelector
+} from '../components';
 import { Gravatar } from '../components/Gravatar';
 import { AppStore, AUTH_KEY, SLOT_KEY } from '../common';
 import { AppRootQuery, withQuery } from '../relay/queries';
@@ -195,6 +200,8 @@ class AppView extends Component {
                         <Divider/>
                     </List>
                     {this.is('') && <WashingTypeSelector data={data.options}/>}
+                    {this.is('') && <Divider/>}
+                    {this.is('') && <CarSelector data={data.user} />}
                 </Drawer>
                 <main className={classes.content}>
                     <div className={classes.toolbar}/>

@@ -31,7 +31,7 @@ const style = theme => (Object.assign(SelectStyle(theme), {
     },
 }));
 
-class CarModelSelect extends Component {
+export class CarModelSelect extends Component {
     static propTypes = {
         classes: PropTypes.object.isRequired,
         disabled: PropTypes.bool.isRequired,
@@ -85,5 +85,3 @@ class CarModelSelect extends Component {
 
 CarModelSelect = withStyles(style)(CarModelSelect);
 CarModelSelect = withQuery(CarModelsQuery)(CarModelSelect);
-
-export { CarModelSelect };

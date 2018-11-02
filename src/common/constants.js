@@ -18,4 +18,4 @@
 export const AUTH_KEY = 'AuthUser';
 export const SLOT_KEY = 'TimeSlotDuration';
 export const PROFILE_PANEL_KEY = 'ProfilePanel';
-
+export const CAR_KEY = 'UserCarId';

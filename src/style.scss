@@ -132,6 +132,15 @@ ul[role=menu] {
     }
   }
 }
+.rbc-time-gutter {
+  .rbc-timeslot-group {
+    .rbc-time-slot {
+      &:hover {
+        background-color: #fff !important;
+      }
+    }
+  }
+}
 .rbc-toolbar {
   button:disabled.today {
     display: none;

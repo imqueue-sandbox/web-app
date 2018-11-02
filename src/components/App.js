@@ -51,7 +51,7 @@ export class App extends Component {
             childProps={{route: this.props.location.pathname}}
             vars={{
                 withUser: true,
-                withUserCars: this.is('profile'),
+                withUserCars: true,
                 withOptions: this.is('')
             }}
             onError={error =>

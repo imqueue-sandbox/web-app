@@ -15,6 +15,102 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export class CarSelector {
+import React, { Component } from 'react';
+import { createFragmentContainer } from 'react-relay';
+import { PropTypes } from 'prop-types';
+import classNames from 'classnames';
+import { Link } from 'react-router-dom';
+import { withStyles } from '@material-ui/core';
+import TextField from "@material-ui/core/TextField/TextField";
+import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+import { SelectStyle} from '../Form';
+import { UserCarsFragment } from '../../relay/queries/fragments';
+import {AppStore, CAR_KEY, carType, PROFILE_PANEL_KEY} from '../../common';
 
+const style = theme => (Object.assign(SelectStyle(theme), {
+    carsSelector: {
+        marginTop: 40,
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    carType: {
+        color: '#777',
+        fontSize: '.8em',
+    },
+    userCars: {
+        margin: '0 25px',
+    },
+    garageLink: {
+        marginLeft: 30,
+        fontSize: '.9em',
+    },
+}));
+
+export class CarSelector extends Component {
+    static propTypes = {
+        classes: PropTypes.object.isRequired,
+        onChange: PropTypes.func,
+    };
+
+    constructor(props) {
+        super(props);
+
+        if (!this.state.carId) {
+            Object.assign(this.state, {
+                carId: ((props.data.cars || [])[0] || {}).id || '',
+            });
+        }
+    }
+
+    state = {
+        carId: AppStore.get(CAR_KEY) || '',
+    };
+
+    select = (event) => {
+        AppStore.set(CAR_KEY, event.target.value);
+        this.setState({ carId: event.target.value });
+    };
+
+    openGarage = () => {
+        AppStore.set(PROFILE_PANEL_KEY, 2);
+        return true;
+    };
+
+    render() {
+        const { classes, data } = this.props;
+        const { cars } = data;
+
+        return <div className={classes.carsSelector}>{cars && cars.length
+            ? <TextField
+                id="car-model"
+                select={true}
+                label="Choose your car to wash"
+                className={classNames(classes.textField, classes.userCars)}
+                value={this.state.carId}
+                onChange={this.select}
+                SelectProps={{MenuProps: {
+                    className: classes.menu,
+                }}}
+                margin="normal"
+            >
+                {cars.map(car => {
+                    return <MenuItem key={car.id} value={car.id}>
+                        {car.make}&nbsp;<em>{car.model}</em>
+                        <span className={classes.carType}>
+                            &nbsp;&ndash;&nbsp;{carType(car.type)}
+                        </span>
+                    </MenuItem>
+                })}
+            </TextField>
+            : <Link
+                to="/profile"
+                className={classes.garageLink}
+                onClick={this.openGarage}
+            >Add cars to your garage first</Link>}
+        </div>;
+    }
 }
+
+CarSelector = withStyles(style)(CarSelector);
+CarSelector = createFragmentContainer(CarSelector, UserCarsFragment);
