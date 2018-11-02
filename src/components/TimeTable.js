@@ -18,11 +18,15 @@
 import React, { Component } from 'react';
 import BigCalendar  from 'react-big-calendar';
 import PropTypes from 'prop-types';
-import {createFragmentContainer} from 'react-relay';
+import { createFragmentContainer, createRefetchContainer } from 'react-relay';
 import moment from 'moment';
 import { CalendarToolbar } from '.';
 import { AppStore, AUTH_KEY } from '../common';
-import { OptionsFragment } from '../relay/queries/fragments';
+import {
+    OptionsFragment,
+    ReservationsQuery,
+    ReservationsFragment,
+} from '../relay/queries';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
@@ -40,6 +44,8 @@ moment.locale(navigator.userLanguage || navigator.language);
 export class TimeTable extends Component {
     static propTypes = {
         timeSlotDuration: PropTypes.number,
+        reservations: PropTypes.arrayOf(PropTypes.object).isRequired,
+        options: PropTypes.object.isRequired,
     };
 
     state = {
@@ -190,8 +196,8 @@ export class TimeTable extends Component {
     }
 
     render() {
-        const { data, timeSlotDuration } = this.props;
-        const { boxes } = data;
+        const { /*reservations,*/ options, timeSlotDuration } = this.props;
+        const { boxes } = options;
         const isAdmin = ((AppStore.get(AUTH_KEY) || {}).user || {}).isAdmin;
         const localizer = BigCalendar.momentLocalizer(moment);
         const events = [];
@@ -235,4 +241,12 @@ export class TimeTable extends Component {
     }
 }
 
-TimeTable = createFragmentContainer(TimeTable, OptionsFragment);
+TimeTable = createRefetchContainer(
+    TimeTable,
+    ReservationsFragment,
+    ReservationsQuery,
+);
+TimeTable = createFragmentContainer(
+    TimeTable,
+    OptionsFragment,
+);

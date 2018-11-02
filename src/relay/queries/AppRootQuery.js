@@ -22,12 +22,16 @@ query AppRootQuery(
     $withUser: Boolean!
     $withUserCars: Boolean!
     $withOptions: Boolean!
+    $withReservations: Boolean!
 ) {
     user {
         ...CurrentUser @include(if: $withUser)
         ...UserCars @include(if: $withUserCars)
     }
     options @include(if: $withOptions) {
-        ...Options
+        ...Options_options
+    }
+    reservations @include(if: $withReservations) {
+        ...Reservations_reservations
     }
 }`;

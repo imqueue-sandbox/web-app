@@ -194,6 +194,23 @@ type Query {
 
   """Fetches all options defined for reservation time table"""
   options: Options
+
+  """Fetches single reservation record by its identifier"""
+  reservation(
+    """Reservation record identifier"""
+    id: String!
+  ): Reservation
+
+  """
+  Fetches list of reservations for a given date. If date is not provided, will
+  fetch reservation list for a current day (today)
+  """
+  reservations(
+    """
+    Date string in ISO format. Time can be provided, but won't be taken into account.
+    """
+    date: String
+  ): [Reservation]
 }
 
 input removeCarInput {
@@ -206,6 +223,27 @@ type removeCarPayload {
   """Updated user data object"""
   user: User
   clientMutationId: String
+}
+
+"""Reservation record entity"""
+type Reservation implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """User's car associated with reservation"""
+  car: Car
+
+  """User associated with reservation"""
+  user: User
+
+  """Reservation type, which was initially requested"""
+  type: String
+
+  """Reservation start time (ISO date/time string)"""
+  start: String
+
+  """Reservation end time (ISO date/time string)"""
+  end: String
 }
 
 input updateUserInput {

@@ -15,7 +15,13 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-export * from './CurrentUser';
-export * from './UserCars';
-export * from './Options';
-export * from './Reservations';
+import { graphql } from 'react-relay';
+
+export const ReservationsQuery = graphql`
+query ReservationsQuery(
+    $date: String!
+) {
+    reservations(date: $date) {
+        ...Reservations_reservations
+    }
+}`;

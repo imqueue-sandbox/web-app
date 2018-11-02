@@ -18,7 +18,7 @@
 import { graphql } from 'react-relay';
 
 export const OptionsFragment = graphql`
-fragment Options on Options {
+fragment Options_options on Options {
     id
     start
     end

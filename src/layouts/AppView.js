@@ -199,7 +199,9 @@ class AppView extends Component {
                         </ListItemLink>
                         <Divider/>
                     </List>
-                    {this.is('') && <WashingTypeSelector data={data.options}/>}
+                    {this.is('') &&
+                        <WashingTypeSelector options={data.options}/>
+                    }
                     {this.is('') && <Divider/>}
                     {this.is('') && <CarSelector data={data.user} />}
                 </Drawer>
@@ -209,7 +211,8 @@ class AppView extends Component {
                         exact
                         path="/"
                         component={() => <TimeTable
-                            data={data.options}
+                            reservations={data.reservations}
+                            options={data.options}
                             timeSlotDuration={this.state.timeSlotDuration}
                         />}
                     />

@@ -79,7 +79,7 @@ export class CarSelector extends Component {
 
     render() {
         const { classes, data } = this.props;
-        const { cars } = data;
+        const { cars } = data || { cars: [] };
 
         return <div className={classes.carsSelector}>{cars && cars.length
             ? <TextField

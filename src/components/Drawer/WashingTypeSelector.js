@@ -42,7 +42,7 @@ const styles = theme => ({
 export class WashingTypeSelector extends Component {
     static propTypes = {
         classes: PropTypes.object.isRequired,
-        data: PropTypes.object.isRequired,
+        options: PropTypes.object.isRequired,
     };
 
     state = {
@@ -55,8 +55,8 @@ export class WashingTypeSelector extends Component {
     }
 
     render() {
-        const { classes, data } = this.props;
-        const baseTime = (data || {}).baseTime || [];
+        const { classes, options } = this.props;
+        const baseTime = (options || {}).baseTime || [];
 
         return <div className={classes.root}>
             <FormControl component="fieldset" className={classes.formControl}>

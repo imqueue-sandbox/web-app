@@ -52,7 +52,8 @@ export class App extends Component {
             vars={{
                 withUser: true,
                 withUserCars: true,
-                withOptions: this.is('')
+                withOptions: this.is(''),
+                withReservations: this.is(''),
             }}
             onError={error =>
                 <AppMessage
