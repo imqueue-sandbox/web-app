@@ -18,7 +18,6 @@
 import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -35,7 +34,6 @@ import Timelapse from '@material-ui/icons/Timelapse';
 import Avatar from '@material-ui/core/Avatar';
 import Waves from '@material-ui/icons/Waves';
 import Divider from '@material-ui/core/Divider';
-
 import { logout } from '../relay/mutations';
 import {
     TimeTable,
@@ -211,7 +209,7 @@ class AppView extends Component {
                         exact
                         path="/"
                         component={() => <TimeTable
-                            reservations={data.reservations}
+                            data={data}
                             options={data.options}
                             timeSlotDuration={this.state.timeSlotDuration}
                         />}

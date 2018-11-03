@@ -18,10 +18,6 @@
 import { graphql } from 'react-relay';
 
 export const ReservationsQuery = graphql`
-query ReservationsQuery(
-    $date: String!
-) {
-    reservations(date: $date) {
-        ...Reservations_reservations
-    }
+query ReservationsQuery($date: String!) {
+    ...Reservations @arguments(date: $date)
 }`;

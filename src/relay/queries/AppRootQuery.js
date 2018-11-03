@@ -31,7 +31,5 @@ query AppRootQuery(
     options @include(if: $withOptions) {
         ...Options_options
     }
-    reservations @include(if: $withReservations) {
-        ...Reservations_reservations
-    }
+    ...Reservations @include(if: $withReservations) 
 }`;

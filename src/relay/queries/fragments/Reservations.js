@@ -18,21 +18,25 @@
 import { graphql } from 'react-relay';
 
 export const ReservationsFragment = graphql`
-fragment Reservations_reservations on Reservation @relay(plural: true) {
-    id
-    car {
-      id
-      make
-      model
-      type
-      regNumber
+fragment Reservations on Query @argumentDefinitions(
+    date: { type: "String" }
+) {
+    reservations(date: $date) {
+        id
+        car {
+            id
+            make
+            model
+            type
+            regNumber
+        }
+        user {
+            id
+            firstName
+            lastName
+        }
+        type
+        start
+        end
     }
-    user {
-      id
-      firstName
-      lastName
-    }
-    type
-    start
-    end
 }`;
