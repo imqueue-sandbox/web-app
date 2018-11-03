@@ -35,15 +35,31 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 moment.locale(navigator.userLanguage || navigator.language);
 
+const ReservationsType = PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    start: PropTypes.string.isRequired,
+    end: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    car: PropTypes.object,
+    user: PropTypes.object,
+}));
+
 export class TimeTable extends Component {
+    /**
+     * Reservations will be either bypassed as a reservations property or
+     * through a relay data fragment from a root query.
+     */
     static propTypes = {
         timeSlotDuration: PropTypes.number,
-        data: PropTypes.object.isRequired,
+        data: PropTypes.shape({ reservations: ReservationsType }).isRequired,
+        reservations: ReservationsType,
         options: PropTypes.object.isRequired,
+        onChange: PropTypes.func,
     };
 
     state = {
         currentDate: new Date(),
+        reservations: null,
     };
     timeout = null;
     interval = null;
@@ -70,12 +86,17 @@ export class TimeTable extends Component {
 
     refetch = () => {
         const date = moment().add(1, 'days').toDate();
-        this.props.relay.refetch(
-            { date },
-            { date },
-            () => this.forceUpdate(), // console.log(this.props),
-            { force: true },
-        );
+        /**
+         * When refetch is done we need to pass-back reservations data to a
+         * parent component to make sure it will be able to pass it back
+         * during this component re-rendering and make sure re-fetched data
+         * will not be override by initial data from a root query fragment
+         * which is required only on initial page load.
+         */
+        this.props.relay.refetch({ date }, null, () => {
+            const { onChange } = this.props;
+            onChange(this.props.data.reservations);
+        }, { force: true });
     }
 
     componentDidMount() {
@@ -98,10 +119,13 @@ export class TimeTable extends Component {
     }
 
     render() {
+        const reservations = this.props.reservations ||
+            this.props.data.reservations;
+
         return (<div>
             <button onClick={this.refetch}>refetch</button>
             <pre>options: {JSON.stringify(this.props.options, null, 2)}</pre>
-            <pre>data: {JSON.stringify(this.props.data.reservations, null, 2)}</pre>
+            <pre>data: {JSON.stringify(reservations, null, 2)}</pre>
         </div>);
     }
 }

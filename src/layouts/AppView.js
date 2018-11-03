@@ -106,6 +106,7 @@ function ListItemLink(props) {
 class AppView extends Component {
     state = {
         timeSlotDuration: AppStore.get(SLOT_KEY) | 0,
+        reservations: null,
     };
 
     componentDidMount() {
@@ -132,6 +133,18 @@ class AppView extends Component {
         const token = (AppStore.get(AUTH_KEY) || {}).token;
         token && logout(token);
         AppStore.del(AUTH_KEY);
+    };
+
+    /**
+     * This handler is required to handle reservations re-fetch to be saved
+     * for time-table re-rendering without data loss, because in other case
+     * it will be re-written by initial data obtained from a root query
+     * fragment, which was cached during the initial page load.
+     *
+     * @param {object} reservations
+     */
+    timeTableChange = (reservations) => {
+        this.setState({ reservations });
     };
 
     render() {
@@ -212,6 +225,8 @@ class AppView extends Component {
                             data={data}
                             options={data.options}
                             timeSlotDuration={this.state.timeSlotDuration}
+                            onChange={this.timeTableChange}
+                            reservations={this.state.reservations}
                         />}
                     />
                     <Route
