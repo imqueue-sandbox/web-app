@@ -57,7 +57,10 @@ const styles = () => ({
 /**
  * Login page layout component - displays login form
  */
-class Login extends PureComponent {
+export class Login extends PureComponent {
+    static propTypes = {
+        fullScreen: PropTypes.bool,
+    };
 
     state = {
         email: '',
@@ -425,10 +428,4 @@ class Login extends PureComponent {
     }
 }
 
-Login.propTypes = {
-    fullScreen: PropTypes.bool,
-};
-
 Login = withMobileDialog()(withStyles(styles)(Login));
-
-export { Login };

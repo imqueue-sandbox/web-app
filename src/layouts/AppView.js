@@ -94,7 +94,12 @@ function ListItemLink(props) {
     return <ListItem button component="a" {...props} />;
 }
 
-class AppView extends Component {
+export class AppView extends Component {
+    static propTypes = {
+        classes: PropTypes.object.isRequired,
+        route: PropTypes.string.isRequired,
+    };
+
     state = {
         timeSlotDuration: AppStore.get(SLOT_KEY) | 0,
         reservations: null,
@@ -210,11 +215,4 @@ class AppView extends Component {
     }
 }
 
-AppView.propTypes = {
-    classes: PropTypes.object.isRequired,
-    route: PropTypes.string.isRequired,
-};
-
 AppView = withQuery(AppRootQuery)(withStyles(styles)(AppView));
-
-export { AppView };
