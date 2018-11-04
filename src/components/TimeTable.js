@@ -20,17 +20,13 @@ import PropTypes from 'prop-types';
 import {
     createFragmentContainer,
     createRefetchContainer,
-    // fetchQuery,
 } from 'react-relay';
 import moment from 'moment';
-// import { AppStore, AUTH_KEY } from '../common';
-// import environment from '../relay/Environment';
 import {
     OptionsFragment,
     ReservationsQuery,
     ReservationsFragment,
 } from '../relay/queries';
-
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 moment.locale(navigator.userLanguage || navigator.language);
