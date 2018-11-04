@@ -26,3 +26,4 @@ export * from './UserCars';
 export * from './CalendarToolbar';
 export * from './TimeTable';
 export * from './Profile';
+export * from './AuthUser';

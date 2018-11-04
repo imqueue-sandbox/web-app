@@ -27,22 +27,18 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import ExitToApp from '@material-ui/icons/ExitToApp';
 import Person from '@material-ui/icons/Person';
 import Timelapse from '@material-ui/icons/Timelapse';
-import Avatar from '@material-ui/core/Avatar';
 import Waves from '@material-ui/icons/Waves';
 import Divider from '@material-ui/core/Divider';
-import { logout } from '../relay/mutations';
 import {
     TimeTable,
     Profile,
     WashingTypeSelector,
-    CarSelector
+    CarSelector,
+    AuthUser,
 } from '../components';
-import { Gravatar } from '../components/Gravatar';
-import { AppStore, AUTH_KEY, SLOT_KEY } from '../common';
+import { AppStore, SLOT_KEY } from '../common';
 import { AppRootQuery, withQuery } from '../relay/queries';
 
 const drawerWidth = 350;
@@ -70,11 +66,6 @@ const styles = theme => ({
             color: '#fff !important',
             textDecoration: 'none',
         },
-    },
-    appBarUser: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center'
     },
     drawerPaper: {
         position: 'relative',
@@ -129,12 +120,6 @@ class AppView extends Component {
         }
     }
 
-    logout = () => {
-        const token = (AppStore.get(AUTH_KEY) || {}).token;
-        token && logout(token);
-        AppStore.del(AUTH_KEY);
-    };
-
     /**
      * This handler is required to handle reservations re-fetch to be saved
      * for time-table re-rendering without data loss, because in other case
@@ -149,9 +134,6 @@ class AppView extends Component {
 
     render() {
         const { classes, data } = this.props;
-        const user = (AppStore.get(AUTH_KEY) || {}).user;
-        const letters = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
-        const fullName = `${user.firstName} ${user.lastName}`;
 
         return (
             <div className={classes.root}>
@@ -172,18 +154,7 @@ class AppView extends Component {
                             Car Wash Tutorial App
                             <sup className={classes.supTitle}>for @imqueue</sup>
                         </Typography>
-                        <div className={classes.appBarUser}>
-                            <span>
-                                {`Hello, ${fullName}`}
-                            </span>
-                            {user.email
-                                ? <Gravatar user={user} size={40} />
-                                : <Avatar>{letters}</Avatar>
-                            }
-                            <IconButton onClick={this.logout}>
-                                <ExitToApp/>
-                            </IconButton>
-                        </div>
+                        <AuthUser data={data.user} />
                     </Toolbar>
                 </AppBar>
                 <Drawer
