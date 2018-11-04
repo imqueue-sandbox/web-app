@@ -113,8 +113,8 @@ export class TimeTable extends Component {
             now.getMonth(),
             now.getDate(),
             now.getHours(),
-            now.getMinutes() + 1,
-            0
+            now.getMinutes(),
+            60, 0,
         );
     }
 
@@ -135,7 +135,4 @@ TimeTable = createRefetchContainer(
     ReservationsFragment,
     ReservationsQuery,
 );
-TimeTable = createFragmentContainer(
-    TimeTable,
-    OptionsFragment,
-);
+TimeTable = createFragmentContainer(TimeTable, OptionsFragment);
