@@ -17,11 +17,10 @@
  */
 import moment from 'moment';
 import React from 'react';
+import { HOUR_HEIGHT } from '../../common';
 
 export const CalendarEvent = (timeStart, step) => props => {
-    const slotHeight = (document.querySelector(
-        '.rbc-day-slot .rbc-time-slot'
-    ) || {}).offsetHeight || 16;
+    const slotHeight = HOUR_HEIGHT / (60 / step);
     const eventHeight = (
         props.event.end.getTime() -
         props.event.start.getTime()

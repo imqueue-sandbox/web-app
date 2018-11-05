@@ -138,21 +138,24 @@ export class TimeTable extends Component {
         );
     }
 
-    render() {
-        const events = (this.props.reservations ||
+    buildEvents() {
+        return (this.props.reservations ||
             this.props.data.reservations).map(item => ({
             title: `Customer: ${item.user.firstName} ${item.user.lastName}
                 Car: ${item.car.regNumber}, ${item.car.make} ${item.car.model}`,
             start: moment.parseZone(item.start).toDate(),
             end: moment.parseZone(item.end).toDate(),
         }));
+    }
+
+    render() {
+        const events = this.buildEvents();
         const localizer = BigCalendar.momentLocalizer(moment);
         const min = this.toTime(this.props.options.start);
         const max = this.toTime(this.props.options.end);
         const step = 15;
         const slots = 60 / step;
-        const timeBlock = this.props.timeSlotDuration;
-        const { car } = this.props;
+        const { car, timeSlotDuration } = this.props;
         // const resources = [
         //     { id: 1, title: 'Box #1' },
         //     { id: 2, title: 'Box #2' },
@@ -171,7 +174,8 @@ export class TimeTable extends Component {
             components={{
                 toolbar: CalendarToolbar(this.onDateChange),
                 eventWrapper: CalendarEvent(min, step),
-                timeSlotWrapper: CalendarTimeSlot(events, step, timeBlock, car),
+                timeSlotWrapper: CalendarTimeSlot(
+                    events, step, timeSlotDuration, car),
             }}
             step={step}
             timeslots={slots}

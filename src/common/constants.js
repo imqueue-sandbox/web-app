@@ -15,6 +15,7 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+export const HOUR_HEIGHT = 60;
 export const AUTH_KEY = 'AuthUser';
 export const SLOT_KEY = 'TimeSlotDuration';
 export const PROFILE_PANEL_KEY = 'ProfilePanel';

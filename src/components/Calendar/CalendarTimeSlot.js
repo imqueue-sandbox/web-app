@@ -17,7 +17,7 @@
  */
 import moment from 'moment';
 import React from 'react';
-import {AppStore, AUTH_KEY} from '../../common';
+import { AppStore, AUTH_KEY, HOUR_HEIGHT } from '../../common';
 
 const RX_TIME_COLUMN = /\brbc-time-gutter\b/;
 
@@ -42,6 +42,8 @@ export const CalendarTimeSlot = (events, step, timeBlock, car) => props => {
     const start = moment(props.value).format('HH:mm');
     const end = moment(props.value.getTime() + timeBlock * 60 * 1000)
         .format('HH:mm');
+    const slotHeight = HOUR_HEIGHT / (60 / step);
+    const eventHeight = timeBlock / step;
 
     if (!user) {
         return null;
@@ -52,22 +54,19 @@ export const CalendarTimeSlot = (events, step, timeBlock, car) => props => {
     }
 
     return <div
-        style={{
-            height: '16px',
-        }}
-        className={
-            'rbc-time-slot' + (busy(props.value, events)
-                    ? ' disabled'
-                    : ''
-            )}>{canReserve(events, props.value, timeBlock) &&
-    <div style={{
-        height: (timeBlock / step) * 16 + 'px',
-        pointerEvents: 'none',
-    }}
-         className="rbc-reservation"
-    >
-        <b>{start}&nbsp;&ndash;&nbsp;{end}&nbsp;&nbsp;</b>
-        <em>{car.make} {car.model}, {car.regNumber}</em>
-    </div>}
-    </div>;
+        style={{ height: '16px' }}
+        className={'rbc-time-slot' + (busy(props.value, events)
+            ? ' disabled' : '')}
+        >{canReserve(events, props.value, timeBlock) &&
+            <div
+                className="rbc-reservation"
+                style={{
+                    height: eventHeight * slotHeight + 'px',
+                    pointerEvents: 'none',
+                }}
+            >
+                <b>{start}&nbsp;&ndash;&nbsp;{end}&nbsp;&nbsp;</b>
+                <em>{car.make} {car.model}, {car.regNumber}</em>
+            </div>}
+        </div>;
 };
