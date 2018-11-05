@@ -30,6 +30,7 @@ import {
     ReservationsFragment,
 } from '../relay/queries';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { AppStore, AUTH_KEY } from "../common";
 
 moment.locale(navigator.userLanguage || navigator.language);
 
@@ -42,10 +43,6 @@ const ReservationsType = PropTypes.arrayOf(PropTypes.shape({
     user: PropTypes.object,
 }));
 
-// const CalendarEventSelector = () => {
-//
-// };
-
 const RX_TIME_COLUMN = /\brbc-time-gutter\b/;
 
 function busy(date, events) {
@@ -55,9 +52,24 @@ function busy(date, events) {
     ));
 }
 
+function canReserve(events, time, timeBlock) {
+    return !!events.find(event =>
+        event.start.getTime() - time.getTime() >= timeBlock * 60 * 1000 ||
+        event.end.getTime() <= time.getTime()
+    );
+}
+
 const CalendarTimeSlot = (events, step, timeBlock, car) => props => {
     const className = (props.children._owner.return.stateNode ||
         { className: '' }).className;
+    const user = (AppStore.get(AUTH_KEY) || { user: null }).user;
+    const start = moment(props.value).format('HH:mm');
+    const end = moment(props.value.getTime() + timeBlock * 60 * 1000)
+        .format('HH:mm');
+
+    if (!user) {
+        return null;
+    }
 
     if (RX_TIME_COLUMN.test(className)) {
         return props.children;
@@ -71,14 +83,17 @@ const CalendarTimeSlot = (events, step, timeBlock, car) => props => {
             'rbc-time-slot' + (busy(props.value, events)
             ? ' disabled'
             : ''
-    )}>
-        <div
-            style={{
+    )}>{canReserve(events, props.value, timeBlock) &&
+        <div style={{
                 height: (timeBlock / step) * 16 + 'px',
                 pointerEvents: 'none',
             }}
             className="rbc-reservation"
-        ><em>{car.regNumber} {car.make} {car.model}</em></div>
+        >
+            <b>{start}&nbsp;&ndash;&nbsp;{end}&nbsp;&nbsp;</b>
+            <em>Customer: {user.firstName} {user.lastName};&nbsp;</em>
+            <em>Car: {car.regNumber}, {car.make} {car.model}</em>
+        </div>}
     </div>;
 };
 
@@ -98,7 +113,6 @@ const CalendarEvent = (timeStart, step) => props => {
     return <div title="This time has been already reserved..." style={{
         position: 'relative',
         pointerEvents: 'all',
-        // border: '1px dotted red',
         padding: '5px 10px',
         top: eventTop * slotHeight + 'px',
         height: eventHeight * slotHeight + 'px',
