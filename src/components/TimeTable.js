@@ -55,7 +55,7 @@ function busy(date, events) {
     ));
 }
 
-const CalendarTimeSlot = events => props => {
+const CalendarTimeSlot = (events, step, timeBlock) => props => {
     const className = (props.children._owner.return.stateNode ||
         { className: '' }).className;
 
@@ -63,11 +63,23 @@ const CalendarTimeSlot = events => props => {
         return props.children;
     }
 
-    else {
-        return <div className={'rbc-time-slot' + (
-            busy(props.value, events) ? ' disabled' : ''
-        )}></div>;
-    }
+    return <div
+        style={{
+            height: '16px',
+        }}
+        className={
+            'rbc-time-slot' + (busy(props.value, events)
+            ? ' disabled'
+            : ''
+    )}>
+        <div
+            style={{
+                height: (timeBlock / step) * 16 + 'px',
+                pointerEvents: 'none',
+            }}
+            className="rbc-reservation"
+        ></div>
+    </div>;
 };
 
 const CalendarEvent = (timeStart, step) => props => {
@@ -83,7 +95,7 @@ const CalendarEvent = (timeStart, step) => props => {
         timeStart.getTime()
     ) / (1000 * 60 * step);
 
-    return <div title="This time is reserved..." style={{
+    return <div title="This time has been already reserved..." style={{
         position: 'relative',
         pointerEvents: 'all',
         // border: '1px dotted red',
@@ -204,6 +216,7 @@ export class TimeTable extends Component {
         const max = this.toTime(this.props.options.end);
         const step = 15;
         const slots = 60 / step;
+        const timeBlock = this.props.timeSlotDuration;
         // const resources = [
         //     { id: 1, title: 'Box #1' },
         //     { id: 2, title: 'Box #2' },
@@ -222,7 +235,7 @@ export class TimeTable extends Component {
             components={{
                 toolbar: CalendarToolbar(this.onDateChange),
                 eventWrapper: CalendarEvent(min, step),
-                timeSlotWrapper: CalendarTimeSlot(events),
+                timeSlotWrapper: CalendarTimeSlot(events, step, timeBlock),
             }}
             step={step}
             timeslots={slots}

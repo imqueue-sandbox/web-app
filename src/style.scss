@@ -118,8 +118,21 @@ ul[role=menu] {
   .rbc-time-slot {
     background-color: #fff !important;
     cursor: pointer;
+    z-index: 0;
+    visibility: visible !important;
+    .rbc-reservation {
+      background-color: #393 !important;
+      opacity: .5;
+      display: none;
+      top: 0;
+      left: 0;
+    }
     &:hover {
-      background-color: #333 !important;
+      //background-color: #333 !important;
+      z-index: 1;
+      .rbc-reservation {
+        display: block;
+      }
     }
     &.disabled {
       cursor: default !important;
