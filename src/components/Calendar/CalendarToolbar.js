@@ -18,7 +18,7 @@
 import React from 'react';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
-import { AppStore, AUTH_KEY } from '../common';
+import { AppStore, AUTH_KEY } from '../../common/index';
 
 export const CalendarToolbar = onChange => toolbar => {
     const isAdmin = ((AppStore.get(AUTH_KEY) || {}).user || {}).isAdmin;

@@ -23,14 +23,17 @@ import {
 } from 'react-relay';
 import moment from 'moment';
 import BigCalendar  from 'react-big-calendar';
-import { CalendarToolbar } from '.';
+import {
+    CalendarToolbar,
+    CalendarTimeSlot,
+    CalendarEvent,
+} from './Calendar';
 import {
     OptionsFragment,
     ReservationsQuery,
     ReservationsFragment,
 } from '../relay/queries';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { AppStore, AUTH_KEY } from "../common";
 
 moment.locale(navigator.userLanguage || navigator.language);
 
@@ -42,89 +45,6 @@ const ReservationsType = PropTypes.arrayOf(PropTypes.shape({
     car: PropTypes.object,
     user: PropTypes.object,
 }));
-
-const RX_TIME_COLUMN = /\brbc-time-gutter\b/;
-
-function busy(date, events) {
-    return !!events.find(event => (
-        event.start.getTime() <= date.getTime() &&
-        event.end.getTime() > date.getTime()
-    ));
-}
-
-function canReserve(events, time, timeBlock) {
-    return !events.length || !!events.find(event =>
-        event.start.getTime() - time.getTime() >= timeBlock * 60 * 1000 ||
-        event.end.getTime() <= time.getTime()
-    );
-}
-
-const CalendarTimeSlot = (events, step, timeBlock, car) => props => {
-    const className = (props.children._owner.return.stateNode ||
-        { className: '' }).className;
-    const user = (AppStore.get(AUTH_KEY) || { user: null }).user;
-    const start = moment(props.value).format('HH:mm');
-    const end = moment(props.value.getTime() + timeBlock * 60 * 1000)
-        .format('HH:mm');
-
-    if (!user) {
-        return null;
-    }
-
-    if (RX_TIME_COLUMN.test(className)) {
-        return props.children;
-    }
-
-    return <div
-        style={{
-            height: '16px',
-        }}
-        className={
-            'rbc-time-slot' + (busy(props.value, events)
-            ? ' disabled'
-            : ''
-    )}>{canReserve(events, props.value, timeBlock) &&
-        <div style={{
-                height: (timeBlock / step) * 16 + 'px',
-                pointerEvents: 'none',
-            }}
-            className="rbc-reservation"
-        >
-            <b>{start}&nbsp;&ndash;&nbsp;{end}&nbsp;&nbsp;</b>
-            <em>Customer: {user.firstName} {user.lastName};&nbsp;</em>
-            <em>Car: {car.regNumber}, {car.make} {car.model}</em>
-        </div>}
-    </div>;
-};
-
-const CalendarEvent = (timeStart, step) => props => {
-    const slotHeight = (document.querySelector(
-        '.rbc-day-slot .rbc-time-slot'
-    ) || {}).offsetHeight || 16;
-    const eventHeight = (
-        props.event.end.getTime() -
-        props.event.start.getTime()
-    ) / (1000 * 60 * step);
-    const eventTop = (
-        props.event.start.getTime() -
-        timeStart.getTime()
-    ) / (1000 * 60 * step);
-
-    return <div title="This time has been already reserved..." style={{
-        position: 'relative',
-        pointerEvents: 'all',
-        padding: '5px 10px',
-        top: eventTop * slotHeight + 'px',
-        height: eventHeight * slotHeight + 'px',
-        left: props.style.left + 'px',
-        color: '#666',
-    }}>
-        <b>{moment(props.event.start).format('HH:mm')}&nbsp;&ndash;&nbsp;{
-        moment(props.event.end).format('HH:mm')}&nbsp;&nbsp;</b>
-        {props.event.title.split(/\r?\n/).map((line, key) =>
-            <em key={key}>{line + (key ? '' : ';')}</em>)}
-    </div>;
-};
 
 export class TimeTable extends Component {
     /**
