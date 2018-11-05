@@ -49,6 +49,35 @@ const ReservationsType = PropTypes.arrayOf(PropTypes.shape({
 //     return props.children;
 // };
 
+const CalendarEvent = timeStart => props => {
+    const slotHeight = (document.querySelector(
+        '.rbc-day-slot .rbc-time-slot'
+    ) || {}).offsetHeight || 16;
+    const eventHeight = (
+        props.event.end.getTime() -
+        props.event.start.getTime()
+    ) / (1000 * 60 * 15);
+    const eventTop = (
+        props.event.start.getTime() -
+        timeStart.getTime()
+    ) / (1000 * 60 * 15);
+
+    return <div style={{
+        position: 'relative',
+        // border: '1px dotted red',
+        padding: '5px 10px',
+        top: eventTop * slotHeight + 'px',
+        height: eventHeight * slotHeight + 'px',
+        left: props.style.left + 'px',
+        color: '#666',
+    }}>
+        <b>{moment(props.event.start).format('HH:mm')}&nbsp;&ndash;&nbsp;{
+        moment(props.event.end).format('HH:mm')}&nbsp;&nbsp;</b>
+        {props.event.title.split(/\r?\n/).map((line, key) =>
+            <i key={key}>{line + (key ? '' : ';')}</i>)}
+    </div>;
+};
+
 export class TimeTable extends Component {
     /**
      * Reservations will be either bypassed as a reservations property or
@@ -162,7 +191,8 @@ export class TimeTable extends Component {
         // const today = new Date();
         const events = (this.props.reservations ||
             this.props.data.reservations).map(item => ({
-            title: `${item.car.regNumber}: ${item.car.make} ${item.car.model}`,
+            title: `Customer: ${item.user.firstName} ${item.user.lastName}
+                Car: ${item.car.regNumber}, ${item.car.make} ${item.car.model}`,
             start: moment.parseZone(item.start).toDate(),
             end: moment.parseZone(item.end).toDate(),
         }));
@@ -180,7 +210,7 @@ export class TimeTable extends Component {
         return <BigCalendar
             className="time-table"
             localizer={localizer}
-            events={[]}
+            events={events}
             defaultView="day"
             startAccessor="start"
             endAccessor="end"
@@ -188,6 +218,7 @@ export class TimeTable extends Component {
             defaultDate={this.props.currentDate || new Date()}
             components={{
                 toolbar: CalendarToolbar(this.onDateChange),
+                eventWrapper: CalendarEvent(min),
                 // timeSlotWrapper: CalendarTimeSlot(events),
             }}
             slotPropGetter={this.slotPropGetter(events)}
