@@ -35,15 +35,21 @@ function canReserve(events, time, timeBlock) {
     );
 }
 
-export const CalendarTimeSlot = (events, step, timeBlock, car) => props => {
+export const CalendarTimeSlot = (
+    events,
+    step,
+    timeBlock,
+    car,
+    onSelect,
+) => props => {
     const className = (props.children._owner.return.stateNode ||
         { className: '' }).className;
     const user = (AppStore.get(AUTH_KEY) || { user: null }).user;
-    const start = moment(props.value).format('HH:mm');
-    const end = moment(props.value.getTime() + timeBlock * 60 * 1000)
-        .format('HH:mm');
+    const start = moment(props.value);
+    const end = moment(props.value.getTime() + timeBlock * 60 * 1000);
     const slotHeight = HOUR_HEIGHT / (60 / step);
     const eventHeight = timeBlock / step;
+    const isSelectable = canReserve(events, props.value, timeBlock);
 
     if (!user) {
         return null;
@@ -57,7 +63,11 @@ export const CalendarTimeSlot = (events, step, timeBlock, car) => props => {
         style={{ height: '16px' }}
         className={'rbc-time-slot' + (busy(props.value, events)
             ? ' disabled' : '')}
-        >{canReserve(events, props.value, timeBlock) &&
+        onClick={() => isSelectable && onSelect && onSelect(
+            start.toDate(),
+            end.toDate(),
+        )}
+        >{isSelectable &&
             <div
                 className="rbc-reservation"
                 style={{
@@ -65,7 +75,10 @@ export const CalendarTimeSlot = (events, step, timeBlock, car) => props => {
                     pointerEvents: 'none',
                 }}
             >
-                <b>{start}&nbsp;&ndash;&nbsp;{end}&nbsp;&nbsp;</b>
+                <strong>
+                    {start.format('HH:mm')}&nbsp;&ndash;&nbsp;
+                    {end.format('HH:mm')}&nbsp;&nbsp;
+                </strong>
                 <em>{car.make} {car.model}, {car.regNumber}</em>
             </div>}
         </div>;

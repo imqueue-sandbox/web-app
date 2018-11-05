@@ -109,6 +109,10 @@ export class TimeTable extends Component {
         }, { force: true });
     }
 
+    reserve = (start, end) => {
+        console.log(start, end);
+    };
+
     componentDidMount() {
         this.initTimers();
     }
@@ -175,7 +179,7 @@ export class TimeTable extends Component {
                 toolbar: CalendarToolbar(this.onDateChange),
                 eventWrapper: CalendarEvent(min, step),
                 timeSlotWrapper: CalendarTimeSlot(
-                    events, step, timeSlotDuration, car),
+                    events, step, timeSlotDuration, car, this.reserve),
             }}
             step={step}
             timeslots={slots}

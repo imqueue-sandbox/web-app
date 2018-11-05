@@ -39,8 +39,10 @@ export const CalendarEvent = (timeStart, step) => props => {
         left: props.style.left + 'px',
         color: '#666',
     }}>
-        <b>{moment(props.event.start).format('HH:mm')}&nbsp;&ndash;&nbsp;{
-            moment(props.event.end).format('HH:mm')}&nbsp;&nbsp;</b>
+        <strong>
+            {moment(props.event.start).format('HH:mm')}&nbsp;&ndash;&nbsp;
+            {moment(props.event.end).format('HH:mm')}&nbsp;&nbsp;
+        </strong>
         {props.event.title.split(/\r?\n/).map((line, key) =>
             <em key={key}>{line + (key ? '' : ';')}</em>)}
     </div>;
