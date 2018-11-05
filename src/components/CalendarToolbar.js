@@ -20,12 +20,7 @@ import moment from 'moment';
 import Button from '@material-ui/core/Button';
 import { AppStore, AUTH_KEY } from '../common';
 
-export const CalendarToolbar = (
-    onToday,
-    onOther,
-    onChange,
-    noToday = false,
-) => (toolbar) => {
+export const CalendarToolbar = onChange => toolbar => {
     const isAdmin = ((AppStore.get(AUTH_KEY) || {}).user || {}).isAdmin;
     const hasPast = () => {
         if (isAdmin) {
@@ -35,41 +30,24 @@ export const CalendarToolbar = (
         const toolDate = moment(toolbar.date).format('YYYYMMDD') | 0;
         let current = moment().format('YYYYMMDD') | 0;
 
-        if (noToday) {
-            current = moment().add(1, 'days').format('YYYYMMDD') | 0;
-        }
-
         return current < toolDate;
     };
 
-    const isToday = (diff) => {
-        const toolDate = (moment(toolbar.date).format('YYYYMMDD') | 0) + diff;
-        const current = moment().format('YYYYMMDD') | 0;
-
-        return toolDate === current;
-    };
-
     const goToBack = () => {
-        toolbar.onNavigate('PREV');
-        isToday(-1) ? onToday && onToday() : onOther && onOther();
-        onChange && onChange(toolbar.date, -1);
+        onChange && onChange(moment(toolbar.date).add(-1, 'days').toDate());
     };
 
     const goToNext = () => {
-        toolbar.onNavigate('NEXT');
-        isToday(1) ? onToday && onToday() : onOther && onOther();
-        onChange && onChange(toolbar.date, 1);
+        onChange && onChange(moment(toolbar.date).add(1, 'days').toDate());
     };
 
     const goToCurrent = () => {
-        toolbar.onNavigate('TODAY');
-        onToday && onToday();
-        onChange && onChange(new Date(), 0);
+        onChange && onChange(new Date());
     };
 
     const cantGoBack = !hasPast();
 
-    return <div className={`rbc-toolbar${noToday ? ' no-today' : ''}`}>
+    return <div className={`rbc-toolbar`}>
         <span className="rbc-toolbar-group">
             <Button
                 size="small"
@@ -81,8 +59,7 @@ export const CalendarToolbar = (
             <Button
                 size="small"
                 onClick={goToCurrent}
-                disabled={noToday || cantGoBack}
-                className={`today${!noToday && cantGoBack ? '-disabled' : ''}`}
+                disabled={cantGoBack}
             >
                 Today
             </Button>

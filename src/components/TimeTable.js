@@ -53,10 +53,10 @@ export class TimeTable extends Component {
         reservations: ReservationsType,
         options: PropTypes.object.isRequired,
         onChange: PropTypes.func,
+        currentDate: PropTypes.instanceOf(Date),
     };
 
     state = {
-        currentDate: new Date(),
         reservations: null,
     };
     timeout = null;
@@ -82,12 +82,15 @@ export class TimeTable extends Component {
         this.timeout = this.interval = null;
     };
 
-    onDateChange = (date, dir) => {
+    onDateChange = date => {
+        const given = moment(date).format('YYYYMMDD') | 0;
+        const current = moment().format('YYYYMMDD') | 0;
 
+        this[`${given === current ? 'init' : 'clear'}Timers`]();
+        this.refetch(date);
     };
 
-    refetch = () => {
-        const date = moment().add(1, 'days').toDate();
+    refetch = date => {
         /**
          * When refetch is done we need to pass-back reservations data to a
          * parent component to make sure it will be able to pass it back
@@ -97,7 +100,10 @@ export class TimeTable extends Component {
          */
         this.props.relay.refetch({ date }, null, () => {
             const { onChange } = this.props;
-            onChange(this.props.data.reservations);
+            onChange && onChange(
+                this.props.data.reservations,
+                date,
+            );
         }, { force: true });
     }
 
@@ -121,13 +127,31 @@ export class TimeTable extends Component {
     }
 
     render() {
+        // const today = new Date();
         const events = (this.props.reservations ||
             this.props.data.reservations).map(item => ({
             title: `${item.car.regNumber}: ${item.car.make} ${item.car.model}`,
-            start: item.start,
-            end: item.end,
+            start: moment.parseZone(item.start).toDate(),
+            end: moment.parseZone(item.end).toDate(),
         }));
         const localizer = BigCalendar.momentLocalizer(moment);
+        // const min = new Date(
+        //     today.getFullYear(),
+        //     today.getMonth(),
+        //     today.getDate(),
+        //     8,0,0,
+        // )
+        // const max = new Date(
+        //     today.getFullYear(),
+        //     today.getMonth(),
+        //     today.getDate(),
+        //     20,0,0,
+        // );
+        // const resources = [
+        //     { id: 1, title: 'Box #1' },
+        //     { id: 2, title: 'Box #2' },
+        //     { id: 3, title: 'Box #3' },
+        // ];
         console.log(events);
         // const events = [];
 
@@ -139,11 +163,9 @@ export class TimeTable extends Component {
             startAccessor="start"
             endAccessor="end"
             // resources={resources}
-            defaultDate={this.state.currentDate}
+            defaultDate={this.props.currentDate || new Date()}
             components={{
                 toolbar: CalendarToolbar(
-                    this.initTimers,
-                    this.clearTimers,
                     this.onDateChange,
                     // max < new Date().getTime(),
                 ),

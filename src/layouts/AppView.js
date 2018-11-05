@@ -103,6 +103,7 @@ export class AppView extends Component {
     state = {
         timeSlotDuration: AppStore.get(SLOT_KEY) | 0,
         reservations: null,
+        currentDate: new Date(),
     };
 
     componentDidMount() {
@@ -133,8 +134,8 @@ export class AppView extends Component {
      *
      * @param {object} reservations
      */
-    timeTableChange = (reservations) => {
-        this.setState({ reservations });
+    timeTableChange = (reservations, currentDate) => {
+        this.setState({ currentDate, reservations });
     };
 
     render() {
@@ -203,6 +204,7 @@ export class AppView extends Component {
                             timeSlotDuration={this.state.timeSlotDuration}
                             onChange={this.timeTableChange}
                             reservations={this.state.reservations}
+                            currentDate={this.state.currentDate}
                         />}
                     />
                     <Route
