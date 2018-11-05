@@ -42,6 +42,13 @@ const ReservationsType = PropTypes.arrayOf(PropTypes.shape({
     user: PropTypes.object,
 }));
 
+// const CalendarTimeSlot = events => props => {
+//     if (busy(props.value, events)) {
+//     }
+//     // return <div className="rbc-time-slot"></div>
+//     return props.children;
+// };
+
 export class TimeTable extends Component {
     /**
      * Reservations will be either bypassed as a reservations property or
@@ -104,6 +111,24 @@ export class TimeTable extends Component {
         }, { force: true });
     }
 
+    busy(date, events) {
+        return !!events.find(event => (
+            event.start.getTime() <= date.getTime() &&
+            event.end.getTime() > date.getTime()
+        ));
+    }
+
+    slotPropGetter = events => (date) => {
+        const props = {};
+        const isBusy = this.busy(date, events);
+
+        if (isBusy) {
+            props.className = "disabled";
+        }
+
+        return props;
+    }
+
     componentDidMount() {
         this.initTimers();
     }
@@ -123,6 +148,16 @@ export class TimeTable extends Component {
         );
     }
 
+    toTime(time, date = this.props.currentDate || new Date()) {
+        const [hours, minutes] = time.split(':').map(item => item | 0);
+        return new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+            hours, minutes, 0, 0,
+        );
+    }
+
     render() {
         // const today = new Date();
         const events = (this.props.reservations ||
@@ -132,47 +167,36 @@ export class TimeTable extends Component {
             end: moment.parseZone(item.end).toDate(),
         }));
         const localizer = BigCalendar.momentLocalizer(moment);
-        // const min = new Date(
-        //     today.getFullYear(),
-        //     today.getMonth(),
-        //     today.getDate(),
-        //     8,0,0,
-        // )
-        // const max = new Date(
-        //     today.getFullYear(),
-        //     today.getMonth(),
-        //     today.getDate(),
-        //     20,0,0,
-        // );
+        const min = this.toTime(this.props.options.start);
+        const max = this.toTime(this.props.options.end);
         // const resources = [
         //     { id: 1, title: 'Box #1' },
         //     { id: 2, title: 'Box #2' },
         //     { id: 3, title: 'Box #3' },
         // ];
-        console.log(events);
+        // console.log(events);
         // const events = [];
 
         return <BigCalendar
             className="time-table"
             localizer={localizer}
-            events={events}
+            events={[]}
             defaultView="day"
             startAccessor="start"
             endAccessor="end"
             // resources={resources}
             defaultDate={this.props.currentDate || new Date()}
             components={{
-                toolbar: CalendarToolbar(
-                    this.onDateChange,
-                    // max < new Date().getTime(),
-                ),
+                toolbar: CalendarToolbar(this.onDateChange),
+                // timeSlotWrapper: CalendarTimeSlot(events),
             }}
+            slotPropGetter={this.slotPropGetter(events)}
             step={15}
             timeslots={4}
             views={[BigCalendar.Views.DAY]}
             // slotPropGetter={this.customSlot}
-            // min={min}
-            // max={max}
+            min={min}
+            max={max}
         />;
 
         // return (<div>

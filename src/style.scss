@@ -122,8 +122,9 @@ ul[role=menu] {
       background-color: #333 !important;
     }
     &.disabled {
-      cursor: default;
-      background-color: #eee;
+      cursor: default !important;
+      background-color: #ddd !important;
+      border-top: 1px solid #ddd !important;
     }
     &.active {
       transition:
