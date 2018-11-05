@@ -22,6 +22,8 @@ import {
     createRefetchContainer,
 } from 'react-relay';
 import moment from 'moment';
+import BigCalendar  from 'react-big-calendar';
+import { CalendarToolbar } from '.';
 import {
     OptionsFragment,
     ReservationsQuery,
@@ -80,6 +82,10 @@ export class TimeTable extends Component {
         this.timeout = this.interval = null;
     };
 
+    onDateChange = (date, dir) => {
+
+    };
+
     refetch = () => {
         const date = moment().add(1, 'days').toDate();
         /**
@@ -115,14 +121,46 @@ export class TimeTable extends Component {
     }
 
     render() {
-        const reservations = this.props.reservations ||
-            this.props.data.reservations;
+        const events = (this.props.reservations ||
+            this.props.data.reservations).map(item => ({
+            title: `${item.car.regNumber}: ${item.car.make} ${item.car.model}`,
+            start: item.start,
+            end: item.end,
+        }));
+        const localizer = BigCalendar.momentLocalizer(moment);
+        console.log(events);
+        // const events = [];
 
-        return (<div>
-            <button onClick={this.refetch}>refetch</button>
-            <pre>options: {JSON.stringify(this.props.options, null, 2)}</pre>
-            <pre>data: {JSON.stringify(reservations, null, 2)}</pre>
-        </div>);
+        return <BigCalendar
+            className="time-table"
+            localizer={localizer}
+            events={events}
+            defaultView="day"
+            startAccessor="start"
+            endAccessor="end"
+            // resources={resources}
+            defaultDate={this.state.currentDate}
+            components={{
+                toolbar: CalendarToolbar(
+                    this.initTimers,
+                    this.clearTimers,
+                    this.onDateChange,
+                    // max < new Date().getTime(),
+                ),
+            }}
+            step={15}
+            timeslots={4}
+            views={[BigCalendar.Views.DAY]}
+            // slotPropGetter={this.customSlot}
+            // min={min}
+            // max={max}
+        />;
+
+        // return (<div>
+        //     <button onClick={this.refetch}>refetch</button>
+        //     <pre>options: {JSON.stringify(this.props.options, null, 2)}</pre>
+        //     <pre>data: {JSON.stringify(reservations, null, 2)}</pre>
+        // </div>);
     }
 }
 
