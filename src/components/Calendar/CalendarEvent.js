@@ -39,6 +39,10 @@ export const CalendarEvent = (timeStart, step) => props => {
         left: props.style.left + 'px',
         color: '#666',
         zIndex: 2,
+        // borderTop: '1px solid #fff',
+        borderBottom: '1px solid #fff',
+        width: '100%',
+        marginRight: '-20px',
     }}>
         <strong>
             {moment(props.event.start).format('HH:mm')}&nbsp;&ndash;&nbsp;

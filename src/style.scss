@@ -116,6 +116,11 @@ ul[role=menu] {
 .rbc-day-bg {
   background-color: #fff !important;
 }
+.rbc-day-slot {
+  .rbc-events-container {
+    margin-right: 0;
+  }
+}
 .rbc-timeslot-group {
   .rbc-time-slot {
     background-color: #fff !important;

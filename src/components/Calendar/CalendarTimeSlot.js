@@ -33,11 +33,11 @@ function canReserve(max, events, time, timeBlock) {
     const end = time.getTime() + timeBlock * 60000;
     const maxTime = max.getTime();
 
-    return !events.some(event => {
+    return end <= maxTime && !events.some(event => {
         const eventStart = event.start.getTime();
         const eventEnd = event.end.getTime();
 
-        return (end > eventStart && eventEnd > start) || end > maxTime;
+        return (end > eventStart && eventEnd > start);
     });
 }
 
