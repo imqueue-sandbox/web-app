@@ -42,28 +42,50 @@ const ReservationsType = PropTypes.arrayOf(PropTypes.shape({
     user: PropTypes.object,
 }));
 
-// const CalendarTimeSlot = events => props => {
-//     if (busy(props.value, events)) {
-//     }
-//     // return <div className="rbc-time-slot"></div>
-//     return props.children;
+// const CalendarEventSelector = () => {
+//
 // };
 
-const CalendarEvent = timeStart => props => {
+const RX_TIME_COLUMN = /\brbc-time-gutter\b/;
+
+function busy(date, events) {
+    return !!events.find(event => (
+        event.start.getTime() <= date.getTime() &&
+        event.end.getTime() > date.getTime()
+    ));
+}
+
+const CalendarTimeSlot = events => props => {
+    const className = (props.children._owner.return.stateNode ||
+        { className: '' }).className;
+
+    if (RX_TIME_COLUMN.test(className)) {
+        return props.children;
+    }
+
+    else {
+        return <div className={'rbc-time-slot' + (
+            busy(props.value, events) ? ' disabled' : ''
+        )}></div>;
+    }
+};
+
+const CalendarEvent = (timeStart, step) => props => {
     const slotHeight = (document.querySelector(
         '.rbc-day-slot .rbc-time-slot'
     ) || {}).offsetHeight || 16;
     const eventHeight = (
         props.event.end.getTime() -
         props.event.start.getTime()
-    ) / (1000 * 60 * 15);
+    ) / (1000 * 60 * step);
     const eventTop = (
         props.event.start.getTime() -
         timeStart.getTime()
-    ) / (1000 * 60 * 15);
+    ) / (1000 * 60 * step);
 
-    return <div style={{
+    return <div title="This time is reserved..." style={{
         position: 'relative',
+        pointerEvents: 'all',
         // border: '1px dotted red',
         padding: '5px 10px',
         top: eventTop * slotHeight + 'px',
@@ -140,24 +162,6 @@ export class TimeTable extends Component {
         }, { force: true });
     }
 
-    busy(date, events) {
-        return !!events.find(event => (
-            event.start.getTime() <= date.getTime() &&
-            event.end.getTime() > date.getTime()
-        ));
-    }
-
-    slotPropGetter = events => (date) => {
-        const props = {};
-        const isBusy = this.busy(date, events);
-
-        if (isBusy) {
-            props.className = "disabled";
-        }
-
-        return props;
-    }
-
     componentDidMount() {
         this.initTimers();
     }
@@ -188,7 +192,6 @@ export class TimeTable extends Component {
     }
 
     render() {
-        // const today = new Date();
         const events = (this.props.reservations ||
             this.props.data.reservations).map(item => ({
             title: `Customer: ${item.user.firstName} ${item.user.lastName}
@@ -199,13 +202,13 @@ export class TimeTable extends Component {
         const localizer = BigCalendar.momentLocalizer(moment);
         const min = this.toTime(this.props.options.start);
         const max = this.toTime(this.props.options.end);
+        const step = 15;
+        const slots = 60 / step;
         // const resources = [
         //     { id: 1, title: 'Box #1' },
         //     { id: 2, title: 'Box #2' },
         //     { id: 3, title: 'Box #3' },
         // ];
-        // console.log(events);
-        // const events = [];
 
         return <BigCalendar
             className="time-table"
@@ -218,23 +221,15 @@ export class TimeTable extends Component {
             defaultDate={this.props.currentDate || new Date()}
             components={{
                 toolbar: CalendarToolbar(this.onDateChange),
-                eventWrapper: CalendarEvent(min),
-                // timeSlotWrapper: CalendarTimeSlot(events),
+                eventWrapper: CalendarEvent(min, step),
+                timeSlotWrapper: CalendarTimeSlot(events),
             }}
-            slotPropGetter={this.slotPropGetter(events)}
-            step={15}
-            timeslots={4}
+            step={step}
+            timeslots={slots}
             views={[BigCalendar.Views.DAY]}
-            // slotPropGetter={this.customSlot}
             min={min}
             max={max}
         />;
-
-        // return (<div>
-        //     <button onClick={this.refetch}>refetch</button>
-        //     <pre>options: {JSON.stringify(this.props.options, null, 2)}</pre>
-        //     <pre>data: {JSON.stringify(reservations, null, 2)}</pre>
-        // </div>);
     }
 }
 
