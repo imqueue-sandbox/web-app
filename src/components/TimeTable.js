@@ -100,10 +100,7 @@ export class TimeTable extends Component {
          */
         this.props.relay.refetch({ date }, null, () => {
             const { onChange } = this.props;
-            onChange && onChange(
-                this.props.data.reservations,
-                date,
-            );
+            onChange && onChange(this.props.data.reservations, date);
         }, { force: true });
     }
 
