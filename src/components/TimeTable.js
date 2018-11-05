@@ -123,7 +123,7 @@ export class TimeTable extends Component {
         }, ({ reservations }) => {
             const { onChange } = this.props;
 
-            onChange && onChange(reservations, this.state.currentDate);
+            onChange && onChange(reservations, start);
         }, err => {
             console.error('reserve error:', err);
         });
