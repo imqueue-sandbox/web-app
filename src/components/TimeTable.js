@@ -53,7 +53,7 @@ function busy(date, events) {
 }
 
 function canReserve(events, time, timeBlock) {
-    return !!events.find(event =>
+    return !events.length || !!events.find(event =>
         event.start.getTime() - time.getTime() >= timeBlock * 60 * 1000 ||
         event.end.getTime() <= time.getTime()
     );
@@ -257,7 +257,7 @@ export class TimeTable extends Component {
             timeslots={slots}
             views={[BigCalendar.Views.DAY]}
             min={min}
-            max={max}
+            max={new Date(max.getTime() - 3600 * 1000)}
         />;
     }
 }
