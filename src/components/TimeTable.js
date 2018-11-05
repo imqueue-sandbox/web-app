@@ -33,7 +33,9 @@ import {
     ReservationsQuery,
     ReservationsFragment,
 } from '../relay/queries';
+import { reserve } from '../relay/mutations';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import {AppStore, CAR_KEY, SLOT_KEY} from "../common";
 
 moment.locale(navigator.userLanguage || navigator.language);
 
@@ -110,7 +112,21 @@ export class TimeTable extends Component {
     }
 
     reserve = (start, end) => {
-        console.log(start, end);
+        const car = AppStore.get(CAR_KEY);
+        const duration = [start, end];
+
+        reserve({
+            carId: car.id,
+            type: this.props.options.baseTime.find(item =>
+                Number(item.duration) === Number(AppStore.get(SLOT_KEY))).key,
+            duration,
+        }, ({ reservations }) => {
+            const { onChange } = this.props;
+
+            onChange && onChange(reservations, this.state.currentDate);
+        }, err => {
+            console.error('reserve error:', err);
+        });
     };
 
     componentDidMount() {

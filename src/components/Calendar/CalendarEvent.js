@@ -31,7 +31,7 @@ export const CalendarEvent = (timeStart, step) => props => {
     ) / (1000 * 60 * step);
 
     return <div title="This time has been already reserved..." style={{
-        position: 'relative',
+        position: 'absolute',
         pointerEvents: 'all',
         padding: '5px 10px',
         top: eventTop * slotHeight + 'px',
