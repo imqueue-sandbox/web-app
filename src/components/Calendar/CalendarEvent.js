@@ -32,12 +32,13 @@ export const CalendarEvent = (timeStart, step) => props => {
 
     return <div title="This time has been already reserved..." style={{
         position: 'absolute',
-        pointerEvents: 'all',
+        pointerEvents: 'auto',
         padding: '5px 10px',
         top: eventTop * slotHeight + 'px',
         height: eventHeight * slotHeight + 'px',
         left: props.style.left + 'px',
         color: '#666',
+        zIndex: 2,
     }}>
         <strong>
             {moment(props.event.start).format('HH:mm')}&nbsp;&ndash;&nbsp;

@@ -28,14 +28,21 @@ function busy(date, events) {
     ));
 }
 
-function canReserve(events, time, timeBlock) {
-    return !events.length || !!events.find(event =>
-        event.start.getTime() - time.getTime() >= timeBlock * 60 * 1000 ||
-        event.end.getTime() <= time.getTime()
-    );
+function canReserve(max, events, time, timeBlock) {
+    const start = time.getTime();
+    const end = time.getTime() + timeBlock * 60000;
+    const maxTime = max.getTime();
+
+    return !events.some(event => {
+        const eventStart = event.start.getTime();
+        const eventEnd = event.end.getTime();
+
+        return (end > eventStart && eventEnd > start) || end > maxTime;
+    });
 }
 
 export const CalendarTimeSlot = (
+    max,
     events,
     step,
     timeBlock,
@@ -49,7 +56,7 @@ export const CalendarTimeSlot = (
     const end = moment(props.value.getTime() + timeBlock * 60 * 1000);
     const slotHeight = HOUR_HEIGHT / (60 / step);
     const eventHeight = timeBlock / step;
-    const isSelectable = canReserve(events, props.value, timeBlock);
+    const isSelectable = canReserve(max, events, props.value, timeBlock);
 
     if (!user) {
         return null;

@@ -195,7 +195,13 @@ export class TimeTable extends Component {
                 toolbar: CalendarToolbar(this.onDateChange),
                 eventWrapper: CalendarEvent(min, step),
                 timeSlotWrapper: CalendarTimeSlot(
-                    events, step, timeSlotDuration, car, this.reserve),
+                    max,
+                    events,
+                    step,
+                    timeSlotDuration,
+                    car,
+                    this.reserve
+                ),
             }}
             step={step}
             timeslots={slots}
