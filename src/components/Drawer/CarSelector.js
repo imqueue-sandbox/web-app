@@ -65,7 +65,7 @@ export class CarSelector extends Component {
     }
 
     state = {
-        carId: AppStore.get(CAR_KEY) || '',
+        carId: (AppStore.get(CAR_KEY) || { id: '' }).id,
     };
 
     select = cars => event => {
