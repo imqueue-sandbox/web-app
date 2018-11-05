@@ -60,6 +60,7 @@ export class CarSelector extends Component {
             Object.assign(this.state, {
                 carId: ((props.data.cars || [])[0] || {}).id || '',
             });
+            AppStore.set(CAR_KEY, (props.data.cars || [])[0] || null);
         }
     }
 
@@ -67,8 +68,9 @@ export class CarSelector extends Component {
         carId: AppStore.get(CAR_KEY) || '',
     };
 
-    select = (event) => {
-        AppStore.set(CAR_KEY, event.target.value);
+    select = cars => event => {
+        const car = cars.find(car => car.id === event.target.value);
+        AppStore.set(CAR_KEY, car);
         this.setState({ carId: event.target.value });
     };
 
@@ -88,7 +90,7 @@ export class CarSelector extends Component {
                 label="Choose your car to wash"
                 className={classNames(classes.textField, classes.userCars)}
                 value={this.state.carId}
-                onChange={this.select}
+                onChange={this.select(cars)}
                 SelectProps={{MenuProps: {
                     className: classes.menu,
                 }}}

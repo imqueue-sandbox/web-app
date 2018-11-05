@@ -55,7 +55,7 @@ function busy(date, events) {
     ));
 }
 
-const CalendarTimeSlot = (events, step, timeBlock) => props => {
+const CalendarTimeSlot = (events, step, timeBlock, car) => props => {
     const className = (props.children._owner.return.stateNode ||
         { className: '' }).className;
 
@@ -78,7 +78,7 @@ const CalendarTimeSlot = (events, step, timeBlock) => props => {
                 pointerEvents: 'none',
             }}
             className="rbc-reservation"
-        ></div>
+        ><em>{car.regNumber} {car.make} {car.model}</em></div>
     </div>;
 };
 
@@ -108,7 +108,7 @@ const CalendarEvent = (timeStart, step) => props => {
         <b>{moment(props.event.start).format('HH:mm')}&nbsp;&ndash;&nbsp;{
         moment(props.event.end).format('HH:mm')}&nbsp;&nbsp;</b>
         {props.event.title.split(/\r?\n/).map((line, key) =>
-            <i key={key}>{line + (key ? '' : ';')}</i>)}
+            <em key={key}>{line + (key ? '' : ';')}</em>)}
     </div>;
 };
 
@@ -124,6 +124,7 @@ export class TimeTable extends Component {
         options: PropTypes.object.isRequired,
         onChange: PropTypes.func,
         currentDate: PropTypes.instanceOf(Date),
+        car: PropTypes.object,
     };
 
     state = {
@@ -217,6 +218,7 @@ export class TimeTable extends Component {
         const step = 15;
         const slots = 60 / step;
         const timeBlock = this.props.timeSlotDuration;
+        const { car } = this.props;
         // const resources = [
         //     { id: 1, title: 'Box #1' },
         //     { id: 2, title: 'Box #2' },
@@ -235,7 +237,7 @@ export class TimeTable extends Component {
             components={{
                 toolbar: CalendarToolbar(this.onDateChange),
                 eventWrapper: CalendarEvent(min, step),
-                timeSlotWrapper: CalendarTimeSlot(events, step, timeBlock),
+                timeSlotWrapper: CalendarTimeSlot(events, step, timeBlock, car),
             }}
             step={step}
             timeslots={slots}

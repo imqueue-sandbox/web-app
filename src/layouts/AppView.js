@@ -38,7 +38,7 @@ import {
     CarSelector,
     AuthUser,
 } from '../components';
-import { AppStore, SLOT_KEY } from '../common';
+import { AppStore, CAR_KEY, SLOT_KEY } from '../common';
 import { AppRootQuery, withQuery } from '../relay/queries';
 
 const drawerWidth = 350;
@@ -104,6 +104,7 @@ export class AppView extends Component {
         timeSlotDuration: AppStore.get(SLOT_KEY) | 0,
         reservations: null,
         currentDate: new Date(),
+        car: AppStore.get(CAR_KEY),
     };
 
     componentDidMount() {
@@ -118,11 +119,17 @@ export class AppView extends Component {
         return this.props.route === `/${routePath}`;
     }
 
-    storeChange = (key, timeSlotDuration) => {
-        timeSlotDuration = timeSlotDuration | 0;
+    storeChange = (key, item) => {
+        if (!item) {
+            return ;
+        }
 
-        if (timeSlotDuration && key === SLOT_KEY) {
-            this.setState({ timeSlotDuration });
+        if (key === SLOT_KEY) {
+            this.setState({ timeSlotDuration: item | 0 });
+        }
+
+        else if (key === CAR_KEY) {
+            this.setState({ car: item });
         }
     }
 
@@ -205,6 +212,7 @@ export class AppView extends Component {
                             onChange={this.timeTableChange}
                             reservations={this.state.reservations}
                             currentDate={this.state.currentDate}
+                            car={this.state.car}
                         />}
                     />
                     <Route
