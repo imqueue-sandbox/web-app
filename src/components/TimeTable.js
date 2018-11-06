@@ -231,7 +231,7 @@ export class TimeTable extends Component {
                         events,
                         step,
                         timeSlotDuration,
-                        car,
+                        car || {},
                         this.reserve
                     ),
                 }}
