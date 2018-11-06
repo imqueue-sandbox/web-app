@@ -205,7 +205,7 @@ export class AppView extends Component {
                     <Route
                         exact
                         path="/"
-                        component={() => <TimeTable
+                        render={() => <TimeTable
                             data={data}
                             options={data.options}
                             timeSlotDuration={this.state.timeSlotDuration}
@@ -217,7 +217,7 @@ export class AppView extends Component {
                     />
                     <Route
                         path="/profile"
-                        component={() => <Profile data={data}/>}
+                        render={() => <Profile data={data}/>}
                     />
                 </main>
             </div>
