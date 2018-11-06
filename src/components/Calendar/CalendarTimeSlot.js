@@ -90,7 +90,7 @@ export const CalendarTimeSlot = (
                     {start.format('HH:mm')}&nbsp;&ndash;&nbsp;
                     {end.format('HH:mm')}&nbsp;&nbsp;
                 </strong>
-                <em>{car.make} {car.model}, {car.regNumber}</em>
+                <em>{car.regNumber}, {car.make} {car.model}</em>
             </div>}
         </div>;
 };
