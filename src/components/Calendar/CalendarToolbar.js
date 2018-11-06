@@ -35,14 +35,17 @@ export const CalendarToolbar = onChange => toolbar => {
 
     const goToBack = () => {
         onChange && onChange(moment(toolbar.date).add(-1, 'days').toDate());
+        toolbar.onNavigate('PREV');
     };
 
     const goToNext = () => {
         onChange && onChange(moment(toolbar.date).add(1, 'days').toDate());
+        toolbar.onNavigate('NEXT');
     };
 
     const goToCurrent = () => {
         onChange && onChange(new Date());
+        toolbar.onNavigate('TODAY');
     };
 
     const cantGoBack = !hasPast();

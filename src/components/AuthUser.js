@@ -51,6 +51,7 @@ export class AuthUser extends Component {
         token && logout(token);
         AppStore.del(AUTH_KEY);
         AppStore.del(CAR_KEY);
+        return false;
     };
 
     render() {
@@ -65,13 +66,14 @@ export class AuthUser extends Component {
         const fullName = `${user.firstName} ${user.lastName}`;
         const letters = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
 
-        return <Link className={classes.appBarUser} to="/profile">
-            <span>{`Hello, ${fullName}`}</span>
-            {user.email
+        return <div className={classes.appBarUser}>
+            <Link to="/profile">{`Hello, ${fullName}`}</Link>
+            <Link to="/profile">{user.email
                 ? <Gravatar user={user} size={40} />
                 : <Avatar>{letters}</Avatar>}
+            </Link>
             <IconButton onClick={this.logout}><ExitToApp/></IconButton>
-        </Link>;
+        </div>;
     }
 }
 
