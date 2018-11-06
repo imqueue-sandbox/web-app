@@ -103,7 +103,7 @@ export class AppMessage extends Component {
                     >
                         <Icon className={classNames(
                             classes.icon,
-                            classes.iconVariant
+                            classes.iconVariant,
                         )}/>
                         {message}
                     </span>
