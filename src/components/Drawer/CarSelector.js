@@ -17,7 +17,7 @@
  */
 import React, { Component } from 'react';
 import { createFragmentContainer } from 'react-relay';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core';

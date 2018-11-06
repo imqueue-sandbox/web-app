@@ -16,7 +16,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React from 'react';
-import {AppMessage} from '../AppMessage';
+import { AppMessage } from '../AppMessage';
 
 export function errorList(errors) {
     return errors && errors.length ? errors.map((err, i) =>

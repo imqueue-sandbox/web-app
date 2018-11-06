@@ -131,7 +131,7 @@ export class AppView extends Component {
         else if (key === CAR_KEY) {
             this.setState({ car: item });
         }
-    }
+    };
 
     /**
      * This handler is required to handle reservations re-fetch to be saved

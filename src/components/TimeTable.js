@@ -117,7 +117,7 @@ export class TimeTable extends Component {
             onChange && onChange(this.props.data.reservations, date);
             this.setState({ loading: false });
         }, { force: true });
-    }
+    };
 
     resultHandler = (date, onChange) => ({ reservations }) => {
         this.setState(
@@ -128,7 +128,7 @@ export class TimeTable extends Component {
 
     errorHandler = errors => {
         this.setState({ errors, loading: false });
-    }
+    };
 
     reserve = (start, end) => {
         const car = AppStore.get(CAR_KEY);

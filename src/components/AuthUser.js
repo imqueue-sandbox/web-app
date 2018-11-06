@@ -28,7 +28,7 @@ import { AppStore, AUTH_KEY, CAR_KEY } from '../common/index';
 import { CurrentUserFragment } from '../relay/queries/fragments/index';
 import { logout } from '../relay/mutations';
 
-const styles = theme => ({
+const styles = () => ({
     appBarUser: {
         display: 'flex',
         flexDirection: 'row',

@@ -17,12 +17,12 @@
  */
 import React, { Component } from 'react';
 import { createFragmentContainer } from 'react-relay';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import { UserCar } from '.';
 import { UserCarsFragment } from '../relay/queries';
 
-const styles = theme => ({
+const styles = () => ({
     cars: {
         display: 'flex',
         flexDirection: 'row',
@@ -62,5 +62,5 @@ export class UserCars extends Component {
 
 UserCars = createFragmentContainer(
     withStyles(styles)(UserCars),
-    UserCarsFragment
+    UserCarsFragment,
 );
