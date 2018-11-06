@@ -40,8 +40,8 @@ export const CalendarEvent = (timeStart, step, onCancel) => props => {
     ) / (1000 * 60 * step);
     const hasPassed = new Date() >= props.event.start;
     const hint = hasPassed ? MSG_TIME_PASSED : MSG_TIME_RESERVED;
-    const canCancel = !hasPassed && authUser &&
-        authUser.id === (props.event.user || { id: '' }).id;
+    const canCancel = !hasPassed && authUser && (authUser.isAdmin ||
+        authUser.id === (props.event.user || { id: '' }).id);
 
     return <div
         title={hint}
