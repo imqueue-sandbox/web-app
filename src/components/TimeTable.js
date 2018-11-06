@@ -34,6 +34,7 @@ import {
     ReservationsFragment,
 } from '../relay/queries';
 import Snackbar from '@material-ui/core/Snackbar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { reserve, cancelReservation } from '../relay/mutations';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { AppStore, CAR_KEY, SLOT_KEY } from '../common';
@@ -68,6 +69,7 @@ export class TimeTable extends Component {
     state = {
         reservations: null,
         errors: [],
+        loading: false,
     };
     timeout = null;
     interval = null;
@@ -102,6 +104,7 @@ export class TimeTable extends Component {
     };
 
     refetch = date => {
+        this.setState({ loading: true });
         /**
          * When refetch is done we need to pass-back reservations data to a
          * parent component to make sure it will be able to pass it back
@@ -112,7 +115,19 @@ export class TimeTable extends Component {
         this.props.relay.refetch({ date }, null, () => {
             const { onChange } = this.props;
             onChange && onChange(this.props.data.reservations, date);
+            this.setState({ loading: false });
         }, { force: true });
+    }
+
+    resultHandler = (date, onChange) => ({ reservations }) => {
+        this.setState(
+            { loading: false },
+            () => onChange && onChange(reservations, date),
+        );
+    };
+
+    errorHandler = errors => {
+        this.setState({ errors, loading: false });
     }
 
     reserve = (start, end) => {
@@ -127,20 +142,24 @@ export class TimeTable extends Component {
             duration,
         };
 
+        this.setState({ loading: true });
+
         reserve(
             mutationInput,
-            ({ reservations }) => onChange && onChange(reservations, start),
-            errors => this.setState({ errors }),
+            this.resultHandler(start, onChange),
+            this.errorHandler,
         );
     };
 
     cancelReservation = (reservationId, date) => {
         const { onChange } = this.props;
 
+        this.setState({ loading: true });
+
         cancelReservation(
             reservationId,
-            ({ reservations }) => onChange && onChange(reservations, date),
-            errors => this.setState({ errors }),
+            this.resultHandler(date, onChange),
+            this.errorHandler,
         );
     };
 
@@ -241,6 +260,11 @@ export class TimeTable extends Component {
                 views={[BigCalendar.Views.DAY]}
                 min={min}
                 max={new Date(max.getTime() - 3600 * 1000)}
+            />
+            <CircularProgress
+                style={{ display: this.state.loading ? 'block' : 'none' }}
+                size={50}
+                className="rbc-loader"
             />
             {hasErrors && errors.map((error, key) =>
                 <Snackbar
