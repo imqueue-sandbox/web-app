@@ -17,23 +17,26 @@
  */
 import moment from 'moment';
 import React from 'react';
-import { AppStore, AUTH_KEY, HOUR_HEIGHT } from '../../common';
+import { AppStore, AUTH_KEY, HOUR_HEIGHT, MSG_TIME_PASSED } from '../../common';
 
 const RX_TIME_COLUMN = /\brbc-time-gutter\b/;
 
 function busy(date, events) {
-    return !!events.find(event => (
+    const now = new Date();
+
+    return date <= now || !!events.find(event => (
         event.start.getTime() <= date.getTime() &&
         event.end.getTime() > date.getTime()
     ));
 }
 
 function canReserve(max, events, time, timeBlock) {
+    const now = new Date().getTime();
     const start = time.getTime();
     const end = time.getTime() + timeBlock * 60000;
     const maxTime = max.getTime();
 
-    return end <= maxTime && !events.some(event => {
+    return (start > now) && (end <= maxTime) && !events.some(event => {
         const eventStart = event.start.getTime();
         const eventEnd = event.end.getTime();
 
@@ -57,6 +60,7 @@ export const CalendarTimeSlot = (
     const slotHeight = HOUR_HEIGHT / (60 / step);
     const eventHeight = timeBlock / step;
     const isSelectable = canReserve(max, events, props.value, timeBlock);
+    const isBusy = busy(props.value, events);
 
     if (!user) {
         return null;
@@ -68,8 +72,8 @@ export const CalendarTimeSlot = (
 
     return <div
         style={{ height: '16px' }}
-        className={'rbc-time-slot' + (busy(props.value, events)
-            ? ' disabled' : '')}
+        className={'rbc-time-slot' + (isBusy ? ' disabled' : '')}
+        title={isBusy && MSG_TIME_PASSED}
         onClick={() => isSelectable && onSelect && onSelect(
             start.toDate(),
             end.toDate(),

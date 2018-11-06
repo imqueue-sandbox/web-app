@@ -19,7 +19,13 @@ import moment from 'moment';
 import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Delete from '@material-ui/icons/Delete';
-import { AppStore, AUTH_KEY, HOUR_HEIGHT } from '../../common';
+import {
+    AppStore,
+    AUTH_KEY,
+    HOUR_HEIGHT,
+    MSG_TIME_PASSED,
+    MSG_TIME_RESERVED,
+} from '../../common';
 
 export const CalendarEvent = (timeStart, step, onCancel) => props => {
     const authUser = (AppStore.get(AUTH_KEY) || { user: null }).user;
@@ -32,11 +38,12 @@ export const CalendarEvent = (timeStart, step, onCancel) => props => {
         props.event.start.getTime() -
         timeStart.getTime()
     ) / (1000 * 60 * step);
-    const canCancel = authUser &&
-        authUser.id === (props.event.user || { id: '' }).id
-    ;
+    const hasPassed = new Date() >= props.event.start;
+    const hint = hasPassed ? MSG_TIME_PASSED : MSG_TIME_RESERVED;
+    const canCancel = !hasPassed && authUser &&
+        authUser.id === (props.event.user || { id: '' }).id;
 
-    return <div title="This time has been already reserved..." style={{
+    return <div title={hint} style={{
         position: 'absolute',
         pointerEvents: 'auto',
         padding: '5px 10px',
