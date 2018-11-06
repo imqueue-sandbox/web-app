@@ -56,8 +56,7 @@ export const CalendarEvent = (timeStart, step, onCancel) => props => {
             {moment(props.event.start).format('HH:mm')}&nbsp;&ndash;&nbsp;
             {moment(props.event.end).format('HH:mm')}&nbsp;&nbsp;
         </strong>
-        {props.event.title.split(/\r?\n/).map((line, key) =>
-            <em key={key}>{line + (key ? '' : ';')}</em>)}
+        <em>{props.event.title}</em>
         {canCancel && <span className="rbc-event-cancel">
             <IconButton
                 key="close"

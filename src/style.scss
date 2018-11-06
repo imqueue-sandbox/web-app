@@ -218,6 +218,10 @@ ul[role=menu] {
   border-top: 1px solid #fff;
   width: 100%;
   margin-right: -20px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding-right: 40px;
   &.past {
     background-color: #edd;
   }

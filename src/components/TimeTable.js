@@ -181,8 +181,9 @@ export class TimeTable extends Component {
     buildEvents() {
         return (this.props.reservations ||
             this.props.data.reservations).map(item => ({
-            title: `Customer: ${item.user.firstName} ${item.user.lastName}
-                Car: ${item.car.regNumber}, ${item.car.make} ${item.car.model}`,
+            title:
+                `${item.car.regNumber}, ${item.car.make} ${item.car.model},
+                ${item.user.firstName} ${item.user.lastName}`,
             start: moment.parseZone(item.start).toDate(),
             end: moment.parseZone(item.end).toDate(),
             user: item.user,
