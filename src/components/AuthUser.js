@@ -18,6 +18,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer } from 'react-relay';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import ExitToApp from '@material-ui/icons/ExitToApp';
@@ -64,13 +65,13 @@ export class AuthUser extends Component {
         const fullName = `${user.firstName} ${user.lastName}`;
         const letters = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
 
-        return <div className={classes.appBarUser}>
+        return <Link className={classes.appBarUser} to="/profile">
             <span>{`Hello, ${fullName}`}</span>
             {user.email
                 ? <Gravatar user={user} size={40} />
                 : <Avatar>{letters}</Avatar>}
             <IconButton onClick={this.logout}><ExitToApp/></IconButton>
-        </div>;
+        </Link>;
     }
 }
 
