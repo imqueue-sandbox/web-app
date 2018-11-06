@@ -144,8 +144,8 @@ ul[role=menu] {
     }
     &.disabled {
       cursor: default !important;
-      background-color: #ddd !important;
-      border-top: 1px solid #ddd !important;
+      background-color: #eee !important;
+      border-top: 1px solid #eee !important;
     }
     &.active {
       transition:
@@ -206,4 +206,19 @@ ul[role=menu] {
   right: 0;
   top: -10px;
   transform: scale(0.6);
+}
+.rbc-event-box {
+  background-color: #dde;
+  position: absolute;
+  pointer-events: auto;
+  padding: 5px 10px;
+  color: #666;
+  z-index: 2;
+  border-bottom: 1px solid #fff;
+  border-top: 1px solid #fff;
+  width: 100%;
+  margin-right: -20px;
+  &.past {
+    background-color: #edd;
+  }
 }

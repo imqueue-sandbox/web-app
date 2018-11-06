@@ -43,19 +43,15 @@ export const CalendarEvent = (timeStart, step, onCancel) => props => {
     const canCancel = !hasPassed && authUser &&
         authUser.id === (props.event.user || { id: '' }).id;
 
-    return <div title={hint} style={{
-        position: 'absolute',
-        pointerEvents: 'auto',
-        padding: '5px 10px',
-        top: eventTop * slotHeight + 'px',
-        height: eventHeight * slotHeight + 'px',
-        left: props.style.left + 'px',
-        color: '#666',
-        zIndex: 2,
-        borderBottom: '1px solid #fff',
-        width: '100%',
-        marginRight: '-20px',
-    }}>
+    return <div
+        title={hint}
+        style={{
+            top: eventTop * slotHeight - 1 + 'px',
+            height: eventHeight * slotHeight + 1 + 'px',
+            left: props.style.left + 'px',
+        }}
+        className={`rbc-event-box${hasPassed ? ' past' : ''}`}
+    >
         <strong>
             {moment(props.event.start).format('HH:mm')}&nbsp;&ndash;&nbsp;
             {moment(props.event.end).format('HH:mm')}&nbsp;&nbsp;
