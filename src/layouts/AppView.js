@@ -120,6 +120,7 @@ export class AppView extends Component {
     }
 
     storeChange = (key, item) => {
+        console.log(key, item);
         if (!item) {
             return ;
         }
