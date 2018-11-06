@@ -178,18 +178,25 @@ export class TimeTable extends Component {
         );
     }
 
+    buildEvent(item) {
+        const { car, user, id } = item;
+        const userTitle = user ? `${user.firstName} ${user.lastName}` : '';
+        const carTitle = item.car ?
+            `${car.regNumber}, ${car.make} ${car.model}` : '';
+        const start = moment.parseZone(item.start).toDate();
+        const end = moment.parseZone(item.end).toDate();
+        let title = carTitle + (carTitle && userTitle ? ',' : '') + userTitle;
+
+        if (!title) {
+            title = 'Reserved';
+        }
+
+        return { id, title, user, car, start, end };
+    }
+
     buildEvents() {
-        return (this.props.reservations ||
-            this.props.data.reservations).map(item => ({
-            title:
-                `${item.car.regNumber}, ${item.car.make} ${item.car.model},
-                ${item.user.firstName} ${item.user.lastName}`,
-            start: moment.parseZone(item.start).toDate(),
-            end: moment.parseZone(item.end).toDate(),
-            user: item.user,
-            car: item.car,
-            id: item.id,
-        }));
+        return (this.props.reservations || this.props.data.reservations)
+            .map(this.buildEvent);
     }
 
     render() {
