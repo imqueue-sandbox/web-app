@@ -185,7 +185,7 @@ export class TimeTable extends Component {
             `${car.regNumber}, ${car.make} ${car.model}` : '';
         const start = moment.parseZone(item.start).toDate();
         const end = moment.parseZone(item.end).toDate();
-        let title = carTitle + (carTitle && userTitle ? ',' : '') + userTitle;
+        let title = carTitle + (carTitle && userTitle ? ', ' : '') + userTitle;
 
         if (!title) {
             title = 'Reserved';
