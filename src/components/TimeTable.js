@@ -202,11 +202,6 @@ export class TimeTable extends Component {
         const { car, timeSlotDuration } = this.props;
         const { errors } = this.state;
         const hasErrors = errors && errors.length > 0;
-        // const resources = [
-        //     { id: 1, title: 'Box #1' },
-        //     { id: 2, title: 'Box #2' },
-        //     { id: 3, title: 'Box #3' },
-        // ];
 
         return <>
             <BigCalendar
@@ -216,7 +211,6 @@ export class TimeTable extends Component {
                 defaultView="day"
                 startAccessor="start"
                 endAccessor="end"
-                // resources={resources}
                 defaultDate={this.props.currentDate || new Date()}
                 components={{
                     toolbar: CalendarToolbar(this.onDateChange),
