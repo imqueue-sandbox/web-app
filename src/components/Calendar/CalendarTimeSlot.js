@@ -73,7 +73,7 @@ export const CalendarTimeSlot = (
     return <div
         style={{ height: '16px' }}
         className={'rbc-time-slot' + (isBusy ? ' disabled' : '')}
-        title={isBusy && MSG_TIME_PASSED}
+        title={isBusy ? MSG_TIME_PASSED : ''}
         onClick={() => isSelectable && onSelect && onSelect(
             start.toDate(),
             end.toDate(),
