@@ -78,12 +78,13 @@ export class TimeTable extends Component {
         }
 
         this.timeout = setTimeout(() => {
-            this.setState({ currentDate: new Date() });
-            this.interval = setInterval(
-                () => this.setState({ currentDate: new Date() }),
-                300000, // each 5 minutes
-            );
+            this.timerUpdate();
+            this.interval = setInterval(this.timerUpdate, 60000);
         }, this.closestMinute().getTime() - Date.now());
+    };
+
+    timerUpdate = () => {
+        this.setState({ currentDate: new Date() });
     };
 
     clearTimers = () => {
