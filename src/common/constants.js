@@ -21,5 +21,5 @@ export const SLOT_KEY = 'TimeSlotDuration';
 export const PROFILE_PANEL_KEY = 'ProfilePanel';
 export const CAR_KEY = 'UserCar';
 
-export const MSG_TIME_PASSED = 'This time passed out...';
+export const MSG_TIME_PASSED = 'This time has been passed...';
 export const MSG_TIME_RESERVED = 'This time has been already reserved...';
