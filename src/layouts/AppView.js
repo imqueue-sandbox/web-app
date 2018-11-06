@@ -31,6 +31,10 @@ import Person from '@material-ui/icons/Person';
 import Timelapse from '@material-ui/icons/Timelapse';
 import Waves from '@material-ui/icons/Waves';
 import Divider from '@material-ui/core/Divider';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import IconButton from '@material-ui/core/IconButton';
+import Hidden from '@material-ui/core/Hidden';
+
 import {
     TimeTable,
     Profile,
@@ -55,17 +59,6 @@ const styles = theme => ({
     },
     logo: {
         marginRight: '15px',
-    },
-    grow: {
-        flexGrow: 1,
-    },
-    appBar: {
-        background: '#333',
-        zIndex: theme.zIndex.drawer + 1,
-        '& *': {
-            color: '#fff !important',
-            textDecoration: 'none',
-        },
     },
     drawerPaper: {
         position: 'relative',
@@ -94,6 +87,194 @@ function ListItemLink(props) {
     return <ListItem button component="a" {...props} />;
 }
 
+const drawerStyles = theme => ({
+  root: {
+    display: 'flex',
+  },
+  logo: {
+      marginRight: '15px',
+  },
+  grow: {
+      display: 'flex',
+      flexGrow: 1,
+      textDecoration: 'none',
+      minHeight: '64px',
+      justifyContent: 'center',
+      alignItems: 'center'
+  },
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  appBar: {
+    marginLeft: drawerWidth,
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+    },
+    background: '#333',
+    zIndex: theme.zIndex.drawer + 1,
+    '& *': {
+        color: '#fff',
+        textDecoration: 'none',
+        justifyContent: 'space-between',
+    }
+  },
+  hidden: {
+    visibility: 'hidden'
+  },
+  supTitle: {
+      color: theme.palette.secondary.light + ' !important',
+      marginLeft: '.5em',
+  },
+  menuButton: {
+    marginRight: 20,
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3,
+  },
+});
+
+class ResponsiveDrawer extends React.Component {
+  state = {
+    mobileOpen: false,
+  };
+
+  handleDrawerToggle = () => {
+    this.setState(state => ({ mobileOpen: !state.mobileOpen }));
+  };
+
+  is(routePath) {
+      return this.props.route === `/${routePath}`;
+  }
+
+  render() {
+    const { classes, theme, data } = this.props;
+
+    const drawer = (
+      <div>
+        <Typography
+            variant="h6"
+            color="inherit"
+            className={classes.grow}
+            noWrap
+        >
+            Car Wash Tutorial App
+            <sup className={classes.supTitle}>for @imqueue</sup>
+        </Typography>
+        <List>
+            <Divider/>
+            <ListItemLink
+                href="/"
+                className={this.is('') ? classes.selected : ''}
+            >
+              <ListItemIcon><Timelapse /></ListItemIcon>
+              <ListItemText primary="Washing Time Reservations" />
+            </ListItemLink>
+            <ListItemLink
+              href="/profile"
+              className={this.is('profile') ?
+                classes.selected : ''}
+            >
+              <ListItemIcon><Person /></ListItemIcon>
+              <ListItemText primary="User Profile" />
+            </ListItemLink>
+            <Divider/>
+        </List>
+        {this.is('') &&
+          <WashingTypeSelector options={data.options}/>
+        }
+        {this.is('') && <Divider/>}
+        {this.is('') && <CarSelector data={data.user} />}
+      </div>
+    );
+
+    return (
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={this.handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <Waves className={classes.logo}/>
+            </IconButton>
+            <Typography variant="h6" className={classes.hidden} noWrap>
+                Responsive drawer
+            </Typography>
+            <AuthUser data={data.user} />
+          </Toolbar>
+        </AppBar>
+        <nav className={classes.drawer}>
+          {/* The implementation can be swap with js to avoid SEO duplication of links. */}
+          <Hidden smUp implementation="css">
+            <Drawer
+              container={this.props.container}
+              variant="temporary"
+              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+              open={this.state.mobileOpen}
+              onClose={this.handleDrawerToggle}
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+              ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+              }}
+            >
+              {drawer}
+            </Drawer>
+          </Hidden>
+          <Hidden xsDown implementation="css">
+            <Drawer
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+              variant="permanent"
+              open
+            >
+              {drawer}
+            </Drawer>
+          </Hidden>
+        </nav>
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <Route
+              exact
+              path="/"
+              component={() => <TimeTable
+                  data={data}
+                  options={data.options}
+                  timeSlotDuration={this.state.timeSlotDuration}
+                  onChange={this.timeTableChange}
+                  reservations={this.state.reservations}
+                  currentDate={this.state.currentDate}
+                  car={this.props.car}
+              />}
+          />
+          <Route
+              path="/profile"
+              component={() => <Profile data={data}/>}
+          />
+        </main>
+      </div>
+    );
+  }
+}
+
+let ResponsiveDrawerComponent = withStyles(drawerStyles, { withTheme: true })(ResponsiveDrawer);
+
 export class AppView extends Component {
     static propTypes = {
         classes: PropTypes.object.isRequired,
@@ -113,10 +294,6 @@ export class AppView extends Component {
 
     componentWillUnmount() {
         AppStore.off('change', this.storeChange);
-    }
-
-    is(routePath) {
-        return this.props.route === `/${routePath}`;
     }
 
     storeChange = (key, item) => {
@@ -170,56 +347,11 @@ export class AppView extends Component {
                         <AuthUser data={data.user} />
                     </Toolbar>
                 </AppBar>
-                <Drawer
-                    variant="permanent"
-                    classes={{paper: classes.drawerPaper}}
-                >
-                    <div className={classes.toolbar}/>
-                    <List className={classes.menuList}>
-                        <Divider/>
-                        <ListItemLink
-                            href="/"
-                            className={this.is('') ? classes.selected : ''}
-                        >
-                            <ListItemIcon><Timelapse /></ListItemIcon>
-                            <ListItemText primary="Washing Time Reservations" />
-                        </ListItemLink>
-                        <ListItemLink
-                            href="/profile"
-                            className={this.is('profile') ?
-                                classes.selected : ''}
-                        >
-                            <ListItemIcon><Person /></ListItemIcon>
-                            <ListItemText primary="User Profile" />
-                        </ListItemLink>
-                        <Divider/>
-                    </List>
-                    {this.is('') &&
-                        <WashingTypeSelector options={data.options}/>
-                    }
-                    {this.is('') && <Divider/>}
-                    {this.is('') && <CarSelector data={data.user} />}
-                </Drawer>
-                <main className={classes.content}>
-                    <div className={classes.toolbar}/>
-                    <Route
-                        exact
-                        path="/"
-                        component={() => <TimeTable
-                            data={data}
-                            options={data.options}
-                            timeSlotDuration={this.state.timeSlotDuration}
-                            onChange={this.timeTableChange}
-                            reservations={this.state.reservations}
-                            currentDate={this.state.currentDate}
-                            car={this.state.car}
-                        />}
-                    />
-                    <Route
-                        path="/profile"
-                        component={() => <Profile data={data}/>}
-                    />
-                </main>
+                <ResponsiveDrawerComponent
+                    data={data}
+                    car={this.state.car}
+                    route={this.props.route}
+                />
             </div>
         )
     }
