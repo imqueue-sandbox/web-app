@@ -45,12 +45,6 @@ export class AuthUser extends Component {
         }),
     };
 
-    logout = () => {
-        const token = (AppStore.get(AUTH_KEY) || {}).token;
-        token && logout(token);
-        AppStore.del(AUTH_KEY);
-    };
-
     render() {
         const { classes } = this.props;
         const user = this.props.data;
@@ -67,8 +61,8 @@ export class AuthUser extends Component {
             <span>{`Hello, ${fullName}`}</span>
             {user.email
                 ? <Gravatar user={user} size={40} />
-                : <Avatar>{letters}</Avatar>}
-            <IconButton onClick={this.logout}><ExitToApp/></IconButton>
+                : <Avatar>{letters}</Avatar>
+              }
         </div>;
     }
 }

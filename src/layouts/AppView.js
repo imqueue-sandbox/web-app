@@ -34,6 +34,7 @@ import Divider from '@material-ui/core/Divider';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
+import ExitToApp from '@material-ui/icons/ExitToApp';
 
 import {
     TimeTable,
@@ -42,10 +43,11 @@ import {
     CarSelector,
     AuthUser,
 } from '../components';
-import { AppStore, CAR_KEY, SLOT_KEY } from '../common';
+import { AppStore, CAR_KEY, SLOT_KEY, AUTH_KEY } from '../common';
 import { AppRootQuery, withQuery } from '../relay/queries';
+import { logout } from '../relay/mutations';
 
-const drawerWidth = 350;
+const drawerWidth = 320;
 
 const styles = theme => ({
     root: {
@@ -106,7 +108,7 @@ const drawerStyles = theme => ({
     [theme.breakpoints.up('sm')]: {
       width: drawerWidth,
       flexShrink: 0,
-    },
+    }
   },
   appBar: {
     marginLeft: drawerWidth,
@@ -121,12 +123,19 @@ const drawerStyles = theme => ({
         justifyContent: 'space-between',
     }
   },
-  hidden: {
-    visibility: 'hidden'
-  },
   supTitle: {
       color: theme.palette.secondary.light + ' !important',
       marginLeft: '.5em',
+      [theme.breakpoints.down('sm')]: {
+        display: 'none',
+      }
+  },
+  user: {
+      display: 'flex',
+      [theme.breakpoints.down('sm')]: {
+        display: 'none'
+      },
+      flexDirection: 'row'
   },
   menuButton: {
     marginRight: 20,
@@ -135,12 +144,16 @@ const drawerStyles = theme => ({
     },
   },
   toolbar: theme.mixins.toolbar,
+  toolbarContent: {
+    flexDirection: 'row',
+    display: 'flex'
+  },
   drawerPaper: {
-    width: drawerWidth,
+    width: drawerWidth
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing.unit * 2,
   },
 });
 
@@ -153,6 +166,12 @@ class ResponsiveDrawer extends React.Component {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
+  logout() {
+      const token = (AppStore.get(AUTH_KEY) || {}).token;
+      token && logout(token);
+      AppStore.del(AUTH_KEY);
+  }
+
   is(routePath) {
       return this.props.route === `/${routePath}`;
   }
@@ -162,17 +181,7 @@ class ResponsiveDrawer extends React.Component {
 
     const drawer = (
       <div>
-        <Typography
-            variant="h6"
-            color="inherit"
-            className={classes.grow}
-            noWrap
-        >
-            Car Wash Tutorial App
-            <sup className={classes.supTitle}>for @imqueue</sup>
-        </Typography>
         <List>
-            <Divider/>
             <ListItemLink
                 href="/"
                 className={this.is('') ? classes.selected : ''}
@@ -203,18 +212,31 @@ class ResponsiveDrawer extends React.Component {
         <CssBaseline />
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerToggle}
-              className={classes.menuButton}
-            >
-              <Waves className={classes.logo}/>
-            </IconButton>
-            <Typography variant="h6" className={classes.hidden} noWrap>
-                Responsive drawer
-            </Typography>
-            <AuthUser data={data.user} />
+            <div className={classes.toolbarContent}>
+                <IconButton
+                  color="inherit"
+                  aria-label="Open drawer"
+                  onClick={this.handleDrawerToggle}
+                  className={classes.menuButton}
+                >
+                  <Waves className={classes.logo}/>
+                </IconButton>
+                <Typography
+                    variant="h6"
+                    color="inherit"
+                    className={classes.grow}
+                    noWrap
+                >
+                    Car Wash Tutorial App
+                    <sup className={classes.supTitle}>for @imqueue</sup>
+                </Typography>
+            </div>
+            <div className={classes.toolbarContent}>
+                <div className={classes.user}>
+                  <AuthUser data={data.user}/>
+                </div>
+                <IconButton onClick={this.logout}><ExitToApp/></IconButton>
+            </div>
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>
@@ -327,26 +349,6 @@ export class AppView extends Component {
 
         return (
             <div className={classes.root}>
-                <AppBar
-                    position="absolute"
-                    className={classes.appBar}
-                >
-                    <Toolbar>
-                        <Link to="/">
-                            <Waves className={classes.logo}/>
-                        </Link>
-                        <Typography
-                            variant="h6"
-                            color="inherit"
-                            className={classes.grow}
-                            noWrap
-                        >
-                            Car Wash Tutorial App
-                            <sup className={classes.supTitle}>for @imqueue</sup>
-                        </Typography>
-                        <AuthUser data={data.user} />
-                    </Toolbar>
-                </AppBar>
                 <ResponsiveDrawerComponent
                     data={data}
                     car={this.state.car}
