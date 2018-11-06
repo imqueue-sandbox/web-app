@@ -30,6 +30,18 @@ type BaseTimeOption {
   duration: Int
 }
 
+input cancelReservationInput {
+  """Existing reservation identifier"""
+  id: ID!
+  clientMutationId: String
+}
+
+type cancelReservationPayload {
+  """Updated list of reservations"""
+  reservations: [Reservation]
+  clientMutationId: String
+}
+
 """Car entity"""
 type Car implements Node {
   """The ID of an object"""
@@ -104,6 +116,9 @@ type Mutation {
 
   """Makes car washing time reservation"""
   reserve(input: reserveInput!): reservePayload
+
+  """Cancels existing reservation"""
+  cancelReservation(input: cancelReservationInput!): cancelReservationPayload
 }
 
 """An object with an ID"""
