@@ -33,9 +33,11 @@ import {
     ReservationsQuery,
     ReservationsFragment,
 } from '../relay/queries';
+import Snackbar from '@material-ui/core/Snackbar';
 import { reserve } from '../relay/mutations';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import {AppStore, CAR_KEY, SLOT_KEY} from "../common";
+import { AppStore, CAR_KEY, SLOT_KEY } from '../common';
+import { AppMessage } from '.';
 
 moment.locale(navigator.userLanguage || navigator.language);
 
@@ -65,6 +67,7 @@ export class TimeTable extends Component {
 
     state = {
         reservations: null,
+        errors: [],
     };
     timeout = null;
     interval = null;
@@ -114,19 +117,26 @@ export class TimeTable extends Component {
     reserve = (start, end) => {
         const car = AppStore.get(CAR_KEY);
         const duration = [start, end];
-
-        reserve({
+        const { onChange, options } = this.props;
+        const mutationInput = {
             carId: car.id,
-            type: this.props.options.baseTime.find(item =>
-                Number(item.duration) === Number(AppStore.get(SLOT_KEY))).key,
+            type: options.baseTime.find(item =>
+                Number(item.duration) === Number(AppStore.get(SLOT_KEY))
+            ).key,
             duration,
-        }, ({ reservations }) => {
-            const { onChange } = this.props;
+        };
 
-            onChange && onChange(reservations, start);
-        }, err => {
-            console.error('reserve error:', err);
-        });
+        reserve(
+            mutationInput,
+            ({ reservations }) => onChange && onChange(reservations, start),
+            errors => this.setState({ errors }),
+        );
+    };
+
+    errorClose = key => () => {
+        const errors = this.state.errors.slice(0);
+        errors.splice(key, 1);
+        this.setState({ errors });
     };
 
     componentDidMount() {
@@ -176,39 +186,59 @@ export class TimeTable extends Component {
         const step = 15;
         const slots = 60 / step;
         const { car, timeSlotDuration } = this.props;
+        const { errors } = this.state;
+        const hasErrors = errors && errors.length > 0;
         // const resources = [
         //     { id: 1, title: 'Box #1' },
         //     { id: 2, title: 'Box #2' },
         //     { id: 3, title: 'Box #3' },
         // ];
 
-        return <BigCalendar
-            className="time-table"
-            localizer={localizer}
-            events={events}
-            defaultView="day"
-            startAccessor="start"
-            endAccessor="end"
-            // resources={resources}
-            defaultDate={this.props.currentDate || new Date()}
-            components={{
-                toolbar: CalendarToolbar(this.onDateChange),
-                eventWrapper: CalendarEvent(min, step),
-                timeSlotWrapper: CalendarTimeSlot(
-                    max,
-                    events,
-                    step,
-                    timeSlotDuration,
-                    car,
-                    this.reserve
-                ),
-            }}
-            step={step}
-            timeslots={slots}
-            views={[BigCalendar.Views.DAY]}
-            min={min}
-            max={new Date(max.getTime() - 3600 * 1000)}
-        />;
+        return <>
+            <BigCalendar
+                className="time-table"
+                localizer={localizer}
+                events={events}
+                defaultView="day"
+                startAccessor="start"
+                endAccessor="end"
+                // resources={resources}
+                defaultDate={this.props.currentDate || new Date()}
+                components={{
+                    toolbar: CalendarToolbar(this.onDateChange),
+                    eventWrapper: CalendarEvent(min, step),
+                    timeSlotWrapper: CalendarTimeSlot(
+                        max,
+                        events,
+                        step,
+                        timeSlotDuration,
+                        car,
+                        this.reserve
+                    ),
+                }}
+                step={step}
+                timeslots={slots}
+                views={[BigCalendar.Views.DAY]}
+                min={min}
+                max={new Date(max.getTime() - 3600 * 1000)}
+            />
+            {hasErrors && errors.map((error, key) =>
+                <Snackbar
+                    key={key}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    open={hasErrors}
+                    autoHideDuration={5000}
+                    onClose={this.errorClose(key)}
+                >
+                    <AppMessage
+                        key={key}
+                        variant="error"
+                        message={error.message}
+                        onClose={this.errorClose(key)}
+                    />
+                </Snackbar>
+            )}
+        </>;
     }
 }
 
