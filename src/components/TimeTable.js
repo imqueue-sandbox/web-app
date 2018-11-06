@@ -34,7 +34,7 @@ import {
     ReservationsFragment,
 } from '../relay/queries';
 import Snackbar from '@material-ui/core/Snackbar';
-import { reserve } from '../relay/mutations';
+import { reserve, cancelReservation } from '../relay/mutations';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { AppStore, CAR_KEY, SLOT_KEY } from '../common';
 import { AppMessage } from '.';
@@ -133,6 +133,16 @@ export class TimeTable extends Component {
         );
     };
 
+    cancelReservation = (reservationId, date) => {
+        const { onChange } = this.props;
+
+        cancelReservation(
+            reservationId,
+            ({ reservations }) => onChange && onChange(reservations, date),
+            errors => this.setState({ errors }),
+        );
+    };
+
     errorClose = key => () => {
         const errors = this.state.errors.slice(0);
         errors.splice(key, 1);
@@ -175,6 +185,9 @@ export class TimeTable extends Component {
                 Car: ${item.car.regNumber}, ${item.car.make} ${item.car.model}`,
             start: moment.parseZone(item.start).toDate(),
             end: moment.parseZone(item.end).toDate(),
+            user: item.user,
+            car: item.car,
+            id: item.id,
         }));
     }
 
@@ -206,7 +219,11 @@ export class TimeTable extends Component {
                 defaultDate={this.props.currentDate || new Date()}
                 components={{
                     toolbar: CalendarToolbar(this.onDateChange),
-                    eventWrapper: CalendarEvent(min, step),
+                    eventWrapper: CalendarEvent(
+                        min,
+                        step,
+                        this.cancelReservation,
+                    ),
                     timeSlotWrapper: CalendarTimeSlot(
                         max,
                         events,

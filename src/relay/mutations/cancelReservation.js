@@ -21,8 +21,8 @@ import { logger } from '../../config';
 import { resultHandler } from '../../common';
 
 const mutation = graphql`
-mutation reserveMutation($input: reserveInput!) {
-    reserve(input: $input) {
+mutation cancelReservationMutation($input: cancelReservationInput!) {
+    cancelReservation(input: $input) {
         reservations {
             id
             car {
@@ -45,26 +45,24 @@ mutation reserveMutation($input: reserveInput!) {
     }
 }`;
 
-export function reserve({ carId, type, duration }, success, failure) {
-    if (!reserve.id) {
-        reserve.id = 0;
+export function cancelReservation(id, success, failure) {
+    if (!cancelReservation.id) {
+        cancelReservation.id = 0;
     }
 
     const config = {
         mutation,
         variables: {
             input: {
-                carId,
-                type,
-                duration: duration.map(item => item.toISOString()),
-                clientMutationId: String(++reserve.id),
+                id,
+                clientMutationId: String(++cancelReservation.id),
             }
         },
         onError: (err) => {
-            logger.error('reserveMutation:request', err);
+            logger.error('cancelReservationMutation:request', err);
             failure && failure([err]);
         },
-        onCompleted: resultHandler('reserve', success, failure)
+        onCompleted: resultHandler('cancelReservation', success, failure)
     };
 
     commitMutation(environment, config);

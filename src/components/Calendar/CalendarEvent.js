@@ -17,9 +17,12 @@
  */
 import moment from 'moment';
 import React from 'react';
-import { HOUR_HEIGHT } from '../../common';
+import IconButton from '@material-ui/core/IconButton';
+import Delete from '@material-ui/icons/Delete';
+import { AppStore, AUTH_KEY, HOUR_HEIGHT } from '../../common';
 
-export const CalendarEvent = (timeStart, step) => props => {
+export const CalendarEvent = (timeStart, step, onCancel) => props => {
+    const authUser = (AppStore.get(AUTH_KEY) || { user: null }).user;
     const slotHeight = HOUR_HEIGHT / (60 / step);
     const eventHeight = (
         props.event.end.getTime() -
@@ -29,6 +32,9 @@ export const CalendarEvent = (timeStart, step) => props => {
         props.event.start.getTime() -
         timeStart.getTime()
     ) / (1000 * 60 * step);
+    const canCancel = authUser &&
+        authUser.id === (props.event.user || { id: '' }).id
+    ;
 
     return <div title="This time has been already reserved..." style={{
         position: 'absolute',
@@ -39,7 +45,6 @@ export const CalendarEvent = (timeStart, step) => props => {
         left: props.style.left + 'px',
         color: '#666',
         zIndex: 2,
-        // borderTop: '1px solid #fff',
         borderBottom: '1px solid #fff',
         width: '100%',
         marginRight: '-20px',
@@ -50,5 +55,18 @@ export const CalendarEvent = (timeStart, step) => props => {
         </strong>
         {props.event.title.split(/\r?\n/).map((line, key) =>
             <em key={key}>{line + (key ? '' : ';')}</em>)}
+        {canCancel && <span className="rbc-event-cancel">
+            <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                onClick={() => onCancel && onCancel(
+                    props.event.id,
+                    props.event.start,
+                )}
+            >
+                <Delete/>
+            </IconButton>
+        </span>}
     </div>;
 };
