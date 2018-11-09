@@ -37,7 +37,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { reserve, cancelReservation } from '../relay/mutations';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { AppStore, CAR_KEY, SLOT_KEY } from '../common';
+import { AppStore, AUTH_KEY, CAR_KEY, SLOT_KEY } from '../common';
 import { AppMessage } from '.';
 
 moment.locale(navigator.userLanguage || navigator.language);
@@ -50,6 +50,8 @@ const ReservationsType = PropTypes.arrayOf(PropTypes.shape({
     car: PropTypes.object,
     user: PropTypes.object,
 }));
+
+const RX_UNAUTHORIZED: RegExp = /\bunauthorized\b/i;
 
 export class TimeTable extends Component {
     /**
@@ -127,6 +129,10 @@ export class TimeTable extends Component {
     };
 
     errorHandler = errors => {
+        if (errors.some(error => RX_UNAUTHORIZED.test(error.message))) {
+            AppStore.del(AUTH_KEY);
+        }
+
         this.setState({ errors, loading: false });
     };
 
