@@ -91,7 +91,9 @@ function ListItemLink(props) {
 
 const drawerStyles = theme => ({
   root: {
-    display: 'flex',
+      display: 'flex',
+      flex: 1,
+      overflowY: 'auto'
   },
   logo: {
       marginRight: '15px',
@@ -105,14 +107,14 @@ const drawerStyles = theme => ({
       alignItems: 'center'
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: drawerWidth,
       flexShrink: 0,
     }
   },
   appBar: {
     marginLeft: drawerWidth,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${drawerWidth}px)`,
     },
     background: '#333',
@@ -126,20 +128,20 @@ const drawerStyles = theme => ({
   supTitle: {
       color: theme.palette.secondary.light + ' !important',
       marginLeft: '.5em',
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down('md')]: {
         display: 'none',
       }
   },
   user: {
       display: 'flex',
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down('md')]: {
         display: 'none'
       },
       flexDirection: 'row'
   },
   menuButton: {
     marginRight: 20,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       display: 'none',
     },
   },
@@ -241,7 +243,7 @@ class ResponsiveDrawer extends React.Component {
         </AppBar>
         <nav className={classes.drawer}>
           {/* The implementation can be swap with js to avoid SEO duplication of links. */}
-          <Hidden smUp implementation="css">
+          <Hidden mdUp implementation="css">
             <Drawer
               container={this.props.container}
               variant="temporary"
@@ -258,7 +260,7 @@ class ResponsiveDrawer extends React.Component {
               {drawer}
             </Drawer>
           </Hidden>
-          <Hidden xsDown implementation="css">
+          <Hidden smDown implementation="css">
             <Drawer
               classes={{
                 paper: classes.drawerPaper,
