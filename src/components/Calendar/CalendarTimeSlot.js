@@ -17,7 +17,13 @@
  */
 import moment from 'moment';
 import React from 'react';
-import { AppStore, AUTH_KEY, HOUR_HEIGHT, MSG_TIME_PASSED } from '../../common';
+import {
+    AppStore,
+    AUTH_KEY,
+    HOUR_HEIGHT,
+    MSG_TIME_PASSED,
+    MSG_CAR_MISSING
+} from '../../common';
 
 const RX_TIME_COLUMN = /\brbc-time-gutter\b/;
 
@@ -30,11 +36,15 @@ function busy(date, events) {
     ));
 }
 
-function canReserve(max, events, time, timeBlock) {
+function canReserve(max, events, time, timeBlock, car) {
     const now = new Date().getTime();
     const start = time.getTime();
     const end = time.getTime() + timeBlock * 60000;
     const maxTime = max.getTime();
+
+    if (!(car && car.make && car.model && car.regNumber)) {
+        return false;
+    }
 
     return (start > now) && (end <= maxTime) && !events.some(event => {
         const eventStart = event.start.getTime();
@@ -59,7 +69,7 @@ export const CalendarTimeSlot = (
     const end = moment(props.value.getTime() + timeBlock * 60 * 1000);
     const slotHeight = HOUR_HEIGHT / (60 / step);
     const eventHeight = timeBlock / step;
-    const isSelectable = canReserve(max, events, props.value, timeBlock);
+    const isSelectable = canReserve(max, events, props.value, timeBlock, car);
     const isBusy = busy(props.value, events);
 
     if (!user) {
@@ -73,7 +83,7 @@ export const CalendarTimeSlot = (
     return <div
         style={{ height: '16px' }}
         className={'rbc-time-slot' + (isBusy ? ' disabled' : '')}
-        title={isBusy ? MSG_TIME_PASSED : ''}
+        title={isBusy ? MSG_TIME_PASSED : !car.regNumber ? MSG_CAR_MISSING : ''}
         onClick={() => isSelectable && onSelect && onSelect(
             start.toDate(),
             end.toDate(),

@@ -23,3 +23,4 @@ export const CAR_KEY = 'UserCar';
 
 export const MSG_TIME_PASSED = 'This time has been passed...';
 export const MSG_TIME_RESERVED = 'This time has been already reserved...';
+export const MSG_CAR_MISSING = 'You need to select a car first...';
