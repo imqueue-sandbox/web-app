@@ -18,7 +18,7 @@
 import React from 'react';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
-import { AppStore, AUTH_KEY } from '../common';
+import { AppStore, AUTH_KEY } from '../../common/index';
 
 export const CalendarToolbar = onChange => toolbar => {
     const isAdmin = ((AppStore.get(AUTH_KEY) || {}).user || {}).isAdmin;
@@ -35,14 +35,17 @@ export const CalendarToolbar = onChange => toolbar => {
 
     const goToBack = () => {
         onChange && onChange(moment(toolbar.date).add(-1, 'days').toDate());
+        toolbar.onNavigate('PREV');
     };
 
     const goToNext = () => {
         onChange && onChange(moment(toolbar.date).add(1, 'days').toDate());
+        toolbar.onNavigate('NEXT');
     };
 
     const goToCurrent = () => {
         onChange && onChange(new Date());
+        toolbar.onNavigate('TODAY');
     };
 
     const cantGoBack = !hasPast();

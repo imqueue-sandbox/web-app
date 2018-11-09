@@ -17,7 +17,7 @@
  */
 import React, { Component } from 'react';
 import { createFragmentContainer } from 'react-relay';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core';
@@ -53,31 +53,31 @@ export class CarSelector extends Component {
         onChange: PropTypes.func,
     };
 
-    constructor(props) {
-        super(props);
-
-        if (!this.state.carId) {
-            Object.assign(this.state, {
-                carId: ((props.data.cars || [])[0] || {}).id || '',
-            });
-            AppStore.set(CAR_KEY, (props.data.cars || [])[0] || null);
-        }
-    }
-
     state = {
         carId: (AppStore.get(CAR_KEY) || { id: '' }).id,
     };
 
     select = cars => event => {
         const car = cars.find(car => car.id === event.target.value);
-        AppStore.set(CAR_KEY, car);
-        this.setState({ carId: event.target.value });
+        this.setState(
+            { carId: event.target.value },
+            () => AppStore.set(CAR_KEY, car),
+        );
     };
 
     openGarage = () => {
         AppStore.set(PROFILE_PANEL_KEY, 2);
         return true;
     };
+
+    componentDidMount() {
+        if (!this.state.carId) {
+            const car = (this.props.data.cars || [])[0] || null;
+            const carId = car ? car.id : '';
+
+            this.setState({ carId }, () => AppStore.set(CAR_KEY, car));
+        }
+    }
 
     render() {
         const { classes, data } = this.props;

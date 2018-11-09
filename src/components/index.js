@@ -23,7 +23,7 @@ export * from './App';
 export * from './Gravatar';
 export * from './UserCar';
 export * from './UserCars';
-export * from './CalendarToolbar';
+export * from './Calendar';
 export * from './TimeTable';
 export * from './Profile';
 export * from './AuthUser';

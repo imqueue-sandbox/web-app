@@ -36,7 +36,7 @@ import { AppMessage } from '../AppMessage';
 import { clone, withoutElement } from '../../common';
 import { addCar } from '../../relay/mutations';
 
-const styles = theme => ({
+const styles = () => ({
     carForm: {
         paddingRight: 40,
         overflow: 'hidden',

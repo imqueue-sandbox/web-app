@@ -18,16 +18,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer } from 'react-relay';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import IconButton from '@material-ui/core/IconButton';
 import { Gravatar } from '.';
-import { AppStore, AUTH_KEY } from '../common/index';
+import { AppStore, AUTH_KEY, CAR_KEY } from '../common/index';
 import { CurrentUserFragment } from '../relay/queries/fragments/index';
 import { logout } from '../relay/mutations';
 
-const styles = theme => ({
+const styles = () => ({
     appBarUser: {
         display: 'flex',
         flexDirection: 'row',
@@ -45,6 +46,14 @@ export class AuthUser extends Component {
         }),
     };
 
+    logout = () => {
+        const token = (AppStore.get(AUTH_KEY) || {}).token;
+        token && logout(token);
+        AppStore.del(AUTH_KEY);
+        AppStore.del(CAR_KEY);
+        return false;
+    };
+
     render() {
         const { classes } = this.props;
         const user = this.props.data;
@@ -58,11 +67,13 @@ export class AuthUser extends Component {
         const letters = `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
 
         return <div className={classes.appBarUser}>
-            <span>{`Hello, ${fullName}`}</span>
-            {user.email
-                ? <Gravatar user={user} size={40} />
-                : <Avatar>{letters}</Avatar>
-              }
+            <Link to="/profile">{`Hello, ${fullName}`}</Link>
+            <Link to="/profile">
+                {user.email ?
+                    <Gravatar user={user} size={40} /> :
+                    <Avatar>{letters}</Avatar>
+                }
+            </Link>
         </div>;
     }
 }

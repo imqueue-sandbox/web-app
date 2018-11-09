@@ -21,3 +21,5 @@ export * from './register';
 export * from './addCar';
 export * from './removeCar';
 export * from './updateUser';
+export * from './reserve';
+export * from './cancelReservation';

@@ -74,6 +74,10 @@ export class AppMessage extends Component {
             'error',
             'info',
         ]).isRequired,
+        key: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+        ]),
     };
 
     render() {
@@ -83,6 +87,7 @@ export class AppMessage extends Component {
             message,
             onClose,
             variant,
+            key,
             ...other
         } = this.props;
         const Icon = variantIcon[variant];
@@ -92,10 +97,13 @@ export class AppMessage extends Component {
                 className={classNames(classes[variant], className)}
                 aria-describedby="client-snackbar"
                 message={
-                    <span id="client-snackbar" className={classes.message}>
+                    <span
+                        id={`client-snackbar${key ? `-${key}` : ''}`}
+                        className={classes.message}
+                    >
                         <Icon className={classNames(
                             classes.icon,
-                            classes.iconVariant
+                            classes.iconVariant,
                         )}/>
                         {message}
                     </span>

@@ -23,13 +23,22 @@ import {
 } from 'react-relay';
 import moment from 'moment';
 import BigCalendar  from 'react-big-calendar';
-import { CalendarToolbar } from '.';
+import {
+    CalendarToolbar,
+    CalendarTimeSlot,
+    CalendarEvent,
+} from './Calendar';
 import {
     OptionsFragment,
     ReservationsQuery,
     ReservationsFragment,
 } from '../relay/queries';
+import Snackbar from '@material-ui/core/Snackbar';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { reserve, cancelReservation } from '../relay/mutations';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { AppStore, CAR_KEY, SLOT_KEY } from '../common';
+import { AppMessage } from '.';
 
 moment.locale(navigator.userLanguage || navigator.language);
 
@@ -41,76 +50,6 @@ const ReservationsType = PropTypes.arrayOf(PropTypes.shape({
     car: PropTypes.object,
     user: PropTypes.object,
 }));
-
-// const CalendarEventSelector = () => {
-//
-// };
-
-const RX_TIME_COLUMN = /\brbc-time-gutter\b/;
-
-function busy(date, events) {
-    return !!events.find(event => (
-        event.start.getTime() <= date.getTime() &&
-        event.end.getTime() > date.getTime()
-    ));
-}
-
-const CalendarTimeSlot = (events, step, timeBlock, car) => props => {
-    const className = (props.children._owner.return.stateNode ||
-        { className: '' }).className;
-
-    if (RX_TIME_COLUMN.test(className)) {
-        return props.children;
-    }
-
-    return <div
-        style={{
-            height: '16px',
-        }}
-        className={
-            'rbc-time-slot' + (busy(props.value, events)
-            ? ' disabled'
-            : ''
-    )}>
-        <div
-            style={{
-                height: (timeBlock / step) * 16 + 'px',
-                pointerEvents: 'none',
-            }}
-            className="rbc-reservation"
-        ><em>{car.regNumber} {car.make} {car.model}</em></div>
-    </div>;
-};
-
-const CalendarEvent = (timeStart, step) => props => {
-    const slotHeight = (document.querySelector(
-        '.rbc-day-slot .rbc-time-slot'
-    ) || {}).offsetHeight || 16;
-    const eventHeight = (
-        props.event.end.getTime() -
-        props.event.start.getTime()
-    ) / (1000 * 60 * step);
-    const eventTop = (
-        props.event.start.getTime() -
-        timeStart.getTime()
-    ) / (1000 * 60 * step);
-
-    return <div title="This time has been already reserved..." style={{
-        position: 'relative',
-        pointerEvents: 'all',
-        // border: '1px dotted red',
-        padding: '5px 10px',
-        top: eventTop * slotHeight + 'px',
-        height: eventHeight * slotHeight + 'px',
-        left: props.style.left + 'px',
-        color: '#666',
-    }}>
-        <b>{moment(props.event.start).format('HH:mm')}&nbsp;&ndash;&nbsp;{
-        moment(props.event.end).format('HH:mm')}&nbsp;&nbsp;</b>
-        {props.event.title.split(/\r?\n/).map((line, key) =>
-            <em key={key}>{line + (key ? '' : ';')}</em>)}
-    </div>;
-};
 
 export class TimeTable extends Component {
     /**
@@ -129,6 +68,8 @@ export class TimeTable extends Component {
 
     state = {
         reservations: null,
+        errors: [],
+        loading: false,
     };
     timeout = null;
     interval = null;
@@ -139,12 +80,13 @@ export class TimeTable extends Component {
         }
 
         this.timeout = setTimeout(() => {
-            this.setState({ currentDate: new Date() });
-            this.interval = setInterval(
-                () => this.setState({ currentDate: new Date() }),
-                300000, // each 5 minutes
-            );
+            this.timerUpdate();
+            this.interval = setInterval(this.timerUpdate, 60000);
         }, this.closestMinute().getTime() - Date.now());
+    };
+
+    timerUpdate = () => {
+        this.setState({ currentDate: new Date() });
     };
 
     clearTimers = () => {
@@ -162,6 +104,7 @@ export class TimeTable extends Component {
     };
 
     refetch = date => {
+        this.setState({ loading: true });
         /**
          * When refetch is done we need to pass-back reservations data to a
          * parent component to make sure it will be able to pass it back
@@ -172,8 +115,59 @@ export class TimeTable extends Component {
         this.props.relay.refetch({ date }, null, () => {
             const { onChange } = this.props;
             onChange && onChange(this.props.data.reservations, date);
+            this.setState({ loading: false });
         }, { force: true });
-    }
+    };
+
+    resultHandler = (date, onChange) => ({ reservations }) => {
+        this.setState(
+            { loading: false },
+            () => onChange && onChange(reservations, date),
+        );
+    };
+
+    errorHandler = errors => {
+        this.setState({ errors, loading: false });
+    };
+
+    reserve = (start, end) => {
+        const car = AppStore.get(CAR_KEY);
+        const duration = [start, end];
+        const { onChange, options } = this.props;
+        const mutationInput = {
+            carId: car.id,
+            type: options.baseTime.find(item =>
+                Number(item.duration) === Number(AppStore.get(SLOT_KEY))
+            ).key,
+            duration,
+        };
+
+        this.setState({ loading: true });
+
+        reserve(
+            mutationInput,
+            this.resultHandler(start, onChange),
+            this.errorHandler,
+        );
+    };
+
+    cancelReservation = (reservationId, date) => {
+        const { onChange } = this.props;
+
+        this.setState({ loading: true });
+
+        cancelReservation(
+            reservationId,
+            this.resultHandler(date, onChange),
+            this.errorHandler,
+        );
+    };
+
+    errorClose = key => () => {
+        const errors = this.state.errors.slice(0);
+        errors.splice(key, 1);
+        this.setState({ errors });
+    };
 
     componentDidMount() {
         this.initTimers();
@@ -204,47 +198,91 @@ export class TimeTable extends Component {
         );
     }
 
+    buildEvent(item) {
+        const { car, user, id } = item;
+        const userTitle = user ? `${user.firstName} ${user.lastName}` : '';
+        const carTitle = item.car ?
+            `${car.regNumber}, ${car.make} ${car.model}` : '';
+        const start = moment.parseZone(item.start).toDate();
+        const end = moment.parseZone(item.end).toDate();
+        let title = carTitle + (carTitle && userTitle ? ', ' : '') + userTitle;
+
+        if (!title) {
+            title = 'Reserved';
+        }
+
+        return { id, title, user, car, start, end };
+    }
+
+    buildEvents() {
+        return (this.props.reservations || this.props.data.reservations)
+            .map(this.buildEvent);
+    }
+
     render() {
-        const events = (this.props.reservations ||
-            this.props.data.reservations).map(item => ({
-            title: `Customer: ${item.user.firstName} ${item.user.lastName}
-                Car: ${item.car.regNumber}, ${item.car.make} ${item.car.model}`,
-            start: moment.parseZone(item.start).toDate(),
-            end: moment.parseZone(item.end).toDate(),
-        }));
+        const events = this.buildEvents();
         const localizer = BigCalendar.momentLocalizer(moment);
         const min = this.toTime(this.props.options.start);
         const max = this.toTime(this.props.options.end);
         const step = 15;
         const slots = 60 / step;
-        const timeBlock = this.props.timeSlotDuration;
-        const { car } = this.props;
-        // const resources = [
-        //     { id: 1, title: 'Box #1' },
-        //     { id: 2, title: 'Box #2' },
-        //     { id: 3, title: 'Box #3' },
-        // ];
+        const { car, timeSlotDuration } = this.props;
+        const { errors } = this.state;
+        const hasErrors = errors && errors.length > 0;
 
-        return <BigCalendar
-            className="time-table"
-            localizer={localizer}
-            events={events}
-            defaultView="day"
-            startAccessor="start"
-            endAccessor="end"
-            // resources={resources}
-            defaultDate={this.props.currentDate || new Date()}
-            components={{
-                toolbar: CalendarToolbar(this.onDateChange),
-                eventWrapper: CalendarEvent(min, step),
-                timeSlotWrapper: CalendarTimeSlot(events, step, timeBlock, car),
-            }}
-            step={step}
-            timeslots={slots}
-            views={[BigCalendar.Views.DAY]}
-            min={min}
-            max={max}
-        />;
+        return <>
+            <BigCalendar
+                className="time-table"
+                localizer={localizer}
+                events={events}
+                defaultView="day"
+                startAccessor="start"
+                endAccessor="end"
+                defaultDate={this.props.currentDate || new Date()}
+                components={{
+                    toolbar: CalendarToolbar(this.onDateChange),
+                    eventWrapper: CalendarEvent(
+                        min,
+                        step,
+                        this.cancelReservation,
+                    ),
+                    timeSlotWrapper: CalendarTimeSlot(
+                        max,
+                        events,
+                        step,
+                        timeSlotDuration,
+                        car || {},
+                        this.reserve
+                    ),
+                }}
+                step={step}
+                timeslots={slots}
+                views={[BigCalendar.Views.DAY]}
+                min={min}
+                max={new Date(max.getTime() - 3600 * 1000)}
+            />
+            <CircularProgress
+                style={{ display: this.state.loading ? 'block' : 'none' }}
+                size={50}
+                className="rbc-loader"
+            />
+            {hasErrors && errors.map((error, key) =>
+                <Snackbar
+                    key={key}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    open={hasErrors}
+                    autoHideDuration={5000}
+                    onClose={this.errorClose(key)}
+                >
+                    <AppMessage
+                        key={key}
+                        variant="error"
+                        message={error.message}
+                        onClose={this.errorClose(key)}
+                    />
+                </Snackbar>
+            )}
+        </>;
     }
 }
 

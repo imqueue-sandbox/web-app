@@ -15,6 +15,8 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+$HOUR_HEIGHT: 60px;
+
 html, body, #app {
   position: relative;
   width: 100%;
@@ -114,6 +116,11 @@ ul[role=menu] {
 .rbc-day-bg {
   background-color: #fff !important;
 }
+.rbc-day-slot {
+  .rbc-events-container {
+    margin-right: 0;
+  }
+}
 .rbc-timeslot-group {
   .rbc-time-slot {
     background-color: #fff !important;
@@ -130,7 +137,6 @@ ul[role=menu] {
       color: #fff;
     }
     &:hover {
-      //background-color: #333 !important;
       z-index: 1;
       .rbc-reservation {
         display: block;
@@ -138,8 +144,8 @@ ul[role=menu] {
     }
     &.disabled {
       cursor: default !important;
-      background-color: #ddd !important;
-      border-top: 1px solid #ddd !important;
+      background-color: #eee !important;
+      border-top: 1px solid #eee !important;
     }
     &.active {
       transition:
@@ -185,10 +191,42 @@ ul[role=menu] {
   padding-top: 85px;
 }
 .rbc-timeslot-group {
-  min-height: 4em;
-  max-height: 4em;
-  height: 4em;
+  min-height: $HOUR_HEIGHT;
+  max-height: $HOUR_HEIGHT;
+  height: $HOUR_HEIGHT;
 }
 .rbc-current-time-indicator {
   display: none;
+}
+.rbc-event-cancel {
+  position: absolute;
+  right: 0;
+  top: -10px;
+  transform: scale(0.6);
+}
+.rbc-event-box {
+  background-color: #dde;
+  position: absolute;
+  pointer-events: auto;
+  padding: 5px 10px;
+  color: #666;
+  z-index: 2;
+  border-bottom: 1px solid #fff;
+  border-top: 1px solid #fff;
+  width: 100%;
+  margin-right: -20px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding-right: 40px;
+  &.past {
+    background-color: #edd;
+  }
+}
+.rbc-loader {
+  margin-left: 185px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

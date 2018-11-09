@@ -130,7 +130,7 @@ export class Profile extends Component {
         }
 
         AppStore.set(AUTH_KEY, data);
-    }
+    };
 
     dataChange = (type, data, errors) => {
         const id = this.props.data.user.__id;

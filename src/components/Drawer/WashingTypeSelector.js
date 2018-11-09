@@ -52,7 +52,7 @@ export class WashingTypeSelector extends Component {
     change = (event) => {
         AppStore.set(SLOT_KEY, event.target.value);
         this.setState({ value: event.target.value });
-    }
+    };
 
     render() {
         const { classes, options } = this.props;
