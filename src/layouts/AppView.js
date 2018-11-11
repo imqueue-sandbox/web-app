@@ -133,18 +133,6 @@ export class AppView extends Component {
         }
     };
 
-    /**
-     * This handler is required to handle reservations re-fetch to be saved
-     * for time-table re-rendering without data loss, because in other case
-     * it will be re-written by initial data obtained from a root query
-     * fragment, which was cached during the initial page load.
-     *
-     * @param {object} reservations
-     */
-    timeTableChange = (reservations, currentDate) => {
-        this.setState({ currentDate, reservations });
-    };
-
     render() {
         const { classes, data } = this.props;
 
@@ -209,9 +197,6 @@ export class AppView extends Component {
                             data={data}
                             options={data.options}
                             timeSlotDuration={this.state.timeSlotDuration}
-                            onChange={this.timeTableChange}
-                            reservations={this.state.reservations}
-                            currentDate={this.state.currentDate}
                             car={this.state.car}
                         />}
                     />
