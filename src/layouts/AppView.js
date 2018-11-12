@@ -54,26 +54,26 @@ function ListItemLink(props) {
 
 const drawerStyles = theme => ({
     root: {
-        display: 'flex'
+        display: 'flex',
     },
     drawer: {
         [theme.breakpoints.up('md')]: {
             width: drawerWidth,
-            flexShrink: 0
+            flexShrink: 0,
         }
     },
     drawerPaper: {
         width: drawerWidth,
-        paddingTop: '60px'
+        paddingTop: '60px',
     },
     drawerPaperMobile: {
         width: drawerWidth,
-        paddingTop: '5px'
+        paddingTop: '5px',
     },
     selected: {
         backgroundColor: '#eee',
         boxShadow: '1px 1px 5px #999',
-    }
+    },
 });
 
 class ResponsiveDrawer extends React.Component {
@@ -159,7 +159,7 @@ const styles = theme => ({
         zIndex: 1,
         position: 'relative',
         display: 'flex',
-        flex: 1
+        flex: 1,
     },
     appBar: {
         width: '100%',
@@ -169,13 +169,13 @@ const styles = theme => ({
             color: '#fff',
             textDecoration: 'none',
             justifyContent: 'space-between',
-            alignItems: 'center'
-        }
+            alignItems: 'center',
+        },
     },
     toolbar: theme.mixins.toolbar,
     toolbarContent: {
         flexDirection: 'row',
-        display: 'flex'
+        display: 'flex',
     },
     menuButton: {
         [theme.breakpoints.up('md')]: {
@@ -191,7 +191,7 @@ const styles = theme => ({
         textDecoration: 'none',
         minHeight: '64px',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     supTitle: {
         color: theme.palette.secondary.light + ' !important',
@@ -203,15 +203,15 @@ const styles = theme => ({
     user: {
         display: 'flex',
         [theme.breakpoints.down('sm')]: {
-            display: 'none'
+            display: 'none',
         },
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     content: {
         flexGrow: 1,
         padding: theme.spacing.unit * 2,
-        backgroundColor: '#eee'
-    }
+        backgroundColor: '#eee',
+    },
 });
 
 export class AppView extends Component {
@@ -248,11 +248,11 @@ export class AppView extends Component {
         else if (key === CAR_KEY) {
             this.setState({ car: item });
         }
-    }
+    };
 
     handleDrawerToggle = () => {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
-    }
+    };
 
     /**
      * This handler is required to handle reservations re-fetch to be saved
@@ -264,7 +264,7 @@ export class AppView extends Component {
      */
     timeTableChange = (reservations, currentDate) => {
         this.setState({ currentDate, reservations });
-    }
+    };
 
     render() {
         const { classes, data, route } = this.props;
@@ -328,7 +328,7 @@ export class AppView extends Component {
                     />
                 </main>
             </div>
-        )
+        );
     }
 }
 
