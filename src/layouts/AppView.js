@@ -148,9 +148,10 @@ class ResponsiveDrawer extends React.Component {
   }
 }
 
-let ResponsiveDrawerComponent = withStyles(drawerStyles, { withTheme: true })(ResponsiveDrawer);
-
-
+const ResponsiveDrawerComponent = withStyles(
+    drawerStyles,
+    { withTheme: true },
+)(ResponsiveDrawer);
 
 const styles = theme => ({
     root: {
