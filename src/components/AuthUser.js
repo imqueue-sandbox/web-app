@@ -21,8 +21,6 @@ import { createFragmentContainer } from 'react-relay';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from "@material-ui/core/Avatar/Avatar";
-import ExitToApp from '@material-ui/icons/ExitToApp';
-import IconButton from '@material-ui/core/IconButton';
 import { Gravatar } from '.';
 import { AppStore, AUTH_KEY, CAR_KEY } from '../common/index';
 import { CurrentUserFragment } from '../relay/queries/fragments/index';

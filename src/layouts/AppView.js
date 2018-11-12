@@ -16,7 +16,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -43,143 +43,42 @@ import {
     CarSelector,
     AuthUser,
 } from '../components';
-import { AppStore, CAR_KEY, SLOT_KEY, AUTH_KEY } from '../common';
+import { AppStore, CAR_KEY, SLOT_KEY } from '../common';
 import { AppRootQuery, withQuery } from '../relay/queries';
-import { logout } from '../relay/mutations';
 
 const drawerWidth = 320;
-
-const styles = theme => ({
-    root: {
-        flexGrow: 1,
-        height: '100%',
-        zIndex: 1,
-        overflow: 'hidden',
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'stretch',
-    },
-    logo: {
-        marginRight: '15px',
-    },
-    drawerPaper: {
-        position: 'relative',
-        width: drawerWidth,
-        paddingTop: '5px'
-    },
-    content: {
-        flexGrow: 1,
-        backgroundColor: '#eee',
-        padding: theme.spacing.unit * 3,
-        minWidth: 0,
-        overflow: 'auto',
-    },
-    toolbar: theme.mixins.toolbar,
-    supTitle: {
-        color: theme.palette.secondary.light + ' !important',
-        marginLeft: '.5em',
-    },
-    selected: {
-        backgroundColor: '#eee',
-        boxShadow: '1px 1px 5px #999',
-    },
-});
 
 function ListItemLink(props) {
     return <ListItem button component="a" {...props} />;
 }
 
 const drawerStyles = theme => ({
-  root: {
-      display: 'flex',
-      flex: 1,
-      overflowY: 'auto'
-  },
-  logo: {
-      marginRight: '15px',
-  },
-  grow: {
-      display: 'flex',
-      flexGrow: 1,
-      textDecoration: 'none',
-      minHeight: '64px',
-      justifyContent: 'center',
-      alignItems: 'center'
-  },
-  drawer: {
-    [theme.breakpoints.up('md')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    }
-  },
-  appBar: {
-    marginLeft: drawerWidth,
-    [theme.breakpoints.up('md')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
+    root: {
+        display: 'flex'
     },
-    background: '#333',
-    zIndex: theme.zIndex.drawer + 1,
-    '& *': {
-        color: '#fff',
-        textDecoration: 'none',
-        justifyContent: 'space-between',
-    }
-  },
-  supTitle: {
-      color: theme.palette.secondary.light + ' !important',
-      marginLeft: '.5em',
-      [theme.breakpoints.down('md')]: {
-        display: 'none',
-      }
-  },
-  user: {
-      display: 'flex',
-      [theme.breakpoints.down('md')]: {
-        display: 'none'
-      },
-      flexDirection: 'row'
-  },
-  menuButton: {
-    marginRight: 20,
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
+    drawer: {
+        [theme.breakpoints.up('md')]: {
+            width: drawerWidth,
+            flexShrink: 0
+        }
     },
-  },
-  toolbar: theme.mixins.toolbar,
-  toolbarContent: {
-    flexDirection: 'row',
-    display: 'flex'
-  },
-  drawerPaper: {
-    width: drawerWidth
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing.unit * 2,
-  },
+    drawerPaper: {
+        width: drawerWidth,
+        paddingTop: '60px'
+    },
+    drawerPaperMobile: {
+        width: drawerWidth,
+        paddingTop: '5px'
+    }
 });
 
 class ResponsiveDrawer extends React.Component {
-  state = {
-    mobileOpen: false,
-  };
-
-  handleDrawerToggle = () => {
-    this.setState(state => ({ mobileOpen: !state.mobileOpen }));
-  };
-
-  logout() {
-      const token = (AppStore.get(AUTH_KEY) || {}).token;
-      token && logout(token);
-      AppStore.del(AUTH_KEY);
-  }
-
   is(routePath) {
       return this.props.route === `/${routePath}`;
   }
 
   render() {
-    const { classes, theme, data } = this.props;
+    const { classes, theme, data, mobileOpen, handleDrawerToggle } = this.props;
 
     const drawer = (
       <div>
@@ -212,59 +111,23 @@ class ResponsiveDrawer extends React.Component {
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
-            <div className={classes.toolbarContent}>
-                <IconButton
-                  color="inherit"
-                  aria-label="Open drawer"
-                  onClick={this.handleDrawerToggle}
-                  className={classes.menuButton}
-                >
-                  <Waves className={classes.logo}/>
-                </IconButton>
-                <Typography
-                    variant="h6"
-                    color="inherit"
-                    className={classes.grow}
-                    noWrap
-                >
-                    Car Wash Tutorial App
-                    <sup className={classes.supTitle}>for @imqueue</sup>
-                </Typography>
-            </div>
-            <div className={classes.toolbarContent}>
-                <div className={classes.user}>
-                  <AuthUser data={data.user}/>
-                </div>
-                <IconButton onClick={this.logout}><ExitToApp/></IconButton>
-            </div>
-          </Toolbar>
-        </AppBar>
         <nav className={classes.drawer}>
           {/* The implementation can be swap with js to avoid SEO duplication of links. */}
           <Hidden mdUp implementation="css">
             <Drawer
-              container={this.props.container}
               variant="temporary"
               anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-              open={this.state.mobileOpen}
-              onClose={this.handleDrawerToggle}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
-              }}
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              classes={{ paper: classes.drawerPaperMobile }}
+              ModalProps={{ keepMounted: true }} // Better open performance on mobile.
             >
               {drawer}
             </Drawer>
           </Hidden>
           <Hidden smDown implementation="css">
             <Drawer
-              classes={{
-                paper: classes.drawerPaper,
-              }}
+              classes={{ paper: classes.drawerPaper }}
               variant="permanent"
               open
             >
@@ -272,32 +135,78 @@ class ResponsiveDrawer extends React.Component {
             </Drawer>
           </Hidden>
         </nav>
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Route
-              exact
-              path="/"
-              component={() => <TimeTable
-                  data={data}
-                  options={data.options}
-                  timeSlotDuration={this.state.timeSlotDuration}
-                  onChange={this.timeTableChange}
-                  reservations={this.state.reservations}
-                  currentDate={this.state.currentDate}
-                  car={this.props.car}
-              />}
-          />
-          <Route
-              path="/profile"
-              component={() => <Profile data={data}/>}
-          />
-        </main>
       </div>
     );
   }
 }
 
 let ResponsiveDrawerComponent = withStyles(drawerStyles, { withTheme: true })(ResponsiveDrawer);
+
+
+
+const styles = theme => ({
+    root: {
+        flexGrow: 1,
+        zIndex: 1,
+        position: 'relative',
+        display: 'flex',
+        flex: 1
+    },
+    appBar: {
+        width: '100%',
+        background: '#333',
+        zIndex: theme.zIndex.drawer + 1,
+        '& *': {
+            color: '#fff',
+            textDecoration: 'none',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+        }
+    },
+    toolbar: theme.mixins.toolbar,
+    toolbarContent: {
+        flexDirection: 'row',
+        display: 'flex'
+    },
+    menuButton: {
+        [theme.breakpoints.up('md')]: {
+            display: 'none',
+        },
+    },
+    logo: {
+        marginRight: '5px',
+    },
+    grow: {
+        display: 'flex',
+        flexGrow: 1,
+        textDecoration: 'none',
+        minHeight: '64px',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    supTitle: {
+        color: theme.palette.secondary.light + ' !important',
+        marginLeft: '.5em',
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
+        }
+    },
+    user: {
+        display: 'flex',
+        [theme.breakpoints.down('sm')]: {
+            display: 'none'
+        },
+        flexDirection: 'row'
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing.unit * 2,
+    },
+    selected: {
+        backgroundColor: '#eee',
+        boxShadow: '1px 1px 5px #999',
+    }
+});
 
 export class AppView extends Component {
     static propTypes = {
@@ -310,6 +219,7 @@ export class AppView extends Component {
         reservations: null,
         currentDate: new Date(),
         car: AppStore.get(CAR_KEY),
+        mobileOpen: false
     };
 
     componentDidMount() {
@@ -334,6 +244,10 @@ export class AppView extends Component {
         }
     }
 
+    handleDrawerToggle = () => {
+        this.setState(state => ({ mobileOpen: !state.mobileOpen }));
+    }
+
     /**
      * This handler is required to handle reservations re-fetch to be saved
      * for time-table re-rendering without data loss, because in other case
@@ -344,18 +258,72 @@ export class AppView extends Component {
      */
     timeTableChange = (reservations, currentDate) => {
         this.setState({ currentDate, reservations });
-    };
+    }
 
     render() {
-        const { classes, data } = this.props;
+        const { classes, data, route } = this.props;
+        const { mobileOpen, car, timeSlotDuration, reservations, currentDate } = this.state;
 
         return (
             <div className={classes.root}>
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                        <div className={classes.toolbarContent}>
+                            <IconButton
+                                color="inherit"
+                                aria-label="Open drawer"
+                                onClick={this.handleDrawerToggle}
+                                className={classes.menuButton}
+                            >
+                                <Waves className={classes.logo}/>
+                            </IconButton>
+                            <Typography
+                                variant="h6"
+                                color="inherit"
+                                className={classes.grow}
+                                noWrap
+                            >
+                                Car Wash Tutorial App
+                                <sup className={classes.supTitle}>for @imqueue</sup>
+                            </Typography>
+                        </div>
+                        <div className={classes.toolbarContent}>
+                            <div className={classes.user}>
+                                <AuthUser data={data.user}/>
+                            </div>
+                            <IconButton onClick={this.logout}><ExitToApp/></IconButton>
+                        </div>
+                    </Toolbar>
+                </AppBar>
                 <ResponsiveDrawerComponent
                     data={data}
-                    car={this.state.car}
-                    route={this.props.route}
+                    route={route}
+                    mobileOpen={mobileOpen}
+                    timeTableChange={this.timeTableChange}
+                    handleDrawerToggle={this.handleDrawerToggle}
                 />
+                <main className={classes.content}>
+                    <div className={classes.toolbar} />
+                    <Route
+                        exact
+                        path="/"
+                        component={() => (
+                            <TimeTable
+                                data={data}
+                                car={car}
+                                options={data.options}
+                                reservations={reservations}
+                                currentDate={currentDate}
+                                timeSlotDuration={timeSlotDuration}
+                                onChange={this.timeTableChange}
+                            />
+                        )}
+                    />
+                    <Route
+                        path="/profile"
+                        component={() => <Profile data={data}/>}
+                    />
+                </main>
             </div>
         )
     }
