@@ -262,7 +262,7 @@ export class AppView extends Component {
 
     render() {
         const { classes, data, route } = this.props;
-        const { mobileOpen, car, timeSlotDuration, reservations, currentDate } = this.state;
+        const { mobileOpen, car, timeSlotDuration } = this.state;
 
         return (
             <div className={classes.root}>
@@ -310,12 +310,9 @@ export class AppView extends Component {
                         component={() => (
                             <TimeTable
                                 data={data}
-                                car={car}
                                 options={data.options}
-                                reservations={reservations}
-                                currentDate={currentDate}
+                                car={car}
                                 timeSlotDuration={timeSlotDuration}
-                                onChange={this.timeTableChange}
                             />
                         )}
                     />

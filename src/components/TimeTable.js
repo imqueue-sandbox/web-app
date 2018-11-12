@@ -17,17 +17,10 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-    createFragmentContainer,
-    createRefetchContainer,
-} from 'react-relay';
+import { createFragmentContainer, createRefetchContainer } from 'react-relay';
 import moment from 'moment';
 import BigCalendar  from 'react-big-calendar';
-import {
-    CalendarToolbar,
-    CalendarTimeSlot,
-    CalendarEvent,
-} from './Calendar';
+import { CalendarToolbar, CalendarTimeSlot, CalendarEvent } from './Calendar';
 import {
     OptionsFragment,
     ReservationsQuery,
@@ -37,32 +30,27 @@ import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { reserve, cancelReservation } from '../relay/mutations';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { AppStore, CAR_KEY, SLOT_KEY } from '../common';
+import { AppStore, AUTH_KEY, CAR_KEY, SLOT_KEY } from '../common';
 import { AppMessage } from '.';
 
 moment.locale(navigator.userLanguage || navigator.language);
 
-const ReservationsType = PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    start: PropTypes.string.isRequired,
-    end: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    car: PropTypes.object,
-    user: PropTypes.object,
-}));
+const RX_UNAUTHORIZED = /\bunauthorized\b/i;
 
 export class TimeTable extends Component {
-    /**
-     * Reservations will be either bypassed as a reservations property or
-     * through a relay data fragment from a root query.
-     */
     static propTypes = {
         timeSlotDuration: PropTypes.number,
-        data: PropTypes.shape({ reservations: ReservationsType }).isRequired,
-        reservations: ReservationsType,
+        data: PropTypes.shape({
+            reservations: PropTypes.arrayOf(PropTypes.shape({
+                id: PropTypes.string.isRequired,
+                start: PropTypes.string.isRequired,
+                end: PropTypes.string.isRequired,
+                type: PropTypes.string.isRequired,
+                car: PropTypes.object,
+                user: PropTypes.object,
+            })),
+        }).isRequired,
         options: PropTypes.object.isRequired,
-        onChange: PropTypes.func,
-        currentDate: PropTypes.instanceOf(Date),
         car: PropTypes.object,
     };
 
@@ -70,6 +58,7 @@ export class TimeTable extends Component {
         reservations: null,
         errors: [],
         loading: false,
+        currentDate: new Date(),
     };
     timeout = null;
     interval = null;
@@ -104,72 +93,55 @@ export class TimeTable extends Component {
     };
 
     refetch = date => {
-        this.setState({ loading: true });
-        /**
-         * When refetch is done we need to pass-back reservations data to a
-         * parent component to make sure it will be able to pass it back
-         * during this component re-rendering and make sure re-fetched data
-         * will not be override by initial data from a root query fragment
-         * which is required only on initial page load.
-         */
-        this.props.relay.refetch({ date }, null, () => {
-            const { onChange } = this.props;
-            onChange && onChange(this.props.data.reservations, date);
-            this.setState({ loading: false });
-        }, { force: true });
-    };
-
-    resultHandler = (date, onChange) => ({ reservations }) => {
-        this.setState(
-            { loading: false },
-            () => onChange && onChange(reservations, date),
+        this.setState({ loading: true }, () =>
+            this.props.relay.refetch({ date }, null, () => {
+                this.onUpdate(date)(this.props.data);
+            }, { force: true })
         );
     };
 
-    errorHandler = errors => {
-        this.setState({ errors, loading: false });
+    onUpdate = (currentDate) => ({ reservations }) => {
+        this.setState({ loading: false, reservations, currentDate });
+    };
+
+    onError = errors => {
+        if (errors.some(error => RX_UNAUTHORIZED.test(error.message))) {
+            AppStore.del(AUTH_KEY);
+        }
+
+        this.setState({ loading: false, errors });
     };
 
     reserve = (start, end) => {
         const car = AppStore.get(CAR_KEY);
         const duration = [start, end];
-        const { onChange, options } = this.props;
         const mutationInput = {
             carId: car.id,
-            type: options.baseTime.find(item =>
+            type: this.props.options.baseTime.find(item =>
                 Number(item.duration) === Number(AppStore.get(SLOT_KEY))
             ).key,
             duration,
         };
 
         this.setState({ loading: true });
-
-        reserve(
-            mutationInput,
-            this.resultHandler(start, onChange),
-            this.errorHandler,
-        );
+        reserve(mutationInput, this.onUpdate(start), this.onError);
     };
 
     cancelReservation = (reservationId, date) => {
-        const { onChange } = this.props;
-
-        this.setState({ loading: true });
-
-        cancelReservation(
-            reservationId,
-            this.resultHandler(date, onChange),
-            this.errorHandler,
+        this.setState({ loading: true }, () =>
+            cancelReservation(reservationId, this.onUpdate(date), this.onError)
         );
     };
 
     errorClose = key => () => {
         const errors = this.state.errors.slice(0);
+
         errors.splice(key, 1);
         this.setState({ errors });
     };
 
     componentDidMount() {
+        this.setState({ reservations: this.props.data.reservations });
         this.initTimers();
     }
 
@@ -188,8 +160,9 @@ export class TimeTable extends Component {
         );
     }
 
-    toTime(time, date = this.props.currentDate || new Date()) {
+    toTime(time, date = this.state.currentDate || new Date()) {
         const [hours, minutes] = time.split(':').map(item => item | 0);
+
         return new Date(
             date.getFullYear(),
             date.getMonth(),
@@ -215,8 +188,7 @@ export class TimeTable extends Component {
     }
 
     buildEvents() {
-        return (this.props.reservations || this.props.data.reservations)
-            .map(this.buildEvent);
+        return (this.state.reservations || []).map(this.buildEvent);
     }
 
     render() {
@@ -237,7 +209,7 @@ export class TimeTable extends Component {
                 defaultView="day"
                 startAccessor="start"
                 endAccessor="end"
-                defaultDate={this.props.currentDate || new Date()}
+                defaultDate={this.state.currentDate}
                 components={{
                     toolbar: CalendarToolbar(this.onDateChange),
                     eventWrapper: CalendarEvent(
