@@ -204,7 +204,6 @@ export class TimeTable extends Component {
 
         return <>
             <BigCalendar
-                className="time-table"
                 localizer={localizer}
                 events={events}
                 defaultView="day"

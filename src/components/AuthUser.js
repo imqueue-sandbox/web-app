@@ -21,8 +21,6 @@ import { createFragmentContainer } from 'react-relay';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from "@material-ui/core/Avatar/Avatar";
-import ExitToApp from '@material-ui/icons/ExitToApp';
-import IconButton from '@material-ui/core/IconButton';
 import { Gravatar } from '.';
 import { AppStore, AUTH_KEY, CAR_KEY } from '../common/index';
 import { CurrentUserFragment } from '../relay/queries/fragments/index';
@@ -68,11 +66,12 @@ export class AuthUser extends Component {
 
         return <div className={classes.appBarUser}>
             <Link to="/profile">{`Hello, ${fullName}`}</Link>
-            <Link to="/profile">{user.email
-                ? <Gravatar user={user} size={40} />
-                : <Avatar>{letters}</Avatar>}
+            <Link to="/profile">
+                {user.email ?
+                    <Gravatar user={user} size={40} /> :
+                    <Avatar>{letters}</Avatar>
+                }
             </Link>
-            <IconButton onClick={this.logout}><ExitToApp/></IconButton>
         </div>;
     }
 }
