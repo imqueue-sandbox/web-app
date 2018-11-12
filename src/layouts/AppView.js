@@ -69,6 +69,10 @@ const drawerStyles = theme => ({
     drawerPaperMobile: {
         width: drawerWidth,
         paddingTop: '5px'
+    },
+    selected: {
+        backgroundColor: '#eee',
+        boxShadow: '1px 1px 5px #999',
     }
 });
 
@@ -205,10 +209,6 @@ const styles = theme => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing.unit * 2,
-    },
-    selected: {
-        backgroundColor: '#eee',
-        boxShadow: '1px 1px 5px #999',
     }
 });
 
