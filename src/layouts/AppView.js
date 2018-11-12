@@ -312,7 +312,7 @@ export class AppView extends Component {
                     <Route
                         exact
                         path="/"
-                        component={() => (
+                        render={() => (
                             <TimeTable
                                 data={data}
                                 options={data.options}
@@ -323,7 +323,7 @@ export class AppView extends Component {
                     />
                     <Route
                         path="/profile"
-                        component={() => <Profile data={data}/>}
+                        render={() => <Profile data={data}/>}
                     />
                 </main>
             </div>
