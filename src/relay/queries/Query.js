@@ -30,6 +30,14 @@ import environment from '../Environment';
  */
 export const withQuery = (query) => (RenderComponent) => {
     class Query extends Component {
+        static propTypes = {
+            vars: PropTypes.object,
+            onError: PropTypes.func,
+            onLoading: PropTypes.func,
+            onLoaded: PropTypes.func,
+            childProps: PropTypes.object,
+        };
+
         render() {
             const {
                 vars,
@@ -61,14 +69,6 @@ export const withQuery = (query) => (RenderComponent) => {
             />;
         }
     }
-
-    Query.propTypes = {
-        vars: PropTypes.object,
-        onError: PropTypes.func,
-        onLoading: PropTypes.func,
-        onLoaded: PropTypes.func,
-        childProps: PropTypes.object,
-    };
 
     return Query;
 };
