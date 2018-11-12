@@ -77,36 +77,40 @@ class ResponsiveDrawer extends React.Component {
       return this.props.route === `/${routePath}`;
   }
 
-  render() {
-    const { classes, theme, data, mobileOpen, handleDrawerToggle } = this.props;
+  _getDrawer() {
+      const { classes, data } = this.props;
 
-    const drawer = (
-      <div>
-        <List>
-            <ListItemLink
-                href="/"
-                className={this.is('') ? classes.selected : ''}
-            >
-              <ListItemIcon><Timelapse /></ListItemIcon>
-              <ListItemText primary="Washing Time Reservations" />
-            </ListItemLink>
-            <ListItemLink
-              href="/profile"
-              className={this.is('profile') ?
-                classes.selected : ''}
-            >
-              <ListItemIcon><Person /></ListItemIcon>
-              <ListItemText primary="User Profile" />
-            </ListItemLink>
-            <Divider/>
-        </List>
-        {this.is('') &&
-          <WashingTypeSelector options={data.options}/>
-        }
-        {this.is('') && <Divider/>}
-        {this.is('') && <CarSelector data={data.user} />}
-      </div>
-    );
+      return (
+          <div>
+              <List>
+                  <ListItemLink
+                      href="/"
+                      className={this.is('') ? classes.selected : ''}
+                  >
+                      <ListItemIcon><Timelapse /></ListItemIcon>
+                      <ListItemText primary="Washing Time Reservations" />
+                  </ListItemLink>
+                  <ListItemLink
+                      href="/profile"
+                      className={this.is('profile') ?
+                          classes.selected : ''}
+                  >
+                      <ListItemIcon><Person /></ListItemIcon>
+                      <ListItemText primary="User Profile" />
+                  </ListItemLink>
+                  <Divider/>
+              </List>
+              {this.is('') &&
+                <WashingTypeSelector options={data.options}/>
+              }
+              {this.is('') && <Divider/>}
+              {this.is('') && <CarSelector data={data.user} />}
+          </div>
+      );
+  }
+
+  render() {
+    const { classes, theme, mobileOpen, handleDrawerToggle } = this.props;
 
     return (
       <div className={classes.root}>
@@ -122,7 +126,7 @@ class ResponsiveDrawer extends React.Component {
               classes={{ paper: classes.drawerPaperMobile }}
               ModalProps={{ keepMounted: true }} // Better open performance on mobile.
             >
-              {drawer}
+              {this._getDrawer()}
             </Drawer>
           </Hidden>
           <Hidden smDown implementation="css">
@@ -131,7 +135,7 @@ class ResponsiveDrawer extends React.Component {
               variant="permanent"
               open
             >
-              {drawer}
+              {this._getDrawer()}
             </Drawer>
           </Hidden>
         </nav>
