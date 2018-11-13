@@ -43,8 +43,9 @@ import {
     CarSelector,
     AuthUser,
 } from '../components';
-import { AppStore, CAR_KEY, SLOT_KEY } from '../common';
+import {AppStore, AUTH_KEY, CAR_KEY, SLOT_KEY} from '../common';
 import { AppRootQuery, withQuery } from '../relay/queries';
+import { logout } from '../relay/mutations';
 
 const drawerWidth = 320;
 
@@ -264,6 +265,14 @@ export class AppView extends Component {
      */
     timeTableChange = (reservations, currentDate) => {
         this.setState({ currentDate, reservations });
+    };
+
+    logout = () => {
+        const token = (AppStore.get(AUTH_KEY) || {}).token;
+        token && logout(token);
+        AppStore.del(AUTH_KEY);
+        AppStore.del(CAR_KEY);
+        return false;
     };
 
     render() {

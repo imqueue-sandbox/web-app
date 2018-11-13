@@ -22,9 +22,8 @@ import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from "@material-ui/core/Avatar/Avatar";
 import { Gravatar } from '.';
-import { AppStore, AUTH_KEY, CAR_KEY } from '../common/index';
+import { AppStore, AUTH_KEY } from '../common/index';
 import { CurrentUserFragment } from '../relay/queries/fragments/index';
-import { logout } from '../relay/mutations';
 
 const styles = () => ({
     appBarUser: {
@@ -42,14 +41,6 @@ export class AuthUser extends Component {
             lastName: PropTypes.string.isRequired,
             email: PropTypes.string,
         }),
-    };
-
-    logout = () => {
-        const token = (AppStore.get(AUTH_KEY) || {}).token;
-        token && logout(token);
-        AppStore.del(AUTH_KEY);
-        AppStore.del(CAR_KEY);
-        return false;
     };
 
     render() {
