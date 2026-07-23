@@ -1,0 +1,14 @@
+{
+  "src": "./src",
+  "schema": "./schema.graphql",
+  "language": "javascript",
+  "eagerEsModules": true,
+  "excludes": [
+    "**/node_modules/**",
+    "**/__mocks__/**",
+    "**/__generated__/**"
+  ],
+  "featureFlags": {
+    "enforce_fragment_alias_where_ambiguous": { "kind": "disabled" }
+  }
+}

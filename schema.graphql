@@ -1,169 +1,3 @@
-input addCarInput {
-  """
-  User identifier or email address. Optional. If not passed user must be authenticated.
-  """
-  idOrEmail: ID
-
-  """Selected car identifier"""
-  carId: String!
-
-  """User's car registration number"""
-  regNumber: String!
-  clientMutationId: String
-}
-
-type addCarPayload {
-  """Updated user data object"""
-  user: User
-  clientMutationId: String
-}
-
-"""Base time option item entity"""
-type BaseTimeOption {
-  """Option key"""
-  key: String
-
-  """Option title"""
-  title: String
-
-  """Option title"""
-  duration: Int
-}
-
-input cancelReservationInput {
-  """Existing reservation identifier"""
-  id: ID!
-  clientMutationId: String
-}
-
-type cancelReservationPayload {
-  """Updated list of reservations"""
-  reservations: [Reservation]
-  clientMutationId: String
-}
-
-"""Car entity"""
-type Car implements Node {
-  """The ID of an object"""
-  id: ID!
-
-  """The ID of an object"""
-  carId: ID!
-
-  """Car's manufacturer"""
-  make: String
-
-  """Car's model name"""
-  model: String
-
-  """Car type (vehicle class)"""
-  type: String
-
-  """Car manufacturing years"""
-  years: [Int]
-
-  """
-  Registration number. This field used only when car is associated with the User entity
-  """
-  regNumber: String
-}
-
-input loginInput {
-  """User's contact email (unique)"""
-  email: String!
-
-  """User's password"""
-  password: String!
-  clientMutationId: String
-}
-
-type loginPayload {
-  """User's authentication token"""
-  token: String
-
-  """Authenticated user"""
-  user: User
-  clientMutationId: String
-}
-
-input logoutInput {
-  """Valid auth jwt token which should be invalidated"""
-  token: String!
-  clientMutationId: String
-}
-
-type logoutPayload {
-  """Logout operation success result"""
-  success: Boolean
-  clientMutationId: String
-}
-
-type Mutation {
-  """Updates given user data fields with a given values"""
-  updateUser(input: updateUserInput!): updateUserPayload
-
-  """Logs user in and returns valid auth jwt token"""
-  login(input: loginInput!): loginPayload
-
-  """Logs user out and invalidates token"""
-  logout(input: logoutInput!): logoutPayload
-
-  """Adds a car to a user"""
-  addCar(input: addCarInput!): addCarPayload
-
-  """Removes car from a user"""
-  removeCar(input: removeCarInput!): removeCarPayload
-
-  """Makes car washing time reservation"""
-  reserve(input: reserveInput!): reservePayload
-
-  """Cancels existing reservation"""
-  cancelReservation(input: cancelReservationInput!): cancelReservationPayload
-}
-
-"""An object with an ID"""
-interface Node {
-  """The id of the object."""
-  id: ID!
-}
-
-"""Time-table options entity"""
-type Options implements Node {
-  """The ID of an object"""
-  id: ID!
-
-  """
-  Start working time, should be a string in form of "HH:MM"
-  """
-  start: String
-
-  """
-  End working time, should be a string in form of "HH:MM"
-  """
-  end: String
-
-  """Number of boxes available on washing station"""
-  boxes: Int
-
-  """Washing time options defined by a service"""
-  baseTime: [BaseTimeOption]
-}
-
-"""Information about pagination in a connection."""
-type PageInfo {
-  """When paginating forwards, are there more items?"""
-  hasNextPage: Boolean!
-
-  """When paginating backwards, are there more items?"""
-  hasPreviousPage: Boolean!
-
-  """When paginating backwards, the cursor to continue."""
-  startCursor: String
-
-  """When paginating forwards, the cursor to continue."""
-  endCursor: String
-}
-
 type Query {
   """Fetches an object given its ID"""
   node(
@@ -172,20 +6,22 @@ type Query {
   ): Node
 
   """
-  Fetches list of users applying given filters and selecting given number of
-  records before or after a specified record in the selection list. If the data
-  is requested not by admin user the max number of records to fetch is limited
-  to 100 (as first or last arguments define). Without a first or last args
-  defined it will return first 10 users matching given filters
+  Fetches list of users applying given filters and selecting given number of records before or after a specified record in the selection list. If the data is requested not by an admin user the max number of records to fetch is limited to 100. Without a first or last arg defined it returns first 10 users matching given filters
   """
   users(
-    """
-    Optional argument, allowing to define filtering criteria for user list selection
-    """
+    """Optional argument, defining filtering criteria for user list selection"""
     filter: UserFilter
+
+    """Returns the items in the list that come after the specified cursor."""
     after: String
+
+    """Returns the first n items from the list."""
     first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
     before: String
+
+    """Returns the last n items from the list."""
     last: Int
   ): UserConnection
 
@@ -203,14 +39,14 @@ type Query {
 
   """Fetches car data by its identifier"""
   car(
-    """User identifier. Optional. Either this identifier or email required"""
+    """Car identifier"""
     id: String!
   ): Car
 
   """Fetches list of car brands"""
   brands: [String]
 
-  """Fetches all options defined for reservation time table"""
+  """Fetches all options defined for the reservation time table"""
   options: Options
 
   """Fetches single reservation record by its identifier"""
@@ -220,8 +56,7 @@ type Query {
   ): Reservation
 
   """
-  Fetches list of reservations for a given date. If date is not provided, will
-  fetch reservation list for a current day (today)
+  Fetches list of reservations for a given date. If date is not provided, fetches the reservation list for the current day
   """
   reservations(
     """
@@ -231,104 +66,43 @@ type Query {
   ): [Reservation]
 }
 
-input removeCarInput {
-  """User's car identifier"""
-  carId: String!
-  clientMutationId: String
-}
-
-type removeCarPayload {
-  """Updated user data object"""
-  user: User
-  clientMutationId: String
-}
-
-"""Reservation record entity"""
-type Reservation implements Node {
-  """The ID of an object"""
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
   id: ID!
-
-  """User's car associated with reservation"""
-  car: Car
-
-  """User associated with reservation"""
-  user: User
-
-  """Reservation type, which was initially requested"""
-  type: String
-
-  """Reservation start time (ISO date/time string)"""
-  start: String
-
-  """Reservation end time (ISO date/time string)"""
-  end: String
 }
 
-input reserveInput {
-  """User identifier"""
-  userId: ID
+"""A connection to a list of items."""
+type UserConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
 
-  """Selected car identifier"""
-  carId: ID!
-
-  """Reservation washing type"""
-  type: String!
-
-  """
-  Time range as list of two date/time strings in ISO format representing start and end date/time
-  """
-  duration: [String]!
-  clientMutationId: String
+  """A list of edges."""
+  edges: [UserEdge]
 }
 
-type reservePayload {
-  """Updated list of reservations"""
-  reservations: [Reservation]
-  clientMutationId: String
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
 }
 
-input updateUserInput {
-  """User's first (given) name"""
-  firstName: String
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge"""
+  node: User
 
-  """User's last (family) name"""
-  lastName: String
-
-  """User's contact email (unique)"""
-  email: String
-
-  """User's password"""
-  password: String
-
-  """User's active state flag"""
-  isActive: Boolean
-
-  """User's admin role flag"""
-  isAdmin: Boolean
-
-  """User registered cars count"""
-  carsCount: Int
-
-  """
-  User identifier. If provided will perform update, if not provided - will attempt to create new user
-  """
-  id: ID
-
-  """
-  Old password to use for verification of the new password change. It MUST be
-  provided when the password field is set to non empty value during update mutation.
-  """
-  oldPassword: String
-
-  """List of cars associated with the user"""
-  cars: [UserCar]
-  clientMutationId: String
-}
-
-type updateUserPayload {
-  """Created or updated user data object"""
-  user: User
-  clientMutationId: String
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 """User entity"""
@@ -361,6 +135,173 @@ type User implements Node {
   carsCount: Int
 }
 
+"""Car entity"""
+type Car implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """The ID of an object"""
+  carId: ID!
+
+  """Car's manufacturer"""
+  make: String
+
+  """Car's model name"""
+  model: String
+
+  """Car type (vehicle class)"""
+  type: String
+
+  """Car manufacturing years"""
+  years: [Int]
+
+  """
+  Registration number. This field is used only when the car is associated with the User entity
+  """
+  regNumber: String
+}
+
+"""
+This type describes arguments passed to a users collection selection filters
+"""
+input UserFilter {
+  """Filters users list by isActive boolean flag"""
+  isActive: Boolean
+
+  """Filters users list by isAdmin boolean flag"""
+  isAdmin: Boolean
+
+  """Filters users whose firstName matches given pattern"""
+  firstName: String
+
+  """Filters users whose lastName matches given pattern"""
+  lastName: String
+
+  """Filters users whose email matches given pattern"""
+  email: String
+}
+
+"""Time-table options entity"""
+type Options implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """
+  Start working time, a string in form of "HH:MM"
+  """
+  start: String
+
+  """
+  End working time, a string in form of "HH:MM"
+  """
+  end: String
+
+  """Number of boxes available on the washing station"""
+  boxes: Int
+
+  """Washing time options defined by a service"""
+  baseTime: [BaseTimeOption]
+}
+
+"""Base time option item entity"""
+type BaseTimeOption {
+  """Option key"""
+  key: String
+
+  """Option title"""
+  title: String
+
+  """Option duration, minutes"""
+  duration: Int
+}
+
+"""Reservation record entity"""
+type Reservation implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """User's car associated with reservation"""
+  car: Car
+
+  """User associated with reservation"""
+  user: User
+
+  """Reservation type, which was initially requested"""
+  type: String
+
+  """Reservation start time (ISO date/time string)"""
+  start: String
+
+  """Reservation end time (ISO date/time string)"""
+  end: String
+}
+
+type Mutation {
+  """Updates given user data fields with given values"""
+  updateUser(input: updateUserInput!): updateUserPayload
+
+  """Logs user in and returns a valid auth jwt token"""
+  login(input: loginInput!): loginPayload
+
+  """Logs user out and invalidates the token"""
+  logout(input: logoutInput!): logoutPayload
+
+  """Adds a car to a user"""
+  addCar(input: addCarInput!): addCarPayload
+
+  """Removes a car from a user"""
+  removeCar(input: removeCarInput!): removeCarPayload
+
+  """Makes a car washing time reservation"""
+  reserve(input: reserveInput!): reservePayload
+
+  """Cancels an existing reservation"""
+  cancelReservation(input: cancelReservationInput!): cancelReservationPayload
+}
+
+type updateUserPayload {
+  """Created or updated user data object"""
+  user: User
+  clientMutationId: String
+}
+
+input updateUserInput {
+  """User's first (given) name"""
+  firstName: String
+
+  """User's last (family) name"""
+  lastName: String
+
+  """User's contact email (unique)"""
+  email: String
+
+  """User's password"""
+  password: String
+
+  """User's active state flag"""
+  isActive: Boolean
+
+  """User's admin role flag"""
+  isAdmin: Boolean
+
+  """User registered cars count"""
+  carsCount: Int
+
+  """
+  User identifier. If provided will perform an update, if not provided will attempt to create a new user
+  """
+  id: ID
+
+  """
+  Old password used to verify the new password change. It MUST be provided when the password field is set to a non-empty value during an update mutation.
+  """
+  oldPassword: String
+
+  """List of cars associated with the user"""
+  cars: [UserCar]
+  clientMutationId: String
+}
+
 """User car association object"""
 input UserCar {
   """Identifier of car object from cars database"""
@@ -370,40 +311,99 @@ input UserCar {
   regNumber: String!
 }
 
-"""A connection to a list of items."""
-type UserConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
+type loginPayload {
+  """User's authentication token"""
+  token: String
 
-  """A list of edges."""
-  edges: [UserEdge]
+  """Authenticated user"""
+  user: User
+  clientMutationId: String
 }
 
-"""An edge in a connection."""
-type UserEdge {
-  """The item at the end of the edge"""
-  node: User
+input loginInput {
+  """User's contact email (unique)"""
+  email: String!
 
-  """A cursor for use in pagination"""
-  cursor: String!
+  """User's password"""
+  password: String!
+  clientMutationId: String
 }
 
-"""
-This type describes an arguments bypassed to a users collection selection filters
-"""
-input UserFilter {
-  """Filters users list by isActive boolean flag"""
-  isActive: Boolean
+type logoutPayload {
+  """Logout operation success result"""
+  success: Boolean
+  clientMutationId: String
+}
 
-  """Filters users list by isAdmin boolean flag"""
-  isAdmin: Boolean
+input logoutInput {
+  """Valid auth jwt token which should be invalidated"""
+  token: String!
+  clientMutationId: String
+}
 
-  """Filters users whom firstName matches given string pattern"""
-  firstName: String
+type addCarPayload {
+  """Updated user data object"""
+  user: User
+  clientMutationId: String
+}
 
-  """Filters users whom lastName matches given string pattern"""
-  lastName: String
+input addCarInput {
+  """
+  User identifier or email address. Optional. If not passed user must be authenticated.
+  """
+  idOrEmail: ID
 
-  """Filters users whom email address matches given string pattern"""
-  email: String
+  """Selected car identifier"""
+  carId: String!
+
+  """User's car registration number"""
+  regNumber: String!
+  clientMutationId: String
+}
+
+type removeCarPayload {
+  """Updated user data object"""
+  user: User
+  clientMutationId: String
+}
+
+input removeCarInput {
+  """User's car identifier"""
+  carId: String!
+  clientMutationId: String
+}
+
+type reservePayload {
+  """Updated list of reservations"""
+  reservations: [Reservation]
+  clientMutationId: String
+}
+
+input reserveInput {
+  """User identifier"""
+  userId: ID
+
+  """Selected car identifier"""
+  carId: ID!
+
+  """Reservation washing type"""
+  type: String!
+
+  """
+  Time range as list of two date/time strings in ISO format representing start and end date/time
+  """
+  duration: [String]!
+  clientMutationId: String
+}
+
+type cancelReservationPayload {
+  """Updated list of reservations"""
+  reservations: [Reservation]
+  clientMutationId: String
+}
+
+input cancelReservationInput {
+  """Existing reservation identifier"""
+  id: ID!
+  clientMutationId: String
 }
