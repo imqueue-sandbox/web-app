@@ -17,20 +17,19 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Typography from '@material-ui/core/Typography';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Update from '@material-ui/icons/Update';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel/ExpansionPanel';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
-import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionActions from '@mui/material/AccordionActions';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import SaveAlt from '@mui/icons-material/SaveAlt';
+import Update from '@mui/icons-material/Update';
 import { User, UserCars, Security, AddCarDialog, AppMessage } from '.';
 import { updateUser } from '../relay/mutations';
-import { AppStore, AUTH_KEY, PROFILE_PANEL_KEY, clone } from '../common';
+import { AppStore, AUTH_KEY, PROFILE_PANEL_KEY, clone, withStyles } from '../common';
 
 const styles = theme => ({
     root: {
@@ -244,37 +243,37 @@ export class Profile extends Component {
                 const errKey = `${panels[name].type}Errors`;
                 const errors = this.state[errKey];
 
-                return <ExpansionPanel
+                return <Accordion
                     key={key}
                     expanded={expanded === key}
                     onChange={this.open(key)}
                 >
-                    <ExpansionPanelSummary
+                    <AccordionSummary
                         expandIcon={<ExpandMore/>}
                         className={classes.summary}
                     >
                         <Typography className={classes.heading}>
                             {name}
                         </Typography>
-                    </ExpansionPanelSummary>
+                    </AccordionSummary>
                     <Divider/>
-                    <ExpansionPanelDetails className={classes.details}>
+                    <AccordionDetails className={classes.details}>
                         <Child
                             data={data.user}
                             onChange={this.dataChange}
                             errors={errors}
                         />
-                    </ExpansionPanelDetails>
+                    </AccordionDetails>
                     {panels[name].actions.length > 0 &&
                     (<div><Divider />
-                    <ExpansionPanelActions className={classes.carActions}>
+                    <AccordionActions className={classes.carActions}>
                         {panels[name].actions.map((action, i) => {
                             const Action = action.component;
                             const props = action.props || {};
                             return <Action key={i} {...props}/>
                         })}
-                    </ExpansionPanelActions></div>)}
-                </ExpansionPanel>
+                    </AccordionActions></div>)}
+                </Accordion>
             })}
         </div>;
     }

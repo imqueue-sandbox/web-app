@@ -18,12 +18,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer } from 'react-relay';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
-import { withStyles } from '@material-ui/core';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import LinearProgress from '@mui/material/LinearProgress';
 import { errorList, Gravatar} from '../index';
-import { AppStore, AUTH_KEY } from '../../common/index';
+import { AppStore, AUTH_KEY, withStyles } from '../../common/index';
 import { CurrentUserFragment } from '../../relay/queries/index';
 
 const styles = () => ({
@@ -162,4 +161,4 @@ export class User extends Component {
 }
 
 User = withStyles(styles)(User);
-User = createFragmentContainer(User, CurrentUserFragment);
+User = createFragmentContainer(User, { data: CurrentUserFragment });

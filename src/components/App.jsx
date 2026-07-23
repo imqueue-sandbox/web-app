@@ -16,12 +16,13 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { Component } from 'react';
+import { useLocation } from 'react-router-dom';
+import LinearProgress from '@mui/material/LinearProgress';
 import { AppStore, AUTH_KEY } from '../common';
 import { Login, AppView } from '../layouts';
 import { AppMessage } from '.';
-import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 
-export class App extends Component {
+class AppComponent extends Component {
 
     state = {
         user: (AppStore.get(AUTH_KEY) || {}).user,
@@ -64,4 +65,15 @@ export class App extends Component {
             onLoading={() => <LinearProgress color="secondary"/>}
         />;
     }
+}
+
+/**
+ * Injects the current router location into the App component. React Router v7
+ * dropped the `withRouter` HOC in favor of hooks, so this thin functional
+ * wrapper bridges the location into the class-based application shell.
+ */
+export function App(props) {
+    const location = useLocation();
+
+    return <AppComponent {...props} location={location}/>;
 }

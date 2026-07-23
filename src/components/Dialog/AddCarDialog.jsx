@@ -18,22 +18,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import withMobileDialog from '@material-ui/core/withMobileDialog';
-import Slide from '@material-ui/core/Slide';
-import Add from '@material-ui/icons/Add';
-import Clear from '@material-ui/icons/Clear';
-import Done from '@material-ui/icons/Done';
-import TextField from '@material-ui/core/TextField';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { withStyles } from '@material-ui/core';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import TextField from '@mui/material/TextField';
+import LinearProgress from '@mui/material/LinearProgress';
+import Add from '@mui/icons-material/Add';
+import Clear from '@mui/icons-material/Clear';
+import Done from '@mui/icons-material/Done';
 import { CarModelSelect, CarBrandsSelect } from '../Form';
 import { AppMessage } from '../AppMessage';
-import { clone, withoutElement } from '../../common';
+import { clone, withoutElement, withStyles, withMobileDialog } from '../../common';
 import { addCar } from '../../relay/mutations';
 
 const styles = () => ({
@@ -52,9 +50,9 @@ const styles = () => ({
     },
 });
 
-function Transition(props) {
-    return <Slide direction="up" {...props} />;
-}
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export class AddCarDialog extends Component {
     static propTypes = {
@@ -115,7 +113,7 @@ export class AddCarDialog extends Component {
             <Button onClick={this.open}><Add/>&nbsp;Add car</Button>
             <Dialog
                 fullScreen={fullScreen}
-                TransitionComponent={Transition}
+                slots={{ transition: Transition }}
                 open={this.state.open}
                 onClose={this.close}
                 aria-labelledby="responsive-dialog-title"

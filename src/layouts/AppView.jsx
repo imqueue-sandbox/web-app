@@ -16,25 +16,23 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Typography from '@material-ui/core/Typography';
-import Person from '@material-ui/icons/Person';
-import Timelapse from '@material-ui/icons/Timelapse';
-import Waves from '@material-ui/icons/Waves';
-import Divider from '@material-ui/core/Divider';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import IconButton from '@material-ui/core/IconButton';
-import Hidden from '@material-ui/core/Hidden';
-import ExitToApp from '@material-ui/icons/ExitToApp';
+import Drawer from '@mui/material/Drawer';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import CssBaseline from '@mui/material/CssBaseline';
+import IconButton from '@mui/material/IconButton';
+import Person from '@mui/icons-material/Person';
+import Timelapse from '@mui/icons-material/Timelapse';
+import Waves from '@mui/icons-material/Waves';
+import ExitToApp from '@mui/icons-material/ExitToApp';
 
 import {
     TimeTable,
@@ -43,14 +41,14 @@ import {
     CarSelector,
     AuthUser,
 } from '../components';
-import {AppStore, AUTH_KEY, CAR_KEY, SLOT_KEY} from '../common';
+import { AppStore, AUTH_KEY, CAR_KEY, SLOT_KEY, withStyles } from '../common';
 import { AppRootQuery, withQuery } from '../relay/queries';
 import { logout } from '../relay/mutations';
 
 const drawerWidth = 320;
 
 function ListItemLink(props) {
-    return <ListItem button component="a" {...props} />;
+    return <ListItemButton component="a" {...props} />;
 }
 
 const drawerStyles = theme => ({
@@ -121,28 +119,27 @@ class ResponsiveDrawer extends React.Component {
       <div className={classes.root}>
         <CssBaseline />
         <nav className={classes.drawer}>
-          {/* The implementation can be swap with js to avoid SEO duplication of links. */}
-          <Hidden mdUp implementation="css">
-            <Drawer
-              variant="temporary"
-              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-              classes={{ paper: classes.drawerPaperMobile }}
-              ModalProps={{ keepMounted: true }} // Better open performance on mobile.
-            >
-              {this._getDrawer()}
-            </Drawer>
-          </Hidden>
-          <Hidden smDown implementation="css">
-            <Drawer
-              classes={{ paper: classes.drawerPaper }}
-              variant="permanent"
-              open
-            >
-              {this._getDrawer()}
-            </Drawer>
-          </Hidden>
+          {/* Temporary drawer, shown on small screens only */}
+          <Drawer
+            variant="temporary"
+            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            classes={{ paper: classes.drawerPaperMobile }}
+            ModalProps={{ keepMounted: true }} // Better open performance on mobile.
+            sx={{ display: { xs: 'block', md: 'none' } }}
+          >
+            {this._getDrawer()}
+          </Drawer>
+          {/* Permanent drawer, shown from the md breakpoint up */}
+          <Drawer
+            classes={{ paper: classes.drawerPaper }}
+            variant="permanent"
+            open
+            sx={{ display: { xs: 'none', md: 'block' } }}
+          >
+            {this._getDrawer()}
+          </Drawer>
         </nav>
       </div>
     );
@@ -164,7 +161,9 @@ const styles = theme => ({
     },
     appBar: {
         width: '100%',
-        background: '#333',
+        // override MUI's built-in colorPrimary background (higher insertion
+        // order) to keep the tutorial's charcoal app bar
+        background: '#333 !important',
         zIndex: theme.zIndex.drawer + 1,
         '& *': {
             color: '#fff',
@@ -319,22 +318,23 @@ export class AppView extends Component {
                 />
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
-                    <Route
-                        exact
-                        path="/"
-                        render={() => (
-                            <TimeTable
-                                data={data}
-                                options={data.options}
-                                car={car}
-                                timeSlotDuration={timeSlotDuration}
-                            />
-                        )}
-                    />
-                    <Route
-                        path="/profile"
-                        render={() => <Profile data={data}/>}
-                    />
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={(
+                                <TimeTable
+                                    data={data}
+                                    options={data.options}
+                                    car={car}
+                                    timeSlotDuration={timeSlotDuration}
+                                />
+                            )}
+                        />
+                        <Route
+                            path="/profile"
+                            element={<Profile data={data}/>}
+                        />
+                    </Routes>
                 </main>
             </div>
         );

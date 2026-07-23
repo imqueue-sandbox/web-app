@@ -17,8 +17,8 @@
  */
 import moment from 'moment';
 import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import Delete from '@material-ui/icons/Delete';
+import IconButton from '@mui/material/IconButton';
+import Delete from '@mui/icons-material/Delete';
 import {
     AppStore,
     AUTH_KEY,

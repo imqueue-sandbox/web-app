@@ -19,3 +19,5 @@ export * from './constants';
 export * from './clone';
 export * from './helpers';
 export * from './AppStore';
+export * from './withStyles';
+export * from './withMobileDialog';

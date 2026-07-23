@@ -18,9 +18,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
-import * as md5 from 'md5';
+import Avatar from '@mui/material/Avatar';
+import md5 from 'blueimp-md5';
+import { withStyles } from '../common';
 
 const bigSize = 60;
 const styles = {

@@ -25,8 +25,6 @@ import {
     MSG_CAR_MISSING
 } from '../../common';
 
-const RX_TIME_COLUMN = /\brbc-time-gutter\b/;
-
 function busy(date, events) {
     const now = new Date();
 
@@ -62,8 +60,12 @@ export const CalendarTimeSlot = (
     car,
     onSelect,
 ) => props => {
-    const className = (props.children._owner.return.stateNode ||
-        { className: '' }).className;
+    // react-big-calendar renders the left time-gutter slots with a time label
+    // as their child, while the day-column slots it wraps are empty. Detect the
+    // gutter by the presence of that label child and leave those slots as-is.
+    const child = props.children;
+    const isTimeColumn = !!(child && child.props
+        && React.Children.count(child.props.children) > 0);
     const user = (AppStore.get(AUTH_KEY) || { user: null }).user;
     const start = moment(props.value);
     const end = moment(props.value.getTime() + timeBlock * 60 * 1000);
@@ -76,7 +78,7 @@ export const CalendarTimeSlot = (
         return null;
     }
 
-    if (RX_TIME_COLUMN.test(className)) {
+    if (isTimeColumn) {
         return props.children;
     }
 

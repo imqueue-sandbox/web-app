@@ -19,10 +19,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer } from 'react-relay';
 import { Link } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
-import Avatar from "@material-ui/core/Avatar/Avatar";
+import Avatar from '@mui/material/Avatar';
 import { Gravatar } from '.';
-import { AppStore, AUTH_KEY } from '../common/index';
+import { AppStore, AUTH_KEY, withStyles } from '../common/index';
 import { CurrentUserFragment } from '../relay/queries/fragments/index';
 
 const styles = () => ({
@@ -68,4 +67,4 @@ export class AuthUser extends Component {
 }
 
 AuthUser = withStyles(styles)(AuthUser);
-AuthUser = createFragmentContainer(AuthUser, CurrentUserFragment);
+AuthUser = createFragmentContainer(AuthUser, { data: CurrentUserFragment });

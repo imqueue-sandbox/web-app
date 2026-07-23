@@ -19,15 +19,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, createRefetchContainer } from 'react-relay';
 import moment from 'moment';
-import BigCalendar  from 'react-big-calendar';
+import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import { CalendarToolbar, CalendarTimeSlot, CalendarEvent } from './Calendar';
 import {
     OptionsFragment,
     ReservationsQuery,
     ReservationsFragment,
 } from '../relay/queries';
-import Snackbar from '@material-ui/core/Snackbar';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@mui/material/Snackbar';
+import CircularProgress from '@mui/material/CircularProgress';
 import { reserve, cancelReservation } from '../relay/mutations';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { AppStore, AUTH_KEY, CAR_KEY, SLOT_KEY } from '../common';
@@ -193,7 +193,7 @@ export class TimeTable extends Component {
 
     render() {
         const events = this.buildEvents();
-        const localizer = BigCalendar.momentLocalizer(moment);
+        const localizer = momentLocalizer(moment);
         const min = this.toTime(this.props.options.start);
         const max = this.toTime(this.props.options.end);
         const step = 15;
@@ -203,7 +203,7 @@ export class TimeTable extends Component {
         const hasErrors = errors && errors.length > 0;
 
         return <>
-            <BigCalendar
+            <Calendar
                 localizer={localizer}
                 events={events}
                 defaultView="day"
@@ -228,7 +228,7 @@ export class TimeTable extends Component {
                 }}
                 step={step}
                 timeslots={slots}
-                views={[BigCalendar.Views.DAY]}
+                views={[Views.DAY]}
                 min={min}
                 max={new Date(max.getTime() - 3600 * 1000)}
             />
@@ -259,7 +259,7 @@ export class TimeTable extends Component {
 
 TimeTable = createRefetchContainer(
     TimeTable,
-    ReservationsFragment,
+    { data: ReservationsFragment },
     ReservationsQuery,
 );
-TimeTable = createFragmentContainer(TimeTable, OptionsFragment);
+TimeTable = createFragmentContainer(TimeTable, { options: OptionsFragment });

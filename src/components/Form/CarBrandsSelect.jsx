@@ -17,9 +17,9 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import MenuItem from '@material-ui/core/MenuItem';
-import TextField from '@material-ui/core/TextField/TextField';
-import { withStyles } from '@material-ui/core';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import { withStyles } from '../../common';
 import { CarBrandsQuery, withQuery } from '../../relay/queries';
 import { SelectStyle, selectHandler } from './SelectStyle';
 
@@ -49,9 +49,9 @@ class CarBrandsSelect extends Component {
             className={classes.textField}
             value={this.state.brand}
             onChange={this.select}
-            SelectProps={{MenuProps: {
+            slotProps={{ select: { MenuProps: {
                 className: classes.menu,
-            }}}
+            } } }}
             helperText="Please, select car make"
             margin="normal"
         >{brands.map((brand, i) => (

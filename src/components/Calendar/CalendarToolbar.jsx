@@ -17,7 +17,7 @@
  */
 import React from 'react';
 import moment from 'moment';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { AppStore, AUTH_KEY } from '../../common/index';
 
 export const CalendarToolbar = onChange => toolbar => {

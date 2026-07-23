@@ -15,7 +15,52 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-import { EventEmitter } from 'events';
+/**
+ * Minimal browser-friendly event emitter. Replaces the Node.js `events`
+ * module the store used to extend, which is not available in the browser.
+ */
+class EventEmitter {
+    constructor() {
+        this._listeners = Object.create(null);
+    }
+
+    on(event, handler) {
+        (this._listeners[event] || (this._listeners[event] = [])).push(handler);
+        return this;
+    }
+
+    removeListener(event, handler) {
+        const handlers = this._listeners[event];
+
+        if (handlers) {
+            this._listeners[event] = handlers.filter(fn => fn !== handler);
+        }
+
+        return this;
+    }
+
+    removeAllListeners(event) {
+        if (event) {
+            delete this._listeners[event];
+        } else {
+            this._listeners = Object.create(null);
+        }
+
+        return this;
+    }
+
+    emit(event, ...args) {
+        const handlers = this._listeners[event];
+
+        if (handlers) {
+            for (const handler of handlers.slice()) {
+                handler(...args);
+            }
+        }
+
+        return !!(handlers && handlers.length);
+    }
+}
 
 class Storage extends EventEmitter {
     /**

@@ -20,12 +20,11 @@ import { createFragmentContainer } from 'react-relay';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { withStyles } from '@material-ui/core';
-import TextField from "@material-ui/core/TextField/TextField";
-import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 import { SelectStyle} from '../Form';
 import { UserCarsFragment } from '../../relay/queries/fragments';
-import {AppStore, CAR_KEY, carType, PROFILE_PANEL_KEY} from '../../common';
+import {AppStore, CAR_KEY, carType, PROFILE_PANEL_KEY, withStyles} from '../../common';
 
 const style = theme => (Object.assign(SelectStyle(theme), {
     carsSelector: {
@@ -91,9 +90,9 @@ export class CarSelector extends Component {
                 className={classNames(classes.textField, classes.userCars)}
                 value={this.state.carId}
                 onChange={this.select(cars)}
-                SelectProps={{MenuProps: {
+                slotProps={{ select: { MenuProps: {
                     className: classes.menu,
-                }}}
+                } } }}
                 margin="normal"
             >
                 {cars.map(car => {
@@ -115,4 +114,4 @@ export class CarSelector extends Component {
 }
 
 CarSelector = withStyles(style)(CarSelector);
-CarSelector = createFragmentContainer(CarSelector, UserCarsFragment);
+CarSelector = createFragmentContainer(CarSelector, { data: UserCarsFragment });

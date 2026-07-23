@@ -16,25 +16,22 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 import React, { PureComponent } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { withStyles } from "@material-ui/core";
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
-import LockOpen from '@material-ui/icons/LockOpen';
-import NotInterested from '@material-ui/icons/NotInterested';
-import PersonAdd from '@material-ui/icons/PersonAdd';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import green from '@material-ui/core/colors/green';
-import withMobileDialog from '@material-ui/core/withMobileDialog';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import LinearProgress from '@mui/material/LinearProgress';
+import CircularProgress from '@mui/material/CircularProgress';
+import LockOpen from '@mui/icons-material/LockOpen';
+import NotInterested from '@mui/icons-material/NotInterested';
+import PersonAdd from '@mui/icons-material/PersonAdd';
+import { green } from '@mui/material/colors';
 import { login, register } from '../relay/mutations';
 import { AppMessage, PasswordEye } from '../components';
-import { clone, withoutElement } from '../common';
+import { clone, withoutElement, withStyles, withMobileDialog } from '../common';
 
 const styles = () => ({
     buttonProgress: {
@@ -102,17 +99,13 @@ export class Login extends PureComponent {
     componentDidMount() {
         this.mounted = true;
         window.requestAnimationFrame(() => {
-            const node = ReactDOM.findDOMNode(this);
-
-            if (node) {
-                document.querySelectorAll('input').forEach(el =>
-                    el.addEventListener(
-                        'animationstart',
-                        this.onAnimationStart,
-                        false,
-                    )
-                );
-            }
+            document.querySelectorAll('input').forEach(el =>
+                el.addEventListener(
+                    'animationstart',
+                    this.onAnimationStart,
+                    false,
+                )
+            );
         });
     }
 
@@ -314,8 +307,10 @@ export class Login extends PureComponent {
                         margin="normal"
                         variant="outlined"
                         value={this.state.email}
-                        InputLabelProps={{
-                            shrink: this.state.shrink || !!this.state.email
+                        slotProps={{
+                            inputLabel: {
+                                shrink: this.state.shrink || !!this.state.email
+                            }
                         }}
                         onChange={this.handleChange.bind(this, 'email')}
                     />
@@ -331,14 +326,16 @@ export class Login extends PureComponent {
                         variant="outlined"
                         className="adornment-end"
                         value={this.state.password}
-                        InputLabelProps={{
-                            shrink: this.state.shrink || !!this.state.password
-                        }}
-                        InputProps={{
-                            endAdornment: <PasswordEye
-                                onClick={this.showPassword}
-                                enabled={this.state.showPassword}
-                            />,
+                        slotProps={{
+                            inputLabel: {
+                                shrink: this.state.shrink || !!this.state.password
+                            },
+                            input: {
+                                endAdornment: <PasswordEye
+                                    onClick={this.showPassword}
+                                    enabled={this.state.showPassword}
+                                />,
+                            },
                         }}
                         onChange={this.handleChange.bind(this, 'password')}
                     />
@@ -356,8 +353,10 @@ export class Login extends PureComponent {
                         margin="normal"
                         variant="outlined"
                         value={this.state.firstName}
-                        InputLabelProps={{
-                            shrink: this.state.shrink || !!this.state.firstName
+                        slotProps={{
+                            inputLabel: {
+                                shrink: this.state.shrink || !!this.state.firstName
+                            }
                         }}
                         onChange={this.handleChange.bind(this, 'firstName')}
                     />
@@ -373,8 +372,10 @@ export class Login extends PureComponent {
                         margin="normal"
                         variant="outlined"
                         value={this.state.lastName}
-                        InputLabelProps={{
-                            shrink: this.state.shrink || !!this.state.lastName
+                        slotProps={{
+                            inputLabel: {
+                                shrink: this.state.shrink || !!this.state.lastName
+                            }
                         }}
                         onChange={this.handleChange.bind(this, 'lastName')}
                     />
@@ -395,7 +396,7 @@ export class Login extends PureComponent {
                 <Button
                     variant={fullScreen ? "text" : "contained"}
                     onClick={this.reset}
-                    color="default"
+                    color="inherit"
                     size={"large"}
                     disabled={!this.state.canReset}
                 >
