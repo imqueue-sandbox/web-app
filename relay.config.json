@@ -1,7 +1,7 @@
 {
   "src": "./src",
   "schema": "./schema.graphql",
-  "language": "javascript",
+  "language": "typescript",
   "eagerEsModules": true,
   "excludes": [
     "**/node_modules/**",

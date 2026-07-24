@@ -13,9 +13,10 @@
   "license": "ISC",
   "scripts": {
     "relay": "relay-compiler",
+    "typecheck": "npm run relay && tsc --noEmit",
     "dev": "npm run relay && vite",
     "start": "npm run dev",
-    "build": "npm run relay && vite build",
+    "build": "npm run relay && tsc --noEmit && vite build",
     "preview": "vite preview --port 3000"
   },
   "dependencies": {
@@ -36,11 +37,17 @@
     "relay-runtime": "^21.0.1"
   },
   "devDependencies": {
+    "@types/blueimp-md5": "^2.18.2",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.7",
+    "@types/react-big-calendar": "^1.16.3",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.4",
     "babel-plugin-relay": "^21.0.1",
     "graphql": "^16.14.2",
     "relay-compiler": "^21.0.1",
     "sass": "^1.80.0",
+    "typescript": "^5.9.0",
     "vite": "^8.1.5",
     "vite-plugin-relay": "^2.1.0"
   }
